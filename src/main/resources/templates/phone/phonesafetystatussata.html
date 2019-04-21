@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+		
+		
+		<title>安全行为监控</title>
+		<link rel="stylesheet" type="text/css" href="/erci/css/bootstrap-3.3.7/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="/erci/font/iconfont.css"/>
+		<link rel="stylesheet" type="text/css" href="/erci/css/swiper.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/erci/css/index.css"/>
+		
+		<script src="/erci/js/echarts.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/index.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<style type=text/css>
+		a:hover {
+			text-decoration:none;
+		}
+	</style>
+	<body>
+		<div class="listbox"><span class="list_tit"><em class="left_line"></em>当日次数平均值<em class="right_line"></em></span></div>
+
+		<div class="container marginBottom60 content_list">
+
+			<a href="/phone/toSafetyStatusLine">
+				<div class="list_number blue_color">
+					<span>塔吊超载监控</span>
+					<em id="1"></em>
+				</div>
+			</a>
+
+			<a href="/phone/toSafetyStatusLine">
+			<div class="list_number orange">
+				<span>施工升降机超载监控</span>
+				<em id="2"></em>
+			</div>
+			</a>
+
+			<a href="/phone/toSafetyStatusLine">
+				<div class="list_number powder">
+					<span>未报备泥头车违规入场监控</span>
+					<em id="3"></em>
+				</div>
+			</a>
+
+			<a href="/phone/toSafetyStatusLine">
+				<div class="list_number purple">
+					<span>扬尘超标准监控</span>
+					<em id="4"></em>
+				</div>
+			</a>
+
+			<a href="/phone/toSafetyStatusLine">
+				<div class="list_number green">
+					<span>噪声超标准监控</span>
+					<em id="5"></em>
+				</div>
+			</a>
+
+		</div>
+
+		<div class="footer">
+			<li id="noticeAnnouncement">
+				<span class="iconfont"><img src="/erci/img/Notice.png" ></span>
+				<p>安全公告</p>
+			</li><li id="indexMenu">
+			<a href="/phone/toIndex">
+				<span class="iconfont"><img src="/erci/img/index.png" ></span>
+			</a><p>首页</p>
+		</li><li id="blackList">
+			<a href="/phone/toRankingTable">
+				<span class="iconfont"><img src="/erci/img/billboard.png" ></span>
+			</a>
+			<p>红黑榜</p>
+		</li>
+		</div>
+
+		<script src="/erci/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			function load() {
+				var craneWeight = '';
+				var lifterWeight = '';
+				var noiseWarning = '';
+				var dustWarning = '';
+				var carWarning = '';
+				$.ajax({
+					type:"get",
+					url:"/phone/phoneSafetyStatus",
+					async: false,
+					success:function (data) {
+						craneWeight += data.craneWeight,
+						lifterWeight += data.lifterWeight,
+						noiseWarning += data.noiseWarning,
+						dustWarning += data.dustWarning,
+						carWarning += data.carWarning
+					}
+				});
+				//回显
+				$("#1").html(craneWeight);
+				$("#2").html(lifterWeight);
+				$("#5").html(noiseWarning);
+				$("#4").html(dustWarning);
+				$("#3").html(carWarning);
+			} load();
+
+
+
+		var swiper = new Swiper('.swiper-container', {
+				navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+				},
+			});
+		</script>
+	</body>
+</html>

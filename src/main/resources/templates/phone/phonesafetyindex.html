@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+		
+		
+		<title>安全行为监控</title>
+		<link rel="stylesheet" type="text/css" href="/erci/css/bootstrap-3.3.7/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="/erci/css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="/erci/font/iconfont.css"/>
+		
+		<script src="/erci/js/echarts.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/index_04.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="container margin15">
+			<div class="container" id="WorkerTraining">
+				<p class="WorkerModalTitle">区域总体施工安全指数（全区域）</p>
+				<p class="TrainingRate"><span class="TrainingRateNumber" id = "anquanzhishu"></span><span class="TrainingRateSymbol">/100</span></p>
+				<p class="progress"><span id="WorkerProgressBar" style="width: 60%;"></span></p>
+			</div>
+		</div>
+		
+		<div class="container marginBottom60">
+			<div class="container">
+				<div id="line_01"></div>
+				<p class="text-c">近10日施工安全指数折线图</p>
+			</div>
+		</div>
+
+		<div class="footer">
+			<li id="noticeAnnouncement">
+				<span class="iconfont"><img src="/erci/img/Notice.png" ></span>
+				<p>安全公告</p>
+			</li><li id="indexMenu">
+			<a href="/phone/toIndex">
+				<span class="iconfont"><img src="/erci/img/index.png" ></span>
+			</a><p>首页</p>
+		</li><li id="blackList">
+			<a href="/phone/toRankingTable">
+				<span class="iconfont"><img src="/erci/img/billboard.png" ></span>
+			</a>
+			<p>红黑榜</p>
+		</li>
+		</div>
+	</body>
+</html>

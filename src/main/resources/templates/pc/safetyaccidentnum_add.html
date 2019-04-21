@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+	<link rel="stylesheet" href="/thy/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/thy/bootstrap/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="/thy/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/thy/css/main.css">
+	<link rel="stylesheet" href="/thy/css/doc.min.css">
+	<style>
+	.tree li {
+        list-style-type: none;
+		cursor:pointer;
+	}
+	</style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+            <div><a class="navbar-brand" style="font-size:32px;" href="user.html">工程安全数据管理系统</a></div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li style="padding-top:8px;">
+				<div class="btn-group">
+				  <button type="button" class="btn btn-default btn-success dropdown-toggle" data-toggle="dropdown">
+					<i class="glyphicon glyphicon-user"></i> 管理员 <span class="caret"></span>
+				  </button>
+					  <ul class="dropdown-menu" role="menu">
+						<li><a href="/loginout"><i class="glyphicon glyphicon-off"></i> 退出系统</a></li>
+					  </ul>
+			    </div>
+			</li>
+            <li style="margin-left:10px;padding-top:8px;">
+			</li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar">
+				<div class="tree">
+					<ul style="padding-left:0px;" class="list-group">
+						<li class="list-group-item tree-closed" >
+							<a href="#"><i class="glyphicon glyphicon-dashboard"></i> 控制面板</a>
+						</li>
+						<li class="list-group-item">
+							<span><i class="glyphicon glyphicon glyphicon-tasks"></i> 安全数据管理 <span class="badge" style="float:right">2</span></span>
+							<ul style="margin-top:10px;">
+								<li style="height:20px;">
+									<a href="/admin/safetyaccidentnum" style="color:red;width:100px;display:block;text-align:left"><i class="glyphicon glyphicon-user"></i>安全事故数</a>
+								</li>
+								<li style="height:20px;">
+									<a href="/admin/safetyindex" style="color:red;width:100px;display:block;text-align:left"><i class="glyphicon glyphicon-king"></i>区域安全指数</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<ol class="breadcrumb">
+				  <li><a href="#">首页</a></li>
+				  <li><a href="#">数据列表</a></li>
+				  <li class="active">新增</li>
+				</ol>
+			<div class="panel panel-default">
+              <div class="panel-heading">表单数据<div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
+			  <div class="panel-body">
+				<form role="form">
+					<div class="form-group">
+						<label for="accidentDate" class="control-label">事故日期</label>
+						<div class="input-group date form_date col-md-5" data-date=""
+							 data-date-format="yyyy-mm-dd" data-link-field="accidentDate" data-link-format="yyyy-mm-dd">
+							<input class="form-control" size="16" type="text" value="" id="accidentDate" name="accidentDate" readonly>
+							<span class="input-group-addon">
+										<span class="glyphicon glyphicon-remove"></span>
+									</span>
+							<span class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+						</div>
+					</div>
+				  <div class="form-group">
+					<label  for="accidentNum">事故数量</label>
+					<input type="text" class="form-control" id="accidentNum" placeholder="请输入事故数量" onkeyup="this.value=this.value.replace(/[^\d]/ig,'')">
+				  </div>
+				  <div class="form-group">
+					<label for="submitName">上传人</label>
+					<input type="email" class="form-control" id="submitName" placeholder="请输入上传人姓名">
+					<p class="help-block label label-warning"></p>
+				  </div>
+				  <button id="saveSecurityDataBtn" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> 新增</button>
+				  <button id="clearValue" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
+				</form>
+			  </div>
+			</div>
+        </div>
+      </div>
+    </div>
+		</div>
+	  </div>
+	</div>
+    <script src="/thy/jquery/jquery-2.1.1.min.js"></script>
+    <script src="/thy/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/thy/script/docs.min.js"></script>
+	<script src="/thy/bootstrap/bootstrap-datetimepicker.js" ></script>
+	<script src="/thy/bootstrap/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script src="/js/layer/layer.js"></script>
+        <script type="javascript">
+            $(function () {
+                $(".list-group-item").click(function(){
+                    if ( $(this).find("ul") ) {
+                        $(this).toggleClass("tree-closed");
+                        if ( $(this).hasClass("tree-closed") ) {
+                            $("ul", this).hide("fast");
+                        } else {
+                            $("ul", this).show("fast");
+                        }
+                    }
+                });
+            });
+        </script>
+        <script type="text/javascript">
+			$('.form_date').datetimepicker({
+				language:  'zh-CN',
+				weekStart: 1,
+				todayBtn:  1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				minView: 2,
+				forceParse: 0
+			});
+
+            $(function() {
+                $(".list-group-item").click(function() {
+                    if ($(this).find("ul")) {
+                        $(this).toggleClass("tree-closed");
+                        if ($(this).hasClass("tree-closed")) {
+                            $("ul", this).hide("fast");
+                        } else {
+                            $("ul", this).show("fast");
+                        }
+                    }
+                });
+            });
+
+			/*执行方法*/
+			$("#saveSecurityDataBtn").click(function() {
+				var loadingIndex = -1;
+				var json = {
+					"accidentDate" : $("#accidentDate").val(),
+					"accidentNum" : $("#accidentNum").val(),
+					"submitName" : $("#submitName").val()
+				};
+				$.ajax({
+					type : "post",
+					url : "/admin/safetyAccident/addAction",
+					contentType : "application/json; charset=UTF-8;",
+					data : JSON.stringify(json),
+					beforeSend : function() {
+						loadingIndex = layer.msg('处理中', {
+							icon : 16
+						});
+						return true;
+					},
+					success : function(result) {
+						if (result.success) {
+							window.location.href = "/admin/safetyaccidentnum";
+						} else {
+							layer.msg("添加失败!", {
+								time : 1000,
+								icon : 5,
+								shift : 6
+							});
+						}
+					}
+				});
+
+			});
+        </script>
+  </body>
+</html>

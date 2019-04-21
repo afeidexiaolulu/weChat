@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+		
+		
+		<title>安全行为监控</title>
+		<link rel="stylesheet" type="text/css" href="/erci/css/bootstrap-3.3.7/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="/erci/font/iconfont.css"/>
+		<link rel="stylesheet" type="text/css" href="/erci/css/swiper.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/erci/css/index.css"/>
+		
+		<script src="/erci/js/echarts.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/index_05.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+
+					<div class="swiper-slide">
+						<span class="container_tit">塔吊超载监控</span>
+						<div class="container marginBottom60">
+							<div class="container">
+								<div id="line_01"></div>
+								<p class="text-c">塔吊超载监控折线图</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="swiper-slide">
+						<span class="container_tit">施工升降机超载监控</span>
+						<div class="container marginBottom60">
+							<div class="container">
+								<div id="line_02"></div>
+								<p class="text-c">升降机超载监控折线图</p>
+							</div>
+						</div>
+					</div>
+					
+					<div class="swiper-slide">
+						<span class="container_tit">扬尘超标准监控</span>
+						<div class="container marginBottom60">
+							<div class="container">
+								<div id="line_03"></div>
+								<p class="text-c">扬尘超标准监控折线图</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="swiper-slide">
+						<span class="container_tit">未报备泥头车违规入场监控</span>
+						<div class="container marginBottom60">
+							<div class="container">
+								<div id="line_04"></div>
+								<p class="text-c">未报备泥头车违规入场监控折线图</p>
+							</div>
+						</div>
+					</div>
+					
+					<div class="swiper-slide">
+						<span class="container_tit">噪声超标准监控</span>
+						<div class="container marginBottom60">
+							<div class="container">
+								<div id="line_05"></div>
+								<p class="text-c">噪声超标准监控折线图</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- Add Arrows -->
+				<div class="swiper-button-next"></div>
+				<div class="swiper-button-prev"></div>
+			</div>
+
+
+			<div class="footer">
+				<li id="noticeAnnouncement">
+					<span class="iconfont"><img src="/erci/img/Notice.png" ></span>
+					<p>安全公告</p>
+				</li><li id="indexMenu">
+				<a href="/phone/toIndex">
+					<span class="iconfont"><img src="/erci/img/index.png" ></span>
+				</a><p>首页</p>
+			</li><li id="blackList">
+				<a href="/phone/toRankingTable">
+					<span class="iconfont"><img src="/erci/img/billboard.png" ></span>
+				</a>
+				<p>红黑榜</p>
+			</li>
+			</div>
+
+
+
+		<script src="/erci/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+		var swiper = new Swiper('.swiper-container', {
+				navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+				},
+			});
+		</script>
+	</body>
+</html>

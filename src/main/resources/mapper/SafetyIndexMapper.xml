@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.gongzhonghao.management.mapper.SafetyIndexMapper">
+    <!---统计功能-->
+    <select id="selectLastOne" resultType="com.zy.gongzhonghao.management.bean.SafetyIndex">
+        select  safety_num from safety_index order by safety_date desc limit 1
+    </select>
+
+    <!--selectLast10SaIndex-->
+    <select id="selectLast10SaIndex" resultType="com.zy.gongzhonghao.management.bean.SafetyIndex">
+        select  safety_num,safety_date from safety_index order by safety_date desc limit 0,10
+    </select>
+
+</mapper>

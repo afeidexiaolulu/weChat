@@ -1,0 +1,47 @@
+#系统变量
+loginname: admin
+password: 1
+weburl: http://120.77.254.210:8888/ibps-platform-webapi/api
+weatherurl: http://t.weather.sojson.com/api/weather/city/101280701
+
+#所有数据三方接口
+safetyInterface: http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord;
+
+
+server:
+  port: 8380
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: root
+    username: root
+    url: jdbc:mysql://localhost:3306/wxgongzhonghao?characterEncoding=UTF-8&useSSL=false
+    type: com.alibaba.druid.pool.DruidDataSource
+    tomcat:
+      connection-properties: druid.stat.mergeSql=true
+      max-idle: 8
+      min-idle: 8
+      max-active: 20
+      initial-size: 10
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+#指定环境为测试环境
+  profiles:
+    active: dev
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      table-underline: true
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+
+

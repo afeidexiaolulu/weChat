@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.gongzhonghao.management.mapper.TotalSafetyDataMapper">
+    <!---昨天在职工人数-->
+    <select id="getYesWorkerNum" resultType="int">
+        select sum(Worker_on_job_count)
+        from total_safety_data
+        where date(Statistics_date) = #{date} and Worker_on_job_count != 8888
+    </select>
+
+    <!--昨天培训工人数-->
+    <select id="getYesWorkerTraNum" resultType="int">
+        select sum(Worker_edu_count)
+        from total_safety_data
+        where date(Statistics_date) = #{date} and Worker_edu_count != 8888
+    </select>
+
+    <!--昨天管理人员在职人数-->
+    <select id="getYesManaNum" resultType="int">
+        select sum(Manager_on_job_count)
+        from total_safety_data
+        where date(Statistics_date) = #{date} and Manager_on_job_count != 8888
+    </select>
+
+    <!--昨天管理人员考勤人数-->
+    <select id="getYesManaDutyNum" resultType="int">
+        select sum(Manager_att_count)
+        from total_safety_data
+        where date(Statistics_date) = #{date} and Manager_att_count != 8888
+    </select>
+
+
+    <!--批量插入安全数据-->
+    <insert id="insertJsonTableBatch" >
+        insert into total_safety_data (Statistics_date,Item_name,Item_no,Worker_on_job_count,Worker_edu_count,Manager_on_job_count,Manager_att_count,Worker_att_count,Crane_weight,Lifter_weight,Noise_warning,Dust_warning,Car_warning)
+        values
+        <foreach collection="totalSafetyDataList" item="item" separator=",">
+            (
+            #{item.StatisticsDate},
+            #{item.ItemName},
+            #{item.ItemNo},
+            #{item.WorkerOnJobCount},
+            #{item.WorkerEduCount},
+            #{item.ManagerOnJobCount},
+            #{item.ManagerAttCount},
+            #{item.WorkerAttCount},
+            #{item.CraneWeight},
+            #{item.LifterWeight},
+            #{item.NoiseWarning},
+            #{item.DustWarning},
+            #{item.CarWarning}
+            )
+        </foreach>
+    </insert>
+
+
+
+</mapper>
