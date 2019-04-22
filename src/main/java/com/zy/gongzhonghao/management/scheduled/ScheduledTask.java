@@ -96,7 +96,7 @@ public class ScheduledTask {
     public void totalRequData() {
 
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(-3,"yyyy-MM-dd");
 
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("SearchBeginDate",yesDateStr);
@@ -131,6 +131,7 @@ public class ScheduledTask {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                     //插入工人培训率和管理到岗率
                     workerManaRateService.insertTraDuty(yesDateStr);
                     //插入各种预警数值

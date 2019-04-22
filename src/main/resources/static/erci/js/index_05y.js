@@ -450,6 +450,8 @@ function load() {
 			totalData.lifterWeight = data.lifterWeight,
 			totalData.noiseWarning = data.noiseWarning,
 
+
+
 			//插入mycharts5
 			myChart5.setOption({
 				xAxis: {
