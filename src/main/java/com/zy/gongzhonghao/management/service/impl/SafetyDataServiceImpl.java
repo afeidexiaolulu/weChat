@@ -1,6 +1,7 @@
 package com.zy.gongzhonghao.management.service.impl;
 
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zy.gongzhonghao.management.bean.AccidentNumTable;
 import com.zy.gongzhonghao.management.bean.SafetyTimeMax;
 import com.zy.gongzhonghao.management.controller.model.phone.SafetyNumDto;

@@ -2,9 +2,7 @@ package com.zy.gongzhonghao.management.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zy.gongzhonghao.management.bean.SafetyIndex;
-import com.zy.gongzhonghao.management.controller.model.phone.SafetyIndexDto;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component

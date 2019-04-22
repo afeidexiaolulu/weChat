@@ -3,6 +3,7 @@ package com.zy.gongzhonghao.management.scheduled;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zy.gongzhonghao.management.bean.Project;
 import com.zy.gongzhonghao.management.bean.TotalSafetyData;
 import com.zy.gongzhonghao.management.bean.Weather;
 import com.zy.gongzhonghao.management.mapper.TotalSafetyDataMapper;
@@ -11,6 +12,7 @@ import com.zy.gongzhonghao.management.util.DateUtils;
 import com.zy.gongzhonghao.management.util.HttpClientUtils;
 import com.zy.gongzhonghao.management.util.JsonUtils;
 import com.zy.gongzhonghao.management.util.MD5Util;
+import org.apache.velocity.runtime.directive.Foreach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,9 @@ public class ScheduledTask {
     @Autowired
     private WeatherService weatherService;
 
+    @Autowired
+    private ProjectService projectService;
+
 
     //每一小时执行一次查询安全时长，并放入数据库中
     @Scheduled(cron="0 0 */1 * * ?")
@@ -96,7 +101,7 @@ public class ScheduledTask {
     public void totalRequData() {
 
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-3,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
 
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("SearchBeginDate",yesDateStr);
@@ -136,6 +141,47 @@ public class ScheduledTask {
                     workerManaRateService.insertTraDuty(yesDateStr);
                     //插入各种预警数值
                     totalWarningService.insertTotalWarning(yesDateStr);
+
+                    //获取所有的项目的item_no
+                    Set<String> itemSet = new HashSet<>();
+                    Set<String> itemSetRetain = itemSet;
+
+                    for (TotalSafetyData totalSafetyData : totalSafetyDataList) {
+                        itemSet.add(totalSafetyData.getItemNo());
+                    }
+
+                    //查询字典表中所有的item
+                    Set<String> myItemSet = projectService.selectItemNo();
+                    
+                    //求两个交集
+                    itemSetRetain.retainAll(myItemSet);
+
+                    //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
+                    itemSet.removeAll(itemSetRetain);
+                    //插入字典表中
+                    for(int i=0; i< totalSafetyDataList.size(); i++){
+                        TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
+                        //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
+                        if(itemSet.contains(totalSafetyData.getItemNo())){
+                            Project project = new Project();
+                            project.setItemName(totalSafetyData.getItemName());
+                            project.setItemNo(totalSafetyData.getItemNo());
+                            project.setStatus(true);
+                            project.setInsertTime(new Date());
+                            //插入
+                            projectService.insertProject(project);
+                        }
+                    }
+
+                    //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
+                    myItemSet.removeAll(itemSetRetain);
+                    //更新状态为关闭
+                    if(myItemSet.size() != 0){
+                        projectService.updateProjectStatus(myItemSet);
+                    }
+
+
+
 
                     //插入后结束定时任务
                     LOGGER.debug("各个安全 数据插入完成，定时任务结束");

@@ -1,6 +1,5 @@
 package com.zy.gongzhonghao.management;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -10,10 +9,8 @@ import com.zy.gongzhonghao.management.controller.model.phone.SafetyIndexDto;
 import com.zy.gongzhonghao.management.controller.model.phone.SafetyNumDto;
 import com.zy.gongzhonghao.management.controller.model.phone.SafetyStatusLineDto;
 import com.zy.gongzhonghao.management.mapper.*;
-import com.zy.gongzhonghao.management.service.TotalSafetyDataService;
-import com.zy.gongzhonghao.management.service.TotalWarningService;
-import com.zy.gongzhonghao.management.service.WeatherService;
-import com.zy.gongzhonghao.management.service.WorkerManaRateService;
+import com.zy.gongzhonghao.management.service.*;
+import com.zy.gongzhonghao.management.util.DateUtils;
 import com.zy.gongzhonghao.management.util.HttpClientUtils;
 import com.zy.gongzhonghao.management.util.JsonUtils;
 import com.zy.gongzhonghao.management.util.MD5Util;
@@ -25,9 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.test.context.junit4.SpringRunner;
-import sun.java2d.pipe.SpanIterator;
-
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -79,6 +75,9 @@ public class ManagementApplicationTests {
 
     @Autowired
     private WeatherService weatherService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Test
     public void contextLoads() {
@@ -506,6 +505,161 @@ public class ManagementApplicationTests {
     }
 
 
+
+    @Test
+    public void testSet(){
+        Set<String> set1 = new HashSet<>();
+        Set<String> set2 = new HashSet<>();
+
+        set1.add("a");
+        set1.add("b");
+        set1.add("c");
+        set2.add("a");
+        set2.add("d");
+        //交集
+        set1.retainAll(set2);
+
+        System.out.println("交集集为是 "+set1);
+
+        set1.removeAll(set2);
+
+        System.out.println("差集集为是 "+set1);
+    }
+
+
+    @Test
+    public void testInsertProject(){
+        //获取昨天日期
+        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
+
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("SearchBeginDate",yesDateStr);
+        paramMap.put("SearchEndDate",yesDateStr);
+        paramMap.put("Token","48C8B324-744C-4480-9E0B-966D8632AB05");
+        String mapToJson = JsonUtils.mapToJson(paramMap);
+
+        try {
+            //通过三方接口获取数据
+            String result = HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord",mapToJson);
+            LOGGER.debug("开始请求所有安全数据");
+            //解析数据查看是否查询成功
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            //查看datas是否为空，如不不为空查询成功
+            JSONArray datas = jsonObject.getJSONArray("Datas");
+            //如果数据不为空插入数据库中
+            if(!datas.isEmpty()) {
+                String s = datas.toString();
+                List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
+
+/*                //C测试关闭项目
+                TotalSafetyData totalSafetyData1 = totalSafetyDataList.get(0);
+                System.out.println("移除的项目为："+totalSafetyData1);
+                totalSafetyDataList.remove(totalSafetyData1);*/
+
+                //数据返回来的日期
+                Date statisticsDate = totalSafetyDataList.get(0).getStatisticsDate();
+                //如果日期数据库没有插入
+                QueryWrapper<TotalSafetyData> wrapper = new QueryWrapper<>();
+                wrapper.eq("statistics_date",statisticsDate);
+                List<TotalSafetyData> selectList = totalSafetyDataMapper.selectList(wrapper);
+                if( selectList.size() == 0){
+                    //插入数据库中
+                    totalSafetyDataService.insertJsonTableBatch(totalSafetyDataList);
+                    LOGGER.debug("将总安全数据插入数据库");
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    //插入工人培训率和管理到岗率
+                    workerManaRateService.insertTraDuty(yesDateStr);
+                    //插入各种预警数值
+                    totalWarningService.insertTotalWarning(yesDateStr);
+
+                    //获取所有的项目的item_no
+                    Set<String> itemSet = new HashSet<>();
+
+                    for (TotalSafetyData totalSafetyData : totalSafetyDataList) {
+                        itemSet.add(totalSafetyData.getItemNo());
+                    }
+                    //复制
+                    Set<String> itemSetRetain = new HashSet<>();
+                    itemSetRetain.addAll(itemSet);
+                    //查询字典表中所有的item
+                    Set<String> myItemSet = projectService.selectItemNo();
+
+                    //求两个交集
+                    itemSetRetain.retainAll(myItemSet);
+                    System.out.println("交集为："+itemSetRetain);
+                    //如果交集长度为0
+                    if(itemSetRetain.size() == 0){
+                        for(int i=0; i<totalSafetyDataList.size(); i++){
+                            TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
+                            //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
+                            Project project = new Project();
+                            project.setItemName(totalSafetyData.getItemName());
+                            project.setItemNo(totalSafetyData.getItemNo());
+                            project.setStatus(true);
+                            project.setInsertTime(new Date());
+                            //插入
+                            projectService.insertProject(project);
+                        }
+                        System.out.println("第一次插入数据完成");
+                    }else{
+                            //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
+                            itemSet.removeAll(itemSetRetain);
+                            System.out.println("新增项目为："+itemSet);
+                            //插入字典表中
+                            for(int i=0; i< totalSafetyDataList.size(); i++){
+                                TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
+                                //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
+                                if(itemSet.contains(totalSafetyData.getItemNo())){
+                                    Project project = new Project();
+                                    project.setItemName(totalSafetyData.getItemName());
+                                    project.setItemNo(totalSafetyData.getItemNo());
+                                    project.setStatus(true);
+                                    project.setInsertTime(new Date());
+                                    //插入
+                                    projectService.insertProject(project);
+                                }
+                            }
+                            //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
+                            myItemSet.removeAll(itemSetRetain);
+                            System.out.println("关闭项目为："+myItemSet);
+                            //更新状态为关闭
+                            if(myItemSet.size() != 0){
+                                projectService.updateProjectStatus(myItemSet);
+                            }
+                    }
+                    //插入后结束定时任务
+                    LOGGER.debug("各个安全 数据插入完成，定时任务结束");
+                    return;
+                }else {
+                    LOGGER.debug("已插入过各种安全数据");
+                }
+            }
+            //失败异常捕获
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    //每天凌晨0点01分开始获取天气,10分钟一次
+    @Scheduled(cron = "0 */1 * * * ?")
+    public void WeatherTask(){
+        //封装到weatherService中,通过接口获取天气
+        Integer result = weatherService.insertWeatherMsgByInterface();
+        if(result == 1){
+            LOGGER.debug("插入天气数据成功");
+            return;
+        }
+        if(result == 2){
+            LOGGER.debug("已插入过天气数据");
+        }
+    }
 }
 
 

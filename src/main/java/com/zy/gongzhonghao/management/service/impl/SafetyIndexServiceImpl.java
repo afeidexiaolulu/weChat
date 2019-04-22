@@ -7,7 +7,6 @@ import com.zy.gongzhonghao.management.bean.SafetyIndex;
 import com.zy.gongzhonghao.management.controller.model.phone.SafetyIndexDto;
 import com.zy.gongzhonghao.management.mapper.SafetyIndexMapper;
 import com.zy.gongzhonghao.management.service.SafetyIndexService;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,6 @@ public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, Safet
 
     @Autowired
     private SafetyIndexMapper safetyIndexMapper;
-
 
     @Override
     public Page<SafetyIndex> queryPage(Map<String, Object> paramMap) {
@@ -69,7 +67,7 @@ public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, Safet
                 safetyDate[i]=sdf.format(safetyIndexList.get(size-1-i).getSafetyDate());
             }
             //给最新安全指数负责
-            safetyIndexDto.setSafetyIndex(safetyIndex[0]);
+            safetyIndexDto.setSafetyIndex(safetyIndex[size-1]);
             //安全指数数组
             safetyIndexDto.setSafetyIndexArr(safetyIndex);
             safetyIndexDto.setSafetyIndexDateArr(safetyDate);
