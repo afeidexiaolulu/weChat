@@ -72,7 +72,7 @@ public class ScheduledTask {
 
 
     //每一小时执行一次查询安全时长，并放入数据库中
-    @Scheduled(cron="0 1,21,41 0,1,2,3 * * ? ")
+    @Scheduled(cron="0 0 0/1 * * ?")
     public void getSafetyData(){
 
         try {
@@ -95,12 +95,13 @@ public class ScheduledTask {
 
 
 
-    //从凌晨1点开始，2点结束，每20分钟执行一次
+    //从凌晨0点开始，3点结束，每20分钟执行一次
+    //@Scheduled(cron="0 1,21,41 0,1,2,3 * * ? ")
     @Scheduled(cron="0 */1 * * * ? ")
     @Transactional
     public void totalRequData() {
 
-//获取昨天日期
+        //获取昨天日期
         String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
 
         Map<String, String> paramMap = new HashMap<>();
@@ -121,11 +122,6 @@ public class ScheduledTask {
             if(!datas.isEmpty()) {
                 String s = datas.toString();
                 List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
-
-/*                //C测试关闭项目
-                TotalSafetyData totalSafetyData1 = totalSafetyDataList.get(0);
-                System.out.println("移除的项目为："+totalSafetyData1);
-                totalSafetyDataList.remove(totalSafetyData1);*/
 
                 //数据返回来的日期
                 Date statisticsDate = totalSafetyDataList.get(0).getStatisticsDate();
@@ -162,8 +158,9 @@ public class ScheduledTask {
 
                     //求两个交集
                     itemSetRetain.retainAll(myItemSet);
-                    System.out.println("交集为："+itemSetRetain);
-                    //如果交集长度为0
+                    LOGGER.debug("接口数据和字典表数据交集为"+itemSetRetain);
+                    List<Project> projectList = new ArrayList<>();
+                    //如果交集长度为0,说明第一次插入项目表
                     if(itemSetRetain.size() == 0){
                         for(int i=0; i<totalSafetyDataList.size(); i++){
                             TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
@@ -173,9 +170,10 @@ public class ScheduledTask {
                             project.setItemNo(totalSafetyData.getItemNo());
                             project.setStatus(true);
                             project.setInsertTime(new Date());
-                            //插入
-                            projectService.insertProject(project);
+                            projectList.add(project);
                         }
+                        //批量插入
+                        projectService.insertProjectBatch(projectList);
                         LOGGER.debug("第一次插入工程项目数据完成");
                     }else{
                         //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中

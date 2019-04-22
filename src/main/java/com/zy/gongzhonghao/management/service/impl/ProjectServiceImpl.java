@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zy.gongzhonghao.management.bean.Project;
 import com.zy.gongzhonghao.management.mapper.ProjectMapper;
 import com.zy.gongzhonghao.management.service.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -15,6 +16,9 @@ import java.util.Set;
 
 @Service
 public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> implements ProjectService{
+
+    @Autowired
+    private ProjectMapper projectMapper;
 
     @Override
     public Set<String> selectItemNo() {
@@ -33,15 +37,12 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         }
     }
 
-    /**
-     * 插入项目
-     * @param project
-     * @return
-     */
+    //批量插入项目
     @Override
-    public Integer insertProject(Project project) {
-        return baseMapper.insert(project);
+    public Integer insertProjectBatch(List<Project> projectList) {
+        return projectMapper.insertProjectBacth(projectList);
     }
+
 
     /**
      * 更新项目状态
@@ -62,5 +63,11 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
             }
         }
         return result;
+    }
+
+    //插入项目
+    @Override
+    public void insertProject(Project project) {
+        baseMapper.insert(project);
     }
 }
