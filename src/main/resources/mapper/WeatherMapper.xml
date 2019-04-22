@@ -3,7 +3,7 @@
 <mapper namespace="com.zy.gongzhonghao.management.mapper.WeatherMapper">
     <!---根据日期查天气-->
     <select id="selectWeaByDate" resultType="com.zy.gongzhonghao.management.bean.Weather">
-        select  ymd, `type`, week, notice from weather where ymd = #{todayStr}
+        select  ymd, `type`, week, notice from weather where ymd = #{todayStr} order by insert_time desc limit 0,1
     </select>
 
 </mapper>

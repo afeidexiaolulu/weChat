@@ -72,7 +72,7 @@ public class ScheduledTask {
 
 
     //每一小时执行一次查询安全时长，并放入数据库中
-    @Scheduled(cron="0 0 */1 * * ?")
+    @Scheduled(cron="0 1,21,41 0,1,2,3 * * ? ")
     public void getSafetyData(){
 
         try {
@@ -100,7 +100,7 @@ public class ScheduledTask {
     @Transactional
     public void totalRequData() {
 
-        //获取昨天日期
+//获取昨天日期
         String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
 
         Map<String, String> paramMap = new HashMap<>();
@@ -121,6 +121,12 @@ public class ScheduledTask {
             if(!datas.isEmpty()) {
                 String s = datas.toString();
                 List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
+
+/*                //C测试关闭项目
+                TotalSafetyData totalSafetyData1 = totalSafetyDataList.get(0);
+                System.out.println("移除的项目为："+totalSafetyData1);
+                totalSafetyDataList.remove(totalSafetyData1);*/
+
                 //数据返回来的日期
                 Date statisticsDate = totalSafetyDataList.get(0).getStatisticsDate();
                 //如果日期数据库没有插入
@@ -144,25 +150,24 @@ public class ScheduledTask {
 
                     //获取所有的项目的item_no
                     Set<String> itemSet = new HashSet<>();
-                    Set<String> itemSetRetain = itemSet;
 
                     for (TotalSafetyData totalSafetyData : totalSafetyDataList) {
                         itemSet.add(totalSafetyData.getItemNo());
                     }
-
+                    //复制
+                    Set<String> itemSetRetain = new HashSet<>();
+                    itemSetRetain.addAll(itemSet);
                     //查询字典表中所有的item
                     Set<String> myItemSet = projectService.selectItemNo();
-                    
+
                     //求两个交集
                     itemSetRetain.retainAll(myItemSet);
-
-                    //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
-                    itemSet.removeAll(itemSetRetain);
-                    //插入字典表中
-                    for(int i=0; i< totalSafetyDataList.size(); i++){
-                        TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
-                        //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
-                        if(itemSet.contains(totalSafetyData.getItemNo())){
+                    System.out.println("交集为："+itemSetRetain);
+                    //如果交集长度为0
+                    if(itemSetRetain.size() == 0){
+                        for(int i=0; i<totalSafetyDataList.size(); i++){
+                            TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
+                            //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
                             Project project = new Project();
                             project.setItemName(totalSafetyData.getItemName());
                             project.setItemNo(totalSafetyData.getItemNo());
@@ -171,18 +176,35 @@ public class ScheduledTask {
                             //插入
                             projectService.insertProject(project);
                         }
+                        LOGGER.debug("第一次插入工程项目数据完成");
+                    }else{
+                        //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
+                        itemSet.removeAll(itemSetRetain);
+                        LOGGER.debug("新增的工程项目为："+ itemSet);
+                        //插入字典表中
+                        for(int i=0; i< totalSafetyDataList.size(); i++){
+                            TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
+                            //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
+                            if(itemSet.contains(totalSafetyData.getItemNo())){
+                                Project project = new Project();
+                                project.setItemName(totalSafetyData.getItemName());
+                                project.setItemNo(totalSafetyData.getItemNo());
+                                project.setStatus(true);
+                                project.setInsertTime(new Date());
+                                //插入
+                                projectService.insertProject(project);
+                                LOGGER.debug("新增的工程项目插入完成"+itemSet);
+                            }
+                        }
+                        //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
+                        myItemSet.removeAll(itemSetRetain);
+                        LOGGER.debug("关闭的工程项目为："+myItemSet);
+                        //更新状态为关闭
+                        if(myItemSet.size() != 0){
+                            projectService.updateProjectStatus(myItemSet);
+                            LOGGER.debug("关闭的工程项目关闭完成："+myItemSet);
+                        }
                     }
-
-                    //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
-                    myItemSet.removeAll(itemSetRetain);
-                    //更新状态为关闭
-                    if(myItemSet.size() != 0){
-                        projectService.updateProjectStatus(myItemSet);
-                    }
-
-
-
-
                     //插入后结束定时任务
                     LOGGER.debug("各个安全 数据插入完成，定时任务结束");
                     return;
@@ -199,16 +221,19 @@ public class ScheduledTask {
 
 
     //每天凌晨0点01分开始获取天气,10分钟一次
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 1 0/3 * * ? ")
     public void WeatherTask(){
-        //封装到weatherService中,通过接口获取天气
-        Integer result = weatherService.insertWeatherMsgByInterface();
-        if(result == 1){
-            LOGGER.debug("插入天气数据成功");
-            return;
-        }
-        if(result == 2){
-            LOGGER.debug("已插入过天气数据");
+
+        try {
+            //封装到weatherService中,通过接口获取天气
+            Integer result = weatherService.insertWeatherMsgByInterface();
+            if(result == 1){
+                LOGGER.debug("插入天气数据成功");
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.debug("插入天气信息失败");
         }
     }
 

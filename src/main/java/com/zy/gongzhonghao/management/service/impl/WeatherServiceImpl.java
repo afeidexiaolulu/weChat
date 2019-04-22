@@ -65,14 +65,8 @@ public class WeatherServiceImpl extends ServiceImpl <WeatherMapper, Weather> imp
             JSONObject jsonObject1 = data.getJSONObject(0);
             Weather weather = JSONObject.parseObject(jsonObject1.toString(), Weather.class);
             weather.setInsertTime(new Date());
-            //插入前先获取，如果获取为0个，则插入
-            QueryWrapper<Weather> wrapper = new QueryWrapper<>();
-            wrapper.eq("ymd",DateUtils.getDateStr(0,"yyyy-MM-dd"));
-            List<Weather> weatherList = baseMapper.selectList(wrapper);
-            //查询不到则插入
-            if(weatherList.size() == 0){
-                return baseMapper.insert(weather);
-            }
+            return baseMapper.insert(weather);
+
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.debug("获取天气失败");
