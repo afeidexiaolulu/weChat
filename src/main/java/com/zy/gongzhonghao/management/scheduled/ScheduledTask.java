@@ -98,8 +98,8 @@ public class ScheduledTask {
 
 
     //从凌晨0点开始，3点结束，每20分钟执行一次
-    @Scheduled(cron="0 1,21,41 1,2,3 * * ? ")
-    //@Scheduled(cron="0 */1 * * * ? ")
+    //@Scheduled(cron="0 1,21,41 1,2,3 * * ? ")
+    @Scheduled(cron="0 */1 * * * ? ")
     @Transactional
     public void totalRequData() {
 
@@ -129,22 +129,33 @@ public class ScheduledTask {
                 List<TotalSafetyData> selectList = totalSafetyDataMapper.selectList(wrapper);
                 if( selectList.size() == 0){
                     //插入数据库中
-                    totalSafetyDataService.insertJsonTableBatch(totalSafetyDataList);
-                    LOGGER.debug("将总安全数据插入数据库");
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+
+                    Integer insertNum = totalSafetyDataService.insertJsonTableBatch(totalSafetyDataList);
+                    if(insertNum != totalSafetyDataList.size()){
+                        LOGGER.error("总安全数据时失败");
+                        throw new Exception();
                     }
+                    LOGGER.debug("将总安全数据插入数据库");
 
                     //插入工人培训率和管理到岗率
-                    workerManaRateService.insertTraDuty(yesDateStr);
+                    Integer insertTraDuty = workerManaRateService.insertTraDuty(yesDateStr);
+                    if(insertTraDuty != 1){
+                        LOGGER.error("插入工人培训率失败");
+                        throw new Exception();
+                    }
                     //插入各种预警数值
-                    totalWarningService.insertTotalWarning(yesDateStr);
+                    Integer insertTotalWarning = totalWarningService.insertTotalWarning(yesDateStr);
+                    if(insertTotalWarning != 1){
+                        LOGGER.error("插入各种预警值失败");
+                        throw new Exception();
+                    }
 
                     //插入区域项目的安全指数
-                    safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
-
+                    Integer insertSafetyIndex = safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList, -1);
+                    if(insertSafetyIndex != 1){
+                        LOGGER.error("插入区域安全指数失败");
+                        throw new Exception();
+                    }
 
                     //获取所有的项目的item_no
                     Set<String> itemSet = new HashSet<>();
@@ -178,12 +189,20 @@ public class ScheduledTask {
                             }
                         }
                         //插入
-                        projectService.insertProjectBatch(projectList);
+                        Integer insertProjectBatch = projectService.insertProjectBatch(projectList);
+                        if(insertProjectBatch != itemSet.size()){
+                            LOGGER.error("批量插入工程失败");
+                            throw new Exception();
+                        }
                         LOGGER.debug("新增的工程项目插入完成"+itemSet);
                     }
                     //更新状态为关闭
                     if(myItemSet.size() != 0){
-                        projectService.updateProjectStatus(myItemSet);
+                        Integer updateProjectStatus = projectService.updateProjectStatus(myItemSet);
+                        if(myItemSet.size() != updateProjectStatus){
+                            LOGGER.error("更新状态失败");
+                            throw new Exception();
+                        }
                         LOGGER.debug("关闭的工程项目关闭完成："+myItemSet);
                     }
                     //插入后结束定时任务
