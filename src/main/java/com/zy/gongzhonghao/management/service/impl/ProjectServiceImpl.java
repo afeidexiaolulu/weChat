@@ -20,6 +20,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     @Autowired
     private ProjectMapper projectMapper;
 
+    //查询个数
     @Override
     public Set<String> selectItemNo() {
 
@@ -57,8 +58,8 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
             Project project = new Project();
             project.setStatus(false);
             UpdateWrapper<Project> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.ge("item_no",item_no);
-            for(int i=0; i<= myItemSet.size(); i++){
+            updateWrapper.eq("item_no",item_no);
+            for(int i=0; i< myItemSet.size(); i++){
                 result += baseMapper.update(project,updateWrapper);
             }
         }

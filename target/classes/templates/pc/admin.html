@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+	<link rel="stylesheet" href="/thy/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/thy/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/thy/css/main.css">
+	<style>
+	.tree li {
+        list-style-type: none;
+		cursor:pointer;
+	}
+	table tbody tr:nth-child(odd){background:#F4F4F4;}
+	table tbody td:nth-child(even){color:#C00;}
+	</style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div><a class="navbar-brand" style="font-size:32px;" href="#">工程安全数据管理系统</a></div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li style="padding-top:8px;">
+				<div class="btn-group">
+				  <button type="button" class="btn btn-default btn-success dropdown-toggle" data-toggle="dropdown">
+                      <i class="glyphicon glyphicon-user"></i> 管理员 <span class="caret"></span>
+				  </button>
+					  <ul class="dropdown-menu" role="menu">
+						<li class="divider"></li>
+						<li><a href="/loginout"><i class="glyphicon glyphicon-off"></i> 退出系统</a></li>
+					  </ul>
+			    </div>
+			</li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+			<div class="tree">
+				<ul style="padding-left:0px;" class="list-group">
+					<li class="list-group-item tree-closed" >
+						<a href="#"><i class="glyphicon glyphicon-dashboard"></i> 控制面板</a>
+					</li>
+					<li class="list-group-item">
+						<span><i class="glyphicon glyphicon glyphicon-tasks"></i> 安全数据管理 <span class="badge" style="float:right">2</span></span>
+						<ul style="margin-top:10px;">
+							<li style="height:20px;">
+								<a href="/admin/safetyaccidentnum" style="color:red;width:100px;display:block;text-align:left"><i class="glyphicon glyphicon-user"></i>安全事故数</a>
+							</li>
+							<li style="height:20px;">
+								<a href="/admin/safetyindex" style="color:red;width:100px;display:block;text-align:left"><i class="glyphicon glyphicon-king"></i>区域安全指数</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+				<h3 class="panel-title"><i class="glyphicon glyphicon-th"></i> 欢迎登陆工程安全数据管理系统</h3>
+			  </div>
+            </div>
+        </div>
+
+
+    <script src="/thy/jquery/jquery-2.1.1.min.js"></script>
+    <script src="/thy/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/thy/script/docs.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+			    $(".list-group-item").click(function(){
+				    if ( $(this).find("ul") ) {
+						$(this).toggleClass("tree-closed");
+						if ( $(this).hasClass("tree-closed") ) {
+							$("ul", this).hide("fast");
+						} else {
+							$("ul", this).show("fast");
+						}
+					}
+				});
+            });
+            $("tbody .btn-success").click(function(){
+                window.location.href = "assignRole.html";
+            });
+            $("tbody .btn-primary").click(function(){
+                window.location.href = "edit.html";
+            });
+        </script>
+  </body>
+</html>

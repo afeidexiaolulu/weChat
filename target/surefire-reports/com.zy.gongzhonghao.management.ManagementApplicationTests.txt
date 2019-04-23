@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.zy.gongzhonghao.management.ManagementApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.092 s - in com.zy.gongzhonghao.management.ManagementApplicationTests

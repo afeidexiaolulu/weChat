@@ -530,7 +530,7 @@ public class ManagementApplicationTests {
     @Test
     public void testInsertProject(){
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(-7,"yyyy-MM-dd");
 
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("SearchBeginDate",yesDateStr);
@@ -550,7 +550,6 @@ public class ManagementApplicationTests {
             if(!datas.isEmpty()) {
                 String s = datas.toString();
                 List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
-
                 //数据返回来的日期
                 Date statisticsDate = totalSafetyDataList.get(0).getStatisticsDate();
                 //如果日期数据库没有插入
@@ -587,50 +586,30 @@ public class ManagementApplicationTests {
                     //求两个交集
                     itemSetRetain.retainAll(myItemSet);
                     System.out.println("交集为："+itemSetRetain);
+                    //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
+                    itemSet.removeAll(itemSetRetain);
+                    //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
+                    myItemSet.removeAll(itemSetRetain);
 
                     List<Project> projectList = new ArrayList<>();
-                    //如果交集长度为0,说明第一次插入项目表
-                    if(itemSetRetain.size() == 0){
-                        for(int i=0; i<totalSafetyDataList.size(); i++){
-                            TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
-                            //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
-                            Project project = new Project();
-                            project.setItemName(totalSafetyData.getItemName());
-                            project.setItemNo(totalSafetyData.getItemNo());
-                            project.setStatus(true);
-                            project.setInsertTime(new Date());
-                            projectList.add(project);
-                        }
-                        //批量插入
-                        projectService.insertProjectBatch(projectList);
-                        LOGGER.debug("第一次插入工程项目数据完成");
-                    }else{
-                        //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
-                        itemSet.removeAll(itemSetRetain);
-                        LOGGER.debug("新增的工程项目为："+ itemSet);
-                        //插入字典表中
+                    //插入新增工程
+                    if(itemSet.size()!= 0){
                         for(int i=0; i< totalSafetyDataList.size(); i++){
                             TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
                             //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
                             if(itemSet.contains(totalSafetyData.getItemNo())){
-                                Project project = new Project();
-                                project.setItemName(totalSafetyData.getItemName());
-                                project.setItemNo(totalSafetyData.getItemNo());
-                                project.setStatus(true);
-                                project.setInsertTime(new Date());
-                                //插入
-                                projectService.insertProject(project);
-                                LOGGER.debug("新增的工程项目插入完成"+itemSet);
+                                Project project = new Project(null,totalSafetyData.getItemName(),totalSafetyData.getItemNo(),true,new Date());
+                                projectList.add(project);
                             }
                         }
-                        //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
-                        myItemSet.removeAll(itemSetRetain);
-                        LOGGER.debug("关闭的工程项目为："+myItemSet);
-                        //更新状态为关闭
-                        if(myItemSet.size() != 0){
-                            projectService.updateProjectStatus(myItemSet);
-                            LOGGER.debug("关闭的工程项目关闭完成："+myItemSet);
-                        }
+                        //插入
+                        projectService.insertProjectBatch(projectList);
+                        LOGGER.debug("新增的工程项目插入完成"+itemSet);
+                    }
+                    //更新状态为关闭
+                    if(myItemSet.size() != 0){
+                        projectService.updateProjectStatus(myItemSet);
+                        LOGGER.debug("关闭的工程项目关闭完成："+myItemSet);
                     }
                     //插入后结束定时任务
                     LOGGER.debug("各个安全 数据插入完成，定时任务结束");

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.gongzhonghao.management.mapper.AccidentNumMapper">
+    <!---统计功能-->
+    <select id="seletcDataAndDateLast3Month" resultType="com.zy.gongzhonghao.management.bean.AccidentNumTable">
+        select  accident_date, sum(accident_num) accident_num
+        from accident_num_table
+        group by date_format(accident_date,"%Y%m")
+        order by accident_date desc limit 0,3
+    </select>
+</mapper>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+	<link rel="stylesheet" href="/thy/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/thy/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/thy/css/main.css">
+	<style>
+	.tree li {
+        list-style-type: none;
+		cursor:pointer;
+	}
+	table tbody tr:nth-child(odd){background:#F4F4F4;}
+	table tbody td:nth-child(even){color:#C00;}
+	</style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div><a class="navbar-brand" style="font-size:32px;" href="#">工程安全数据管理系统</a></div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li style="padding-top:8px;">
+				<div class="btn-group">
+				  <button type="button" class="btn btn-default btn-success dropdown-toggle" data-toggle="dropdown">
+                      <i class="glyphicon glyphicon-user"></i> 管理员 <span class="caret"></span>
+				  </button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="/loginout"><i class="glyphicon glyphicon-off"></i> 退出系统</a></li>
+					</ul>
+			    </div>
+			</li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+			<div class="tree">
+				<ul style="padding-left:0px;" class="list-group">
+					<li class="list-group-item tree-closed" >
+						<a href="#"><i class="glyphicon glyphicon-dashboard"></i> 控制面板</a>
+					</li>
+					<li class="list-group-item">
+						<span><i class="glyphicon glyphicon glyphicon-tasks"></i> 安全数据管理 <span class="badge" style="float:right">2</span></span>
+						<ul style="margin-top:10px;">
+							<li style="height:20px;">
+								<a href="/admin/safetyaccidentnum" style="color:red;width:100px;display:block;text-align:left"><i class="glyphicon glyphicon-user"></i>安全事故数</a>
+							</li>
+							<li style="height:20px;">
+								<a href="/admin/safetyindex" style="color:red;width:100px;display:block;text-align:left"><i class="glyphicon glyphicon-king"></i>区域安全指数</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+        </div>
+		  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			  <div class="panel panel-default">
+				  <div class="panel-heading">
+					  <h3 class="panel-title"><i class="glyphicon glyphicon-th"></i> 施工安全指数据列表</h3>
+				  </div>
+				  <div class="panel-body">
+					<!--<i class=" glyphicon glyphicon-remove"></i> 删除</button>-->
+					  <button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='/admin/conSafetyIndexAdd'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
+					  <br>
+					  <hr style="clear:both;">
+					  <div class="table-responsive" style="text-align:center">
+						  <table class="table  table-bordered">
+							  <thead>
+							  <tr >
+								  <th width="30">#</th>
+								  <th width="30"><input type="checkbox"></th>
+								  <th>指数发布日期</th>
+								  <th>安全指数</th>
+								  <th>上传人</th>
+								  <th>上传时间</th>
+								  <th width="100">操作</th>
+							  </tr>
+							  </thead>
+
+							  <tbody></tbody>
+
+							  <tfoot>
+							  <tr >
+								  <td colspan="7" align="center">
+									  <ul class="pagination"></ul>
+								  </td>
+							  </tr>
+							  </tfoot>
+						  </table>
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+	  </div>
+	</div>
+
+
+    <script src="/thy/jquery/jquery-2.1.1.min.js"></script>
+    <script src="/thy/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/thy/script/docs.min.js"></script>
+	<script src="/js/layer/layer.js"></script>
+        <script type="text/javascript">
+            $(function () {
+			    $(".list-group-item").click(function(){
+				    if ( $(this).find("ul") ) {
+						$(this).toggleClass("tree-closed");
+						if ( $(this).hasClass("tree-closed") ) {
+							$("ul", this).hide("fast");
+						} else {
+							$("ul", this).show("fast");
+						}
+					}
+				});
+				queryPage(1)
+            });
+
+			function deleteById(id){
+				layer.confirm("您确定要删除此条信息么？",  {icon: 3, title:'提示'}, function(cindex){
+					layer.close(cindex);
+					$.ajax({
+						type:"post",
+						url:"/admin/consafetyindex/deleteById",
+						data:{
+							deleteId:id
+						},
+						beforeSend:function(){
+							index = layer.load(0, {time: 10*1000});
+							return true ;
+						},
+						success:function(result){
+							layer.close(index);
+							if(result.success){
+								//局部刷新
+								queryPage(1);
+							}else{
+								//加载失败，弹出错误消息
+								layer.msg("删除失败!", {time:1000, icon:5, shift:6});
+							}
+						}
+					});
+				}, function(cindex){
+					layer.close(cindex);
+				});
+			}
+
+			function queryPage(pageno){
+				var index = -1 ;
+				$.ajax({
+					type:"post",
+					url:"/admin/consafetyindex/page",
+					data:{
+						pageno:pageno,
+						pagesize:10
+					},
+					beforeSend:function(){
+						index = layer.load(0, {time: 10*1000});
+						return true ;
+					},
+					success:function(result){
+						layer.close(index);
+						if(result.success){
+							//局部刷新
+							var page = result.data ;
+							var list = page.datas ;
+							var content = '';
+							$.each(list,function(i,e){
+								content+='<tr>';
+								content+='  <td>'+(i+1)+'</td>';
+								content+='  <td><input type="checkbox"></td>';
+								content+='  <td>'+e.stringDate+'</td>';
+								content+='  <td>'+e.safetyNum+'</td>';
+								content+='  <td>'+e.submitName+'</td>';
+								content+='  <td>'+e.submitTime+'</td>';
+								content+='  <td>';
+/*								content+='	  <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
+								content+='	  <button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>';*/
+								content+='	  <button type="button" class="btn btn-danger btn-xs" onclick="deleteById('+e.id+')"><i class=" glyphicon glyphicon-remove"></i></button>';
+								content+='  </td>';
+								content+='</tr>';
+							});
+							$("tbody").html(content);
+
+							//分页条
+							var navigator = '';
+							if(page.pageno == 1){
+								navigator +='<li class="disabled"><a href="#">上一页</a></li>';
+							}else{
+								navigator +='<li><a onclick="queryPage('+(page.pageno-1)+')">上一页</a></li>';
+							}
+							for(var i=1; i<= page.totalno ; i++){
+								if(i == page.pageno){
+									navigator +='<li class="active"><a onclick="queryPage('+i+')">'+i+'</a></li>';
+								}else{
+									navigator +='<li><a onclick="queryPage('+i+')">'+i+'</a></li>';
+								}
+							}
+
+							if(page.pageno == page.totalno){
+
+								navigator +='<li class="disabled"><a href="#">下一页</a></li>';
+							}else{
+								navigator +='<li><a onclick="queryPage('+(page.pageno+1)+')">下一页</a></li>';
+							}
+
+							$(".pagination").html(navigator);
+						}else{
+							//加载失败，弹出错误消息
+							layer.msg("加载数据失败!", {time:1000, icon:5, shift:6});
+						}
+					}
+				});
+			}
+        </script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+		
+		
+		<title>安全管理首页</title>
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap-3.3.7/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="/font/iconfont.css"/>
+		
+		<script src="/js/echarts.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/index.js" type="text/javascript" charset="utf-8"></script>
+		<style type=text/css>
+			a:hover {
+				text-decoration:none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="bannerImg">
+			<div class="bannerimg"></div>
+			<div class="DivLeft">
+				<p class="DivRight_03P">珠海市</p>
+				<p><span class="Green">横琴新区</span><span class="White">建设工程</span></p>
+				<hr />
+				<p class="DivRight_03P letteS">施工安全指数</p>
+			</div>
+			<div class="DivRight_01">
+				<div class="DivRight_02">
+					<p class="DivRight_03Number" id="shigongzhishu"></p>
+					<p class="DivRight_03P">区域总体施工</p>
+					<p class="DivRight_03P">安全指数</p>
+				</div>
+			</div>
+		</div>
+		<div class="container RollingMessage" id="news">
+			<ul id="p1">
+				<li><span class="iconfont icon-xiaolaba"></span><a href="#" id="weather"></a></li>
+			</ul>
+		</div>
+		<div class="container marginBottom60 menu_">
+			<div class="">
+				<div class="menu_01">
+					<a href="/phone/toSafetyData"><img src="/img/安全数据.png" >
+					<p>安全数据</p></a>
+				</div><i style="margin: 0 2%"></i><div class="menu_02">
+					<a href="/phone/toSafetyIndex"><img src="/img/施工安全指数.png" >
+					<p>施工安全指数</p></a>
+				</div>
+			</div>
+			<div class="margin08">
+				<div class="menu_03">
+					<a href="/phone/toSafetyBehaviour"><img src="/img/安全行为监控.png" >
+					<p>安全行为监控</p></a>
+				</div><i style="margin: 0 2%"></i><div class="menu_04">
+					<a href="/phone/toSafetyStatus"><img src="/img/安全状态监控.png" >
+					<p>安全状态监控</p></a>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<li id="noticeAnnouncement">
+				<span class="iconfont"><img src="/img/Notice.png" ></span>
+				<p>安全公告</p>
+			</li><li id="indexMenu">
+			<a href="/phone/toIndex">
+				<span class="iconfont"><img src="/img/index.png" ></span>
+			</a><p>首页</p>
+		</li><li id="blackList">
+			<a href="/phone/toRankingTable">
+			<span class="iconfont"><img src="/img/billboard.png" ></span>
+			</a>
+			<p>红黑榜</p>
+		</li>
+		</div>
+		<script type="text/javascript">
+			function aa() {
+				var nu = '';
+				var wea = '';
+				$.ajax({
+					url: "/phone/phoneSafetyIndex",
+					type: "get",
+					async: false,
+					success: function (data) {
+						nu = "<div>" + data.safetyIndex + "</div>";
+						wea += data.weatherStr;
+					}
+				});
+				//将数据通过id选择器进行回填
+				$("#shigongzhishu").html(nu);
+				$("#weather").html(wea);
+			} aa();
+
+			 var time = setInterval(function () {
+                t();}, 5000);
+
+            function t() {
+                var he = $("#news>ul>li").height();//找到li高
+                $("#news>ul>li").eq(0).appendTo($("#news>ul")); //复制第一个到最后一个
+                $("#news>ul").animate({
+                    "marginTop": "-" + he
+                }, 500, function () {
+                    $("#news>ul").css({
+                        "marginTop": 0
+                    });
+                });
+            }
+		</script>
+	</body>
+</html>
