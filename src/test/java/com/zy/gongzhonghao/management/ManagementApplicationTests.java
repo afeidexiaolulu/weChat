@@ -46,6 +46,24 @@ public class ManagementApplicationTests {
     @Value("${weatherurl}")
     private String weatherurl;
 
+
+    @Value("${Mmin}")
+    private Integer Mmin;
+
+    @Value("${Mmax}")
+    private Integer Mmax;
+
+    @Value("${a1}")
+    private Float al;
+
+    @Value("${a2}")
+    private Float a2;
+
+    @Value("${a3}")
+    private Float a3;
+
+
+
     @Autowired
     private SafetyTimeMapper safetyTimeMapper;
 
@@ -78,6 +96,12 @@ public class ManagementApplicationTests {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private ProjectRateService projectRateService;
+
+    @Autowired
+    private SafetyIndexService safetyIndexService;
 
     @Test
     public void contextLoads() {
@@ -530,7 +554,7 @@ public class ManagementApplicationTests {
     @Test
     public void testInsertProject(){
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-7,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(-10,"yyyy-MM-dd");
 
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("SearchBeginDate",yesDateStr);
@@ -570,6 +594,10 @@ public class ManagementApplicationTests {
                     workerManaRateService.insertTraDuty(yesDateStr);
                     //插入各种预警数值
                     totalWarningService.insertTotalWarning(yesDateStr);
+
+                    //计算每个项目的今天的安全指数
+                    safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
+
 
                     //获取所有的项目的item_no
                     Set<String> itemSet = new HashSet<>();
@@ -627,6 +655,7 @@ public class ManagementApplicationTests {
 
 
     //每天凌晨0点01分开始获取天气,10分钟一次
+    @Test
     @Scheduled(cron = "0 */1 * * * ?")
     public void WeatherTask(){
         //封装到weatherService中,通过接口获取天气
@@ -639,6 +668,43 @@ public class ManagementApplicationTests {
             LOGGER.debug("已插入过天气数据");
         }
     }
+
+
+    @Test
+    public void testSafetyIndexByInterface(){
+        //获取昨天日期
+        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
+
+        String jsonString = DateUtils.getJsonString(-1);
+
+        try {
+            //通过三方接口获取数据
+            String result = HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord",jsonString);
+            LOGGER.debug("开始请求所有安全数据");
+            //解析数据查看是否查询成功
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            //查看datas是否为空，如不不为空查询成功
+            JSONArray datas = jsonObject.getJSONArray("Datas");
+            //如果数据不为空插入数据库中
+            if(!datas.isEmpty()) {
+                String s = datas.toString();
+                List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
+
+                if( true){
+                    //计算每个项目的今天的安全指数
+                    safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
+
+                    return;
+                }else {
+                    LOGGER.debug("已插入过各种安全数据");
+                }
+            }
+            //失败异常捕获
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 

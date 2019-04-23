@@ -7,6 +7,13 @@ weatherurl: http://t.weather.sojson.com/api/weather/city/101280701
 #所有数据三方接口
 safetyInterface: http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord
 
+#安全指数计算数据
+Mmax: 90
+Mmin: 60
+a1: 0.1513
+a2: 0.49
+a3: 0.1917
+
 
 server:
   port: 8380

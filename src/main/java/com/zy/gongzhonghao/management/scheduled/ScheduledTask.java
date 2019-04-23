@@ -70,6 +70,8 @@ public class ScheduledTask {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private SafetyIndexService safetyIndexService;
 
     //每一小时执行一次查询安全时长，并放入数据库中
     @Scheduled(cron="0 0 0/1 * * ?")
@@ -103,16 +105,12 @@ public class ScheduledTask {
 
         //获取昨天日期
         String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
-
-        Map<String, String> paramMap = new HashMap<>();
-        paramMap.put("SearchBeginDate",yesDateStr);
-        paramMap.put("SearchEndDate",yesDateStr);
-        paramMap.put("Token","48C8B324-744C-4480-9E0B-966D8632AB05");
-        String mapToJson = JsonUtils.mapToJson(paramMap);
+        //获取请求参数
+        String jsonString = DateUtils.getJsonString(-1);
 
         try {
             //通过三方接口获取数据
-            String result = HttpClientUtils.doPostJson(safetyInterface,mapToJson);
+            String result = HttpClientUtils.doPostJson(safetyInterface,jsonString);
             LOGGER.debug("开始请求所有安全数据");
             //解析数据查看是否查询成功
             JSONObject jsonObject = JSONObject.parseObject(result);
@@ -143,6 +141,10 @@ public class ScheduledTask {
                     workerManaRateService.insertTraDuty(yesDateStr);
                     //插入各种预警数值
                     totalWarningService.insertTotalWarning(yesDateStr);
+
+                    //插入区域项目的安全指数
+                    safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
+
 
                     //获取所有的项目的item_no
                     Set<String> itemSet = new HashSet<>();

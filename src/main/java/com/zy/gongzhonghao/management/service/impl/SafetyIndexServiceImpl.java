@@ -3,22 +3,46 @@ package com.zy.gongzhonghao.management.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zy.gongzhonghao.management.bean.ProjectRate;
 import com.zy.gongzhonghao.management.bean.SafetyIndex;
+import com.zy.gongzhonghao.management.bean.TotalSafetyData;
 import com.zy.gongzhonghao.management.controller.model.phone.SafetyIndexDto;
 import com.zy.gongzhonghao.management.mapper.SafetyIndexMapper;
+import com.zy.gongzhonghao.management.service.ProjectRateService;
 import com.zy.gongzhonghao.management.service.SafetyIndexService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, SafetyIndex> implements SafetyIndexService {
 
+    @Value("${Mmin}")
+    private Integer Mmin;
+
+    @Value("${Mmax}")
+    private Integer Mmax;
+
+    @Value("${a1}")
+    private Float al;
+
+    @Value("${a2}")
+    private Float a2;
+
+    @Value("${a3}")
+    private Float a3;
+
+    @Autowired
+    private ProjectRateService projectRateService;
+
     @Autowired
     private SafetyIndexMapper safetyIndexMapper;
+
 
     @Override
     public Page<SafetyIndex> queryPage(Map<String, Object> paramMap) {
@@ -77,5 +101,68 @@ public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, Safet
             dto.setSafetyIndex(new Float(0));
             return dto;
         }
+    }
+
+    //通过接口插入安全指数
+    @Override
+    public Integer insertSafetyIndexByInterface(List<TotalSafetyData> totalSafetyDataList, Integer diff) {
+
+        Float safetIndexSum = new Float("0");
+
+        //遍历list集合，求出每个项目安全指数
+        for(int i=0; i< totalSafetyDataList.size(); i++){
+            float workerRate;
+            float manaRate;
+            float manaBachelor;
+            //求培训率
+            TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
+            //工人总人数
+            Integer workerOnJobCount = totalSafetyData.getWorkerOnJobCount();
+            //工人教育人数
+            Integer workerEduCount = totalSafetyData.getWorkerEduCount();
+            if(workerEduCount  == 8888 || workerEduCount == 0 || workerOnJobCount == 0 || workerOnJobCount == 0 ){
+                workerRate = 0;
+            }else {
+                //工人教育率
+                workerRate = workerEduCount / new Float(workerOnJobCount);
+            }
+
+            //求到岗率
+            Integer managerOnJobCount = totalSafetyData.getManagerOnJobCount();
+            Integer managerAttCount = totalSafetyData.getManagerAttCount();
+            if(managerOnJobCount == 0 || managerOnJobCount == 8888 || managerAttCount == 8888 || managerAttCount == 0){
+                //到岗率
+                manaRate = 0;
+            }else {
+                //到岗率
+                manaRate = managerAttCount / new Float(managerOnJobCount);
+            }
+            //求所有的项目管理指数
+            List<ProjectRate> projectRateList =  projectRateService.selectAll();
+            if(i<202){ 
+                float manaBachelorF = projectRateList.get(i).getManaBachelor();
+                if(manaBachelorF == 8888){
+                    manaBachelor = new Float(0);
+                }else {
+                    manaBachelor = manaBachelorF/10;
+                }
+            }else {
+                //如果超过202，为0;
+                manaBachelor = new Float(0);
+            }
+            //计算项目的安全指数
+            safetIndexSum += ((Mmax - Mmin) / (al + a2 + a3)) * ((al * workerRate) + (a2 * manaBachelor) + (a3 * manaRate)) + 60;
+            System.out.println(safetIndexSum);
+        }
+        //求区域安全指数
+        float safetIndexAvg = safetIndexSum / totalSafetyDataList.size();
+        //生成昨天时间
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE,diff);
+        Date time = calendar.getTime();
+
+        SafetyIndex areaSafetyIndex = new SafetyIndex(null, time, safetIndexAvg, "系统生成", new Date(), null);
+        //插入区域安全指数
+        return baseMapper.insert(areaSafetyIndex);
     }
 }
