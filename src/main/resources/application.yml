@@ -39,7 +39,7 @@ spring:
     time-zone: GMT+8
 #指定环境为测试环境
   profiles:
-    active: dev
+    active: prod
 
 
 mybatis-plus:

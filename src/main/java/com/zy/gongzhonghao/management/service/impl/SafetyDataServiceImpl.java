@@ -80,8 +80,8 @@ public class SafetyDataServiceImpl implements SafetyDataService {
             int[] intTem = new int[resultSize];
             Date[] dateTem = new Date[resultSize];
             for (int i = 0; i< resultSize; i++){
-                intTem[i] = accidentNumTables.get(resultSize-i-1).getAccidentNum();
-                dateTem[i] = accidentNumTables.get(resultSize-i-1).getAccidentDate();
+                intTem[i] = accidentNumTables.get(i).getAccidentNum();
+                dateTem[i] = accidentNumTables.get(i).getAccidentDate();
             }
             safetyNumDto.setAccidentNum(intTem);
             //转换时间格式

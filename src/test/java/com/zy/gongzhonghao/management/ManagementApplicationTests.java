@@ -15,6 +15,7 @@ import com.zy.gongzhonghao.management.util.HttpClientUtils;
 import com.zy.gongzhonghao.management.util.JsonUtils;
 import com.zy.gongzhonghao.management.util.MD5Util;
 import org.apache.commons.lang.ArrayUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -656,7 +657,6 @@ public class ManagementApplicationTests {
 
     //每天凌晨0点01分开始获取天气,10分钟一次
     @Test
-    @Scheduled(cron = "0 */1 * * * ?")
     public void WeatherTask(){
         //封装到weatherService中,通过接口获取天气
         Integer result = weatherService.insertWeatherMsgByInterface();
