@@ -99,8 +99,8 @@ public class ScheduledTask {
 
 
     //从凌晨0点开始，3点结束，每20分钟执行一次
-    //@Scheduled(cron="0 */1 * * * ? ")
-    @Scheduled(cron="0 0 0/2 * * ?")
+    @Scheduled(cron="0 */1 * * * ? ")
+    //@Scheduled(cron="0 0 0/2 * * ?")
     @Transactional
     public void totalRequData() {
 
@@ -224,8 +224,8 @@ public class ScheduledTask {
 
 
     //每天凌晨0点01分开始获取天气,10分钟一次
-    @Scheduled(cron = "0 1 0/3 * * ? ")
-    //@Scheduled(cron="0 */1 * * * ? ")
+    //@Scheduled(cron = "0 1 0/3 * * ? ")
+    @Scheduled(cron="0 */1 * * * ? ")
     public void WeatherTask(){
 
         try {
