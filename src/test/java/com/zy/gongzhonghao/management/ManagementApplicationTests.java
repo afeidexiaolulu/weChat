@@ -31,7 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-//@Ignore
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ManagementApplicationTests {
@@ -554,8 +554,9 @@ public class ManagementApplicationTests {
 
     @Test
     public void testInsertProject(){
+
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-10,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(-2,"yyyy-MM-dd");
 
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("SearchBeginDate",yesDateStr);
@@ -571,6 +572,17 @@ public class ManagementApplicationTests {
             JSONObject jsonObject = JSONObject.parseObject(result);
             //查看datas是否为空，如不不为空查询成功
             JSONArray datas = jsonObject.getJSONArray("Datas");
+/*            if(datas.isEmpty()){
+                //工人培训，管理到岗，各种预警，安全数据
+                //插入工人培训率和管理到岗率
+                workerManaRateService.insertTraDuty(yesDateStr);
+                //插入各种预警数值
+                totalWarningService.insertTotalWarning(yesDateStr);
+                //计算每个项目的今天的安全指数
+                safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
+
+
+            }*/
             //如果数据不为空插入数据库中
             if(!datas.isEmpty()) {
                 String s = datas.toString();
@@ -585,17 +597,10 @@ public class ManagementApplicationTests {
                     //插入数据库中
                     totalSafetyDataService.insertJsonTableBatch(totalSafetyDataList);
                     LOGGER.debug("将总安全数据插入数据库");
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
                     //插入工人培训率和管理到岗率
                     workerManaRateService.insertTraDuty(yesDateStr);
                     //插入各种预警数值
                     totalWarningService.insertTotalWarning(yesDateStr);
-
                     //计算每个项目的今天的安全指数
                     safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
 
@@ -694,6 +699,56 @@ public class ManagementApplicationTests {
                     //计算每个项目的今天的安全指数
                     safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
 
+                    //获取所有的项目的item_no
+                    Set<String> itemSet = new HashSet<>();
+
+                    for (TotalSafetyData totalSafetyData : totalSafetyDataList) {
+                        itemSet.add(totalSafetyData.getItemNo());
+                    }
+                    //复制
+                    Set<String> itemSetRetain = new HashSet<>();
+                    itemSetRetain.addAll(itemSet);
+                    //查询字典表中所有的item
+                    Set<String> myItemSet = projectService.selectItemNo();
+
+                    //求两个交集
+                    itemSetRetain.retainAll(myItemSet);
+                    LOGGER.debug("交集为："+itemSetRetain);
+                    //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
+                    itemSet.removeAll(itemSetRetain);
+                    //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
+                    myItemSet.removeAll(itemSetRetain);
+
+                    List<Project> projectList = new ArrayList<>();
+                    //插入新增工程
+                    if(itemSet.size()!= 0){
+                        for(int i=0; i< totalSafetyDataList.size(); i++){
+                            TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
+                            //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
+                            if(itemSet.contains(totalSafetyData.getItemNo())){
+                                Project project = new Project(null,totalSafetyData.getItemName(),totalSafetyData.getItemNo(),true,new Date());
+                                projectList.add(project);
+                            }
+                        }
+                        //插入
+                        Integer insertProjectBatch = projectService.insertProjectBatch(projectList);
+                        if(insertProjectBatch != itemSet.size()){
+                            LOGGER.error("批量插入工程失败");
+                            throw new Exception();
+                        }
+                        LOGGER.debug("新增的工程项目插入完成"+itemSet);
+                    }
+                    //更新状态为关闭
+                    if(myItemSet.size() != 0){
+                        Integer updateProjectStatus = projectService.updateProjectStatus(myItemSet);
+                        if(myItemSet.size() != updateProjectStatus){
+                            LOGGER.error("更新状态失败");
+                            throw new Exception();
+                        }
+                        LOGGER.debug("关闭的工程项目关闭完成："+myItemSet);
+                    }
+                    //插入后结束定时任务
+                    LOGGER.debug("各个安全 数据插入完成，定时任务结束");
                     return;
                 }else {
                     LOGGER.debug("已插入过各种安全数据");

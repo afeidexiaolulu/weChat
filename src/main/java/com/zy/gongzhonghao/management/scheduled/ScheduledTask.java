@@ -75,6 +75,7 @@ public class ScheduledTask {
 
     //每一小时执行一次查询安全时长，并放入数据库中
     @Scheduled(cron="0 0 0/1 * * ?")
+    //@Scheduled(cron="0 */1 * * * ?")
     public void getSafetyData(){
 
         try {
@@ -98,8 +99,8 @@ public class ScheduledTask {
 
 
     //从凌晨0点开始，3点结束，每20分钟执行一次
-    //@Scheduled(cron="0 1,21,41 1,2,3 * * ? ")
-    @Scheduled(cron="0 */1 * * * ? ")
+    //@Scheduled(cron="0 */1 * * * ? ")
+    @Scheduled(cron="0 0 0/2 * * ?")
     @Transactional
     public void totalRequData() {
 
@@ -111,11 +112,14 @@ public class ScheduledTask {
         try {
             //通过三方接口获取数据
             String result = HttpClientUtils.doPostJson(safetyInterface,jsonString);
-            LOGGER.debug("开始请求所有安全数据");
+            LOGGER.info("开始请求所有安全数据");
             //解析数据查看是否查询成功
             JSONObject jsonObject = JSONObject.parseObject(result);
             //查看datas是否为空，如不不为空查询成功
             JSONArray datas = jsonObject.getJSONArray("Datas");
+            //if(datas)
+
+
             //如果数据不为空插入数据库中
             if(!datas.isEmpty()) {
                 String s = datas.toString();
@@ -129,13 +133,12 @@ public class ScheduledTask {
                 List<TotalSafetyData> selectList = totalSafetyDataMapper.selectList(wrapper);
                 if( selectList.size() == 0){
                     //插入数据库中
-
                     Integer insertNum = totalSafetyDataService.insertJsonTableBatch(totalSafetyDataList);
                     if(insertNum != totalSafetyDataList.size()){
                         LOGGER.error("总安全数据时失败");
                         throw new Exception();
                     }
-                    LOGGER.debug("将总安全数据插入数据库");
+                    LOGGER.info("将总安全数据插入数据库");
 
                     //插入工人培训率和管理到岗率
                     Integer insertTraDuty = workerManaRateService.insertTraDuty(yesDateStr);
@@ -203,13 +206,13 @@ public class ScheduledTask {
                             LOGGER.error("更新状态失败");
                             throw new Exception();
                         }
-                        LOGGER.debug("关闭的工程项目关闭完成："+myItemSet);
+                        LOGGER.info("关闭的工程项目关闭完成："+myItemSet);
                     }
                     //插入后结束定时任务
-                    LOGGER.debug("各个安全 数据插入完成，定时任务结束");
+                    LOGGER.info("各个安全 数据插入完成，定时任务结束");
                     return;
                 }else {
-                    LOGGER.debug("已插入过各种安全数据");
+                    LOGGER.info("已插入过各种安全数据");
                 }
             }
             //失败异常捕获

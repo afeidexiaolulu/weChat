@@ -87,6 +87,7 @@ var line_01 = function(){
 		var safetyIndex = '';
 	   //发送ajax请求发送数据
 		$.ajax({
+			cache:'false',
 			type: "get",
 			url: "/phone/phoneSafetyIndexData",//安全行为监控页请求
 			success: function (data) {

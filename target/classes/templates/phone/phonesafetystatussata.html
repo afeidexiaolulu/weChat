@@ -10,7 +10,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
 		
 		
-		<title>安全行为监控</title>
+		<title>安全状态监控</title>
 		<link rel="stylesheet" type="text/css" href="/erci/css/bootstrap-3.3.7/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/erci/font/iconfont.css"/>
 		<link rel="stylesheet" type="text/css" href="/erci/css/swiper.min.css"/>
@@ -39,10 +39,10 @@
 			</a>
 
 			<a href="/phone/toSafetyStatusLine">
-			<div class="list_number orange">
-				<span>施工升降机超载监控</span>
-				<em id="2"></em>
-			</div>
+				<div class="list_number orange">
+					<span>施工升降机超载监控</span>
+					<em id="2"></em>
+				</div>
 			</a>
 
 			<a href="/phone/toSafetyStatusLine">
@@ -93,6 +93,7 @@
 				var dustWarning = '';
 				var carWarning = '';
 				$.ajax({
+					cache:'false',
 					type:"get",
 					url:"/phone/phoneSafetyStatus",
 					async: false,

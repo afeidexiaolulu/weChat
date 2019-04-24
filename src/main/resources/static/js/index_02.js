@@ -98,6 +98,7 @@ var line_03 = function(){
 	var zuigao = '';
     //书写ajax请求，然后动态的在此显示横纵坐标
     $.ajax({
+		cache:'false',
         type:"get",
         url:"/phone/phoneSafetyData",//安全数据页请求
         success:function(result){

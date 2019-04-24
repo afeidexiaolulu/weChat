@@ -189,6 +189,7 @@ function load() {
 
 	//发送ajax请求
 	$.ajax({
+		cache:'false',
 		type:'get',
 		url:'/phone/safetyBehaviourMonData',
 		success:function (data) {

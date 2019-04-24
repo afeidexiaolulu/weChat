@@ -432,6 +432,7 @@ var line_05 = function(){
 function load() {
 
 	$.ajax({
+		cache:'false',
 		type:'get',
 		url:'/phone/phoneSafetyStatusLine',
 		success : function (data) {
@@ -521,7 +522,7 @@ function load() {
 							}
 						}
 					},
-					data: data.carWarning,
+					data: data.dustWarning,
 					// 显示数值
 					itemStyle : { normal: {label : {show: true}}}
 				}]
@@ -567,7 +568,7 @@ function load() {
 							}
 						}
 					},
-					data: data.dustWarning,
+					data: data.carWarning,
 					// 显示数值
 					itemStyle : { normal: {label : {show: true}}}
 				}]
