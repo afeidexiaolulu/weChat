@@ -52,7 +52,7 @@
 				</div>
 			</a>
 
-			<a href="/phone/toSafetyStatusLine">
+			<a id="dustLine">
 				<div class="list_number purple">
 					<span>扬尘超标准监控</span>
 					<em id="4"></em>
@@ -118,9 +118,13 @@
 		var swiper = new Swiper('.swiper-container', {
 				navigation: {
 				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-prev',
-				},
+				prevEl: '.swiper-button-prev'
+				}
 			});
+
+		$('#dustLine').click(function(){
+			swiper.slideTo(3);//切换到第一个slide，速度为1秒
+		})
 		</script>
 	</body>
 </html>

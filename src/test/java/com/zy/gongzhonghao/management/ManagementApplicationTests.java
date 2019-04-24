@@ -31,7 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-@Ignore
+//@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ManagementApplicationTests {
@@ -503,11 +503,11 @@ public class ManagementApplicationTests {
         int size = totalWarningList.size();
 
         String dateString[] = new String[size];
-        Float craneWeight[] = new Float[size];
-        Float lifterWeight[] = new Float[size];
-        Float noiseWarning[] = new Float[size];
-        Float dustWarning[] = new Float[size];
-        Float carWarning[] = new Float[size];
+        Integer craneWeight[] = new Integer[size];
+        Integer lifterWeight[] = new Integer[size];
+        Integer noiseWarning[] = new Integer[size];
+        Integer dustWarning[] = new Integer[size];
+        Integer carWarning[] = new Integer[size];
 
         if(totalWarningList != null && totalWarningList.size() != 0){
             for(int i = 0; i < size; i++){
@@ -556,7 +556,7 @@ public class ManagementApplicationTests {
     public void testInsertProject(){
 
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-2,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
 
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("SearchBeginDate",yesDateStr);

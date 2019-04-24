@@ -34,19 +34,19 @@ public class TotalWarningServiceImpl extends ServiceImpl<TotalWarningMapper, Tot
         TotalWarning totalWarning = new TotalWarning();
 
         //插入泥头车
-        Float aFloat = totalSafetyDataService.carWarningAvg(yesterday);
+        Integer aFloat = Math.round(totalSafetyDataService.carWarningAvg(yesterday));
         totalWarning.setCarWarning(aFloat);
         //插入塔吊
-        Float aFloat1 = totalSafetyDataService.craneWeightAvg(yesterday);
+        Integer aFloat1 = Math.round(totalSafetyDataService.craneWeightAvg(yesterday));
         totalWarning.setCraneWeight(aFloat1);
         //插入升降机
-        Float aFloat2 = totalSafetyDataService.lifterWeightAvg(yesterday);
+        Integer aFloat2 = Math.round(totalSafetyDataService.lifterWeightAvg(yesterday));
         totalWarning.setLifterWeight(aFloat2);
         //插入噪音
-        Float aFloat3 = totalSafetyDataService.noiseWarningAvg(yesterday);
+        Integer aFloat3 = Math.round(totalSafetyDataService.noiseWarningAvg(yesterday));
         totalWarning.setNoiseWarning(aFloat3);
         //插入扬尘
-        Float aFloat4 = totalSafetyDataService.dustWarningAvg(yesterday);
+        Integer aFloat4 = Math.round(totalSafetyDataService.dustWarningAvg(yesterday));
         totalWarning.setDustWarning(aFloat4);
 
         Date parse = null;
@@ -83,11 +83,11 @@ public class TotalWarningServiceImpl extends ServiceImpl<TotalWarningMapper, Tot
         }
         //如果为空，返回全是0
         TotalWarning totalWarning = new TotalWarning();
-        totalWarning.setCarWarning(new Float(0.0));
-        totalWarning.setCraneWeight(new Float(0.0));
-        totalWarning.setNoiseWarning(new Float(0.0));
-        totalWarning.setLifterWeight(new Float(0.0));
-        totalWarning.setDustWarning(new Float(0.0));
+        totalWarning.setCarWarning(0);
+        totalWarning.setCraneWeight(0);
+        totalWarning.setNoiseWarning(0);
+        totalWarning.setLifterWeight(0);
+        totalWarning.setDustWarning(0);
         return totalWarning;
     }
 
@@ -100,11 +100,11 @@ public class TotalWarningServiceImpl extends ServiceImpl<TotalWarningMapper, Tot
         int size = totalWarningList.size();
 
         String dateString[] = new String[size];
-        Float craneWeight[] = new Float[size];
-        Float lifterWeight[] = new Float[size];
-        Float noiseWarning[] = new Float[size];
-        Float dustWarning[] = new Float[size];
-        Float carWarning[] = new Float[size];
+        Integer craneWeight[] = new Integer[size];
+        Integer lifterWeight[] = new Integer[size];
+        Integer noiseWarning[] = new Integer[size];
+        Integer dustWarning[] = new Integer[size];
+        Integer carWarning[] = new Integer[size];
 
         if (totalWarningList != null && totalWarningList.size() != 0) {
             for (int i = 0; i < size; i++) {

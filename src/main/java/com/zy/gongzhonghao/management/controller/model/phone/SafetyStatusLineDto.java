@@ -9,13 +9,13 @@ public class SafetyStatusLineDto {
 
     private String dateString[];
 
-    private Float craneWeight[];
+    private Integer craneWeight[];
 
-    private Float lifterWeight[];
+    private Integer lifterWeight[];
 
-    private Float noiseWarning[];
+    private Integer noiseWarning[];
 
-    private Float dustWarning[];
+    private Integer dustWarning[];
 
-    private Float carWarning[];
+    private Integer carWarning[];
 }

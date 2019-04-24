@@ -105,9 +105,9 @@ public class ScheduledTask {
     public void totalRequData() {
 
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(-9,"yyyy-MM-dd");
         //获取请求参数
-        String jsonString = DateUtils.getJsonString(-1);
+        String jsonString = DateUtils.getJsonString(-9);
 
         try {
             //通过三方接口获取数据
@@ -154,7 +154,7 @@ public class ScheduledTask {
                     }
 
                     //插入区域项目的安全指数
-                    Integer insertSafetyIndex = safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList, -1);
+                    Integer insertSafetyIndex = safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList, -9);
                     if(insertSafetyIndex != 1){
                         LOGGER.error("插入区域安全指数失败");
                         throw new Exception();

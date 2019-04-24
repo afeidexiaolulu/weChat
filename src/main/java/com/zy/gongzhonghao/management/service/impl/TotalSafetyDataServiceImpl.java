@@ -7,8 +7,6 @@ import com.zy.gongzhonghao.management.mapper.TotalSafetyDataMapper;
 import com.zy.gongzhonghao.management.service.TotalSafetyDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -67,7 +65,7 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
         if(totalSafetyDataMapper.getCarWarningNumAVG(yesterday) != null){
             return totalSafetyDataMapper.getCarWarningNumAVG(yesterday);
         }else {
-            return new Float("0.0");
+            return new Float("0");
         }
     }
 
@@ -76,7 +74,7 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
         if(totalSafetyDataMapper.getCraneWeightNumAVG(yesterday) != null){
             return totalSafetyDataMapper.getCraneWeightNumAVG(yesterday);
         }else {
-            return new Float("0.0");
+            return new Float("0");
         }
     }
 
@@ -88,7 +86,7 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
         if(totalSafetyDataMapper.getLifterWeightNumAVG(yesterday) != null){
             return totalSafetyDataMapper.getLifterWeightNumAVG(yesterday);
         }else {
-            return new Float("0.0");
+            return new Float("0");
         }
     }
 
@@ -97,7 +95,7 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
         if(totalSafetyDataMapper.getDustWarningNumAVG(yesterday) != null){
             return totalSafetyDataMapper.getDustWarningNumAVG(yesterday);
         }else {
-            return new Float("0.0");
+            return new Float("0");
         }
     }
 
@@ -106,7 +104,7 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
         if(totalSafetyDataMapper.getNoiseWarningNumAVG(yesterday) != null){
             return totalSafetyDataMapper.getNoiseWarningNumAVG(yesterday);
         }else {
-            return new Float("0.0");
+            return new Float("0");
         }
     }
 }
