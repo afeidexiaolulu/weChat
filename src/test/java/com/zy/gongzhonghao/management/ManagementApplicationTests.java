@@ -99,9 +99,6 @@ public class ManagementApplicationTests {
     private ProjectService projectService;
 
     @Autowired
-    private ProjectRateService projectRateService;
-
-    @Autowired
     private SafetyIndexService safetyIndexService;
 
     @Test
@@ -695,10 +692,15 @@ public class ManagementApplicationTests {
                 String s = datas.toString();
                 List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
 
-                if( true){
+                if(true){
+
+                    //插入工人培训率和管理到岗率
+                    workerManaRateService.insertTraDuty(yesDateStr);
                     //计算每个项目的今天的安全指数
                     safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
 
+                    //插入各种预警数值
+                    totalWarningService.insertTotalWarning(yesDateStr);
                     //获取所有的项目的item_no
                     Set<String> itemSet = new HashSet<>();
 

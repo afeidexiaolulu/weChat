@@ -20,6 +20,7 @@
 		<script src="/erci/js/jquery.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/erci/js/common.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/erci/js/index_05.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/erci/js/getUrl.js"  type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 			<div class="swiper-container">
@@ -64,8 +65,6 @@
 							</div>
 						</div>
 					</div>
-
-
 					
 					<div class="swiper-slide">
 						<span class="container_tit">噪声超标准监控</span>
@@ -104,7 +103,11 @@
 
 		<script src="/erci/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
 		<script>
+		var a = UrlParam.paramValues("index");
+		var index = a[0];
+		console.log(index);
 		var swiper = new Swiper('.swiper-container', {
+				initialSlide :index,
 				navigation: {
 				nextEl: '.swiper-button-next',
 				prevEl: '.swiper-button-prev',
