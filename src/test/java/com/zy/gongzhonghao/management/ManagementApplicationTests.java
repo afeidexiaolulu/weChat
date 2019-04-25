@@ -31,7 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-//@Ignore
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ManagementApplicationTests {
@@ -111,6 +111,7 @@ public class ManagementApplicationTests {
     //测试获取安全时长
     @Test
     public void getSatefyData(){
+
         String s = "http://120.77.254.210:8888/ibps-platform-webapi/api/loginCustomService/appEncryption?account=";
         String safetyDataStr = HttpClientUtils.doPost(s + loginname + "&pwd=" + password);
         //利用fastjosn来获取json字符串中的某个数据

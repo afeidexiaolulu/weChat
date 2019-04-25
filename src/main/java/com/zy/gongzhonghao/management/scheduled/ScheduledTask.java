@@ -98,16 +98,16 @@ public class ScheduledTask {
 
 
 
-    //从凌晨0点开始，3点结束，每20分钟执行一次
-    @Scheduled(cron="0 */1 * * * ? ")
-    //@Scheduled(cron="0 0 0/2 * * ?")
+    //从凌晨0点01分开始每2个小时执行一次
+    //@Scheduled(cron="0 */1 * * * ? ")
+    @Scheduled(cron="0 1 0/2 * * ?")
     @Transactional
     public void totalRequData() {
 
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-9,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
         //获取请求参数
-        String jsonString = DateUtils.getJsonString(-9);
+        String jsonString = DateUtils.getJsonString(-1);
 
         try {
             //通过三方接口获取数据
@@ -117,8 +117,6 @@ public class ScheduledTask {
             JSONObject jsonObject = JSONObject.parseObject(result);
             //查看datas是否为空，如不不为空查询成功
             JSONArray datas = jsonObject.getJSONArray("Datas");
-            //if(datas)
-
 
             //如果数据不为空插入数据库中
             if(!datas.isEmpty()) {
@@ -154,7 +152,7 @@ public class ScheduledTask {
                     }
 
                     //插入区域项目的安全指数
-                    Integer insertSafetyIndex = safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList, -9);
+                    Integer insertSafetyIndex = safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList, -1);
                     if(insertSafetyIndex != 1){
                         LOGGER.error("插入区域安全指数失败");
                         throw new Exception();
@@ -223,9 +221,9 @@ public class ScheduledTask {
 
 
 
-    //每天凌晨0点01分开始获取天气,10分钟一次
-    //@Scheduled(cron = "0 1 0/3 * * ? ")
-    @Scheduled(cron="0 */1 * * * ? ")
+    //每天凌晨0点01分开始获取天气,3小时一次
+    @Scheduled(cron = "0 1 0/3 * * ? ")
+    //@Scheduled(cron="0 */1 * * * ? ")
     public void WeatherTask(){
 
         try {
