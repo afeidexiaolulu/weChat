@@ -31,7 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-@Ignore
+//@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ManagementApplicationTests {
@@ -677,8 +677,16 @@ public class ManagementApplicationTests {
     public void testSafetyIndexByInterface(){
         //获取昨天日期
         String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
+        String dateStr = DateUtils.getDateStr(-1, "yyyy-MM-dd");
 
         String jsonString = DateUtils.getJsonString(-1);
+
+/*        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("SearchBeginDate",dateStr);
+        paramMap.put("SearchEndDate",yesDateStr);
+        paramMap.put("Token","48C8B324-744C-4480-9E0B-966D8632AB05");
+        String mapToJson = JsonUtils.mapToJson(paramMap);*/
+
 
         try {
             //通过三方接口获取数据
@@ -762,6 +770,18 @@ public class ManagementApplicationTests {
             e.printStackTrace();
         }
     }
+
+
+    @Test
+    public void testMap(){
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(1,2);
+        map.put(3,4);
+        Integer integer = map.get(5);
+        System.out.println(integer);
+        System.out.println(111);
+    }
+
 
 }
 

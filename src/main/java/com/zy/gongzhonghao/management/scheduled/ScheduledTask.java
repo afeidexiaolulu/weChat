@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zy.gongzhonghao.management.bean.Project;
+import com.zy.gongzhonghao.management.bean.ProjectScoreWeek;
 import com.zy.gongzhonghao.management.bean.TotalSafetyData;
 import com.zy.gongzhonghao.management.bean.Weather;
 import com.zy.gongzhonghao.management.mapper.TotalSafetyDataMapper;
@@ -73,6 +74,12 @@ public class ScheduledTask {
     @Autowired
     private SafetyIndexService safetyIndexService;
 
+    @Autowired
+    private ProjectScoreDayService projectScoreDayService;
+
+    //定义请求回来的安全数据列表
+    private List<TotalSafetyData> totalSafetyDataList;
+
     //每一小时执行一次查询安全时长，并放入数据库中
     @Scheduled(cron="0 0 0/1 * * ?")
     //@Scheduled(cron="0 */1 * * * ?")
@@ -99,8 +106,8 @@ public class ScheduledTask {
 
 
     //从凌晨0点01分开始每2个小时执行一次
-    //@Scheduled(cron="0 */1 * * * ? ")
-    @Scheduled(cron="0 1 0/2 * * ?")
+    @Scheduled(cron="0 */1 * * * ? ")
+    //@Scheduled(cron="0 1 0/2 * * ?")
     @Transactional
     public void totalRequData() {
 
@@ -121,7 +128,7 @@ public class ScheduledTask {
             //如果数据不为空插入数据库中
             if(!datas.isEmpty()) {
                 String s = datas.toString();
-                List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
+                totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
 
                 //数据返回来的日期
                 Date statisticsDate = totalSafetyDataList.get(0).getStatisticsDate();
@@ -218,6 +225,18 @@ public class ScheduledTask {
             e.printStackTrace();
         }
     }
+
+
+
+    //每周一早上6点钟开始计算上周各个项目平均分数
+    @Scheduled(cron = "0 0 5/1 ? * MON")
+    public void projectScoreWeek(){
+
+    }
+
+
+
+
 
 
 

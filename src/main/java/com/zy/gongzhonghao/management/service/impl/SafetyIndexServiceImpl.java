@@ -4,20 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zy.gongzhonghao.management.bean.ProjectRate;
+import com.zy.gongzhonghao.management.bean.ProjectScoreDay;
 import com.zy.gongzhonghao.management.bean.SafetyIndex;
 import com.zy.gongzhonghao.management.bean.TotalSafetyData;
 import com.zy.gongzhonghao.management.controller.model.phone.SafetyIndexDto;
 import com.zy.gongzhonghao.management.mapper.SafetyIndexMapper;
 import com.zy.gongzhonghao.management.service.ProjectRateService;
+import com.zy.gongzhonghao.management.service.ProjectScoreDayService;
 import com.zy.gongzhonghao.management.service.SafetyIndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, SafetyIndex> implements SafetyIndexService {
@@ -42,6 +41,9 @@ public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, Safet
 
     @Autowired
     private SafetyIndexMapper safetyIndexMapper;
+
+    @Autowired
+    private ProjectScoreDayService projectScoreDayService;
 
 
     @Override
@@ -106,8 +108,18 @@ public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, Safet
     //通过接口插入安全指数
     @Override
     public Integer insertSafetyIndexByInterface(List<TotalSafetyData> totalSafetyDataList, Integer diff) {
+        //安全指数的和
+        Float safetyIndexSum = 0.0f;
+        //将项目管理人员指数转成map
+        HashMap<String,Float> manaMap = new HashMap<>();
+        //求所有的项目管理指数
+        List<ProjectRate> projectRateList =  projectRateService.selectAll();
 
-        Float safetIndexSum = new Float("0");
+        List<ProjectScoreDay> projectScoreDayList = new ArrayList<>();
+
+        for (ProjectRate projectRate : projectRateList) {
+            manaMap.put(projectRate.getItemName(),projectRate.getManaBachelor());
+        }
 
         //遍历list集合，求出每个项目安全指数
         for(int i=0; i< totalSafetyDataList.size(); i++){
@@ -137,31 +149,39 @@ public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, Safet
                 //到岗率
                 manaRate = managerAttCount / new Float(managerOnJobCount);
             }
-            //求所有的项目管理指数
-            List<ProjectRate> projectRateList =  projectRateService.selectAll();
-            if(i<202){ 
-                float manaBachelorF = projectRateList.get(i).getManaBachelor();
-                if(manaBachelorF == 8888){
-                    manaBachelor = new Float(0);
-                }else {
-                    manaBachelor = manaBachelorF/10;
-                }
+            //取出管理人员的比例
+            Float manaBachelorF = manaMap.get(totalSafetyData.getItemName());
+            if(manaBachelorF == 8888 || manaBachelorF == 0 || manaBachelorF == null){
+                manaBachelor = 0.0f;
             }else {
-                //如果超过202，为0;
-                manaBachelor = new Float(0);
+                manaBachelor = manaBachelorF/10;
             }
-            //计算项目的安全指数
-            safetIndexSum += ((Mmax - Mmin) / (al + a2 + a3)) * ((al * workerRate) + (a2 * manaBachelor) + (a3 * manaRate)) + 60;
-            System.out.println(safetIndexSum);
+
+            //计算每个项目的安全指数
+            Float safetyIndexDay = ((Mmax - Mmin) / (al + a2 + a3)) * ((al * workerRate) + (a2 * manaBachelor) + (a3 * manaRate)) + 60;
+            //将每个项目的安全指数插入数据库中
+            ProjectScoreDay projectScoreDay = new ProjectScoreDay(null, totalSafetyData.getItemName(), totalSafetyData.getItemNo(), totalSafetyData.getStatisticsDate(), safetyIndexDay, new Date());
+            projectScoreDayList.add(projectScoreDay);
+            //总的安全指数
+            safetyIndexSum += safetyIndexDay;
         }
+        //批量插入今天的每个项目的安全指数
+        Integer insertSum = projectScoreDayService.insertBatch(projectScoreDayList);
+        if(insertSum != totalSafetyDataList.size()){
+            throw new RuntimeException("每天每天项目安全指数未插入");
+        }
+
+
+
         //求区域安全指数
-        float safetIndexAvg = safetIndexSum / totalSafetyDataList.size();
+        float safetIndexAvg = safetyIndexSum / totalSafetyDataList.size();
         //生成昨天时间
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE,diff);
         Date time = calendar.getTime();
 
         SafetyIndex areaSafetyIndex = new SafetyIndex(null, time, safetIndexAvg, "系统生成", new Date(), null);
+
         //插入区域安全指数
         return baseMapper.insert(areaSafetyIndex);
     }
