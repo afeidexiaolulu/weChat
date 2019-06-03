@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @EnableScheduling
-//@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableTransactionManagement    //事务
 @SpringBootApplication
 @MapperScan("com.zy.gongzhonghao.management.mapper")

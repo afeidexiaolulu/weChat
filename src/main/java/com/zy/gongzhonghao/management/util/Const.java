@@ -1,5 +1,7 @@
 package com.zy.gongzhonghao.management.util;
 
+import java.util.Date;
+
 /**
  * 常量类，定义全局常用常量
  */
@@ -13,5 +15,6 @@ public class Const {
     public static final String DEFAULT_USERPSWD = "123";
     public static final String USER_PERMISSION = "userPermission";
     public static final String LOGIN_MEMBER = "loginMember";
+
 
 }

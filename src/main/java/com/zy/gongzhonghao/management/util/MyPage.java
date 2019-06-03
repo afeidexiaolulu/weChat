@@ -5,9 +5,13 @@ import java.util.List;
 
 public class MyPage<T> {
 	private List<T> datas;
+	//总页码数
 	private int totalno;
+	//当前页码
 	private int pageno;
+	//总数据数量
 	private int totalsize;
+	//页码内数据条数
 	private int pagesize;
 
 	public MyPage() {

@@ -34,6 +34,7 @@ public class SafetyTimeServiceImpl extends ServiceImpl<SafetyTimeMapper, SafetyT
             maxRecordInsert.setMaxRecord(safetyTime);
             saTiMaxRecordMapper.insert(maxRecordInsert);
         }
+        //如果是第一次的话，这里有空指针异常
         Integer maxRecord = saTiMaxRecord.getMaxRecord();
         if( maxRecord < safetyTime ){
             //更新最大安全工时

@@ -267,6 +267,10 @@ ul li{
 	height: 0.375rem;
 }
 
+.clearfix {
+	position: relative;
+}
+
 
 .container_tit{display:block;width:70%;margin:0.6rem auto 0.4rem;height:0.5rem;background:#def1ff;font-size:0.14rem;line-height:0.5rem;color:#1873e4; text-align: center;border-radius:7px;}
 .swiper-button-next, .swiper-button-prev{top:9%;background-size:50%;background-color:#fff;}
@@ -335,11 +339,11 @@ ul li{
 .columnar ul{padding:0;margin:0;}
 .columnar ul li{padding-bottom:0.2rem;}
 .li_tit{display: block;line-height:0.35rem;font-size:0.18rem;color:#707070;margin-left:0.3rem; box-sizing: border-box;}
-.span_number{display:block;float:left;width:0.3rem;font-weight:600; text-align: center; box-sizing: border-box;line-height:0.4rem;font-size:0.2rem;}
+.span_number{display:block;float:left;width:0.3rem;font-weight:600; text-align: center; box-sizing: border-box;line-height:0.4rem;font-size:0.2rem;z-index: 999;}
 .width_box{width:92%;float:left;}
 .li_box_width{ position: relative;height:0.4rem;line-height:0.40rem;background:#fff0f0;border:#ff2a06 solid 2px;}
 .li_box_width_blue{background:#d7ecfb;border:#5eb5ef solid 2px;}
-.number_sum{display:inline-block; position: absolute;right:0;top:0;height:0.36rem;line-height:0.36rem;padding-right:0.04rem;color:#ff2a06;font-size:0.12rem;}
+.number_sum{display:inline-block; position: absolute;right:0;top:0;height:0.36rem;line-height:0.36rem;padding-right:0.04rem;color:#ff2a06;font-size:0.12rem;z-index: 999;}
 .number_sum_blue{color:#219ff4;}
 .span_number_box{box-sizing: border-box;clear:both;padding-left: 0.3rem;}
 .span_number_list{float:left;display:block;width:20%; text-align: center;height:0.44rem;line-height:0.44rem;font-size:0.16rem;color:#4a4a4a;font-weight:600}

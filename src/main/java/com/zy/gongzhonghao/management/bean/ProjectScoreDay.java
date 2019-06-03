@@ -21,6 +21,22 @@ public class ProjectScoreDay {
 
     private Date statisticsDate;
 
+    private Integer craneWeight;
+
+    private Integer liferWeight;
+
+    private Integer carWarning;
+
+    private Integer dustWarning;
+
+    private Integer noiseWarning;
+
+    //管理培训率
+    private Float manaRate;
+
+    //工人培训率
+    private Float workerRate;
+
     private Float score;
 
     private Date insertTime;

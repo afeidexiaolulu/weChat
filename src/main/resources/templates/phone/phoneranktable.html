@@ -21,12 +21,12 @@
 	</head>
 	<body>
 		<div class="listbox">
-			<span class="security_tit">安全评估平均得分：<em>63.0</em></span>
+			<span class="security_tit">安全评估平均得分：<em id="weekSafeScore">0</em></span>
 		</div>
 
 		<div class="container marginBottom60">
 			<!-- 红榜 -->
-			<div class="background clearfix">
+			<div class="background clearfix" id="red_container">
 
 				<div class="tit_box tit_color_red">
 					<span class="background_tit "><em class="tit_left"></em>红榜<em class="tit_right"></em></span>
@@ -34,39 +34,39 @@
 					<span class="yuan_right"></span>
 				</div>
 
-				<div class="number_lists">
+				<!--<div class="number_lists">
 					<em class="list_left_top first_color">1</em>
-					<span class="lists_span">澳台中心</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em> 86.5</em>分</span><span class="mine_ci"><em>28</em>次</span></div>
+					<span class="lists_span" id="itemName0"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore0"> </em>分</span>&lt;!&ndash;<span class="mine_ci"><em>28</em>次</span>&ndash;&gt;</div>
 				</div>
 				
 				<div class="number_lists">
 					<em class="list_left_top">2</em>
-					<span class="lists_span">丞富商贸大厦</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em>78.0</em>分</span><span class="mine_ci"><em>98</em>次</span></div>
+					<span class="lists_span" id="itemName1"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore1"></em>分</span>&lt;!&ndash;<span class="mine_ci"><em>98</em>次</span>&ndash;&gt;</div>
 				</div>
 
 				<div class="number_lists">
 					<em class="list_left_top">3</em>
-					<span class="lists_span">中冶逸璟公馆项目主体工程</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em>77.1</em>分</span><span class="mine_ci"><em>88</em>次</span></div>
+					<span class="lists_span" id="itemName2"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore2"></em>分</span>&lt;!&ndash;<span class="mine_ci"><em>88</em>次</span>&ndash;&gt;</div>
 				</div>
 
 				<div class="number_lists">
 					<em class="list_left_top">4</em>
-					<span class="lists_span">中冶逸璟公馆项目基坑支护及桩基础工程</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em>77.1</em>分</span><span class="mine_ci"><em>18</em>次</span></div>
+					<span class="lists_span" id="itemName3"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore3"></em>分</span>&lt;!&ndash;<span class="mine_ci"><em>18</em>次</span>&ndash;&gt;</div>
 				</div>
 
 				<div class="number_lists">
 					<em class="list_left_top">5</em>
-					<span class="lists_span">珠海泰富国际大厦</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em>76.3</em>分</span><span class="mine_ci"><em>68</em>次</span></div>
-				</div>
+					<span class="lists_span" id="itemName4"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore4"></em>分</span>&lt;!&ndash;<span class="mine_ci"><em>68</em>次</span>&ndash;&gt;</div>
+				</div>-->
 
 			</div>
 			<!-- 蓝榜 -->
-			<div class="background clearfix">
+			<div class="background clearfix" id="blue_container">
 
 				<div class="tit_box tit_color_blue">
 					<span class="background_tit "><em class="tit_left tit_left_blue"></em>黑榜<em class="tit_right tit_right_blue"></em></span>
@@ -74,53 +74,52 @@
 					<span class="yuan_right"></span>
 				</div>
 
-				<div class="number_lists">
+				<!--<div class="number_lists">
 					<em class="list_left_top ">1</em>
-					<span class="lists_span">中大金融大厦主体、地下室及裙楼工程</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em>40.3</em>分</span><span class="mine_ci"><em>18</em>次</span></div>
+					<span class="lists_span" id="blItemName0"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="blScore0"></em>分</span>&lt;!&ndash;<span class="mine_ci"><em>18</em>次</span>&ndash;&gt;</div>
 				</div>
 				
 				<div class="number_lists">
 					<em class="list_left_top">2</em>
-					<span class="lists_span">横琴新区国际居住区市政基础设施及配套工程（S2片区</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em>40.6</em>分</span><span class="mine_ci"><em>28</em>次</span></div>
+					<span class="lists_span" id="blItemName1"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="blScore1"></em>分</span>&lt;!&ndash;<span class="mine_ci"><em>28</em>次</span>&ndash;&gt;</div>
 				</div>
 
 				<div class="number_lists">
 					<em class="list_left_top">3</em>
-					<span class="lists_span">对澳供水洪湾西引水渠改造工程（二期）</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em>41.3</em>分</span><span class="mine_ci"><em>18</em>次</span></div>
+					<span class="lists_span" id="blItemName2"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="blScore2"></em>分</span>&lt;!&ndash;<span class="mine_ci"><em>18</em>次</span>&ndash;&gt;</div>
 				</div>
 
 				<div class="number_lists">
 					<em class="list_left_top">4</em>
-					<span class="lists_span">十方电子商务会展中心</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em>41.8</em>分</span><span class="mine_ci"><em>58</em>次</span></div>
+					<span class="lists_span" id="blItemName3"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="blScore3"></em>分</span>&lt;!&ndash;<span class="mine_ci"><em>58</em>次</span>&ndash;&gt;</div>
 				</div>
 
 				<div class="number_lists">
 					<em class="list_left_top">5</em>
-					<span class="lists_span">红东互通立交市政道路衔接工程（一标段）</span>
-					<div class="mine clearfix"><span class="mine_fen">自评分：<em>42.2</em>分</span><span class="mine_ci"><em>38</em>次</span></div>
-				</div>
+					<span class="lists_span" id="blItemName4"></span>
+					<div class="mine clearfix"><span class="mine_fen">自评分：<em id="blScore4"></em>分</span>&lt;!&ndash;<span class="mine_ci"><em>38</em>次</span>&ndash;&gt;</div>
+				</div>-->
 
 			</div>
 
 
 			<!-- 红榜柱状图 -->
 			<div class="background clearfix">
-
-				<div class="number_lists mtp_number">
+				<div class="number_lists mtp_number" >
 					<span class="mtop_tit">红榜次数前五名的柱状图</span>
 					<div class="columnar_box">
-						<div class="height_span">
+						<div class="height_span" id="height_span_red" >
 							<div class="background_bg">
-								<div class="span_left">
-									<span class="bg_span"></span>
-									<span class="bg_span"></span>
-									<span class="bg_span"></span>
-									<span class="bg_span"></span>
-									<span class="bg_span"></span>
+								<div class="span_left"  id="span_left_red">
+									<span class="bg_span" id="bg_span_red_0"></span>
+									<span class="bg_span" id="bg_span_red_1"></span>
+									<span class="bg_span" id="bg_span_red_2"></span>
+									<span class="bg_span" id="bg_span_red_3"></span>
+									<span class="bg_span" id="bg_span_red_4"></span>
 								</div>
 							</div>
 							<div class="span_number_box clearfix">
@@ -132,62 +131,57 @@
 								<span class="span_number_list last_span">100</span>
 							</div>
 						</div>
-						<div class="columnar">
+						<div class="columnar" id="columnar_red">
 							<ul>
 								<li>
-									<span class="li_tit">澳台中心</span>
+									<span class="li_tit" id="RlistName0"></span>
 									<div class="li_box clearfix">
 										<span class="span_number">1</span>
+										<span class="number_sum" id="Rlistnum0"></span>
 										<div class="width_box">
-											<div class="li_box_width" style="width:92%">
-												<span class="number_sum">92次</span>
-											</div>
+											<div class="li_box_width"  style="width:0%" id="RlistCss0"></div>
 										</div>
 									</div>
 								</li>
 								<li>
-									<span class="li_tit">丞富商贸大厦</span>
+									<span class="li_tit" id="RlistName1"></span>
 									<div class="li_box clearfix">
 										<span class="span_number">2</span>
+										<span class="number_sum" id="Rlistnum1"></span>
 										<div class="width_box">
-											<div class="li_box_width" style="width:70%">
-												<span class="number_sum">70次</span>
-											</div>
+											<div class="li_box_width" style="width:0%" id="RlistCss1"></div>
 										</div>
 									</div>
 								</li>
 								<li>
-									<span class="li_tit">中冶逸璟公馆项目主体工程</span>
+									<span class="li_tit" id="RlistName2"></span>
 									<div class="li_box clearfix">
 										<span class="span_number">3</span>
+										<span class="number_sum" id="Rlistnum2"></span>
 										<div class="width_box">
-											<div class="li_box_width" style="width:60%">
-												<span class="number_sum">60次</span>
-											</div>
+											<div class="li_box_width" style="width:0%" id="RlistCss2"></div>
 										</div>
 									</div>
 								</li>
 
 								<li>
-									<span class="li_tit">中冶逸璟公馆项目基坑支护及桩基础工程</span>
+									<span class="li_tit" id="RlistName3"></span>
 									<div class="li_box clearfix">
 										<span class="span_number">4</span>
+										<span class="number_sum" id="Rlistnum3"></span>
 										<div class="width_box">
-											<div class="li_box_width" style="width:33%">
-												<span class="number_sum">33次</span>
-											</div>
+											<div class="li_box_width" style="width:0%" id="RlistCss3"></div>
 										</div>
 									</div>
 								</li>
 
 								<li>
-									<span class="li_tit">珠海泰富国际大厦</span>
+									<span class="li_tit" id="RlistName4"></span>
 									<div class="li_box clearfix">
 										<span class="span_number">5</span>
+										<span class="number_sum" id="Rlistnum4"></span>
 										<div class="width_box">
-											<div class="li_box_width" style="width:22%">
-												<span class="number_sum">22次</span>
-											</div>
+											<div class="li_box_width" style="width:0%" id="RlistCss4"></div>
 										</div>
 									</div>
 								</li>
@@ -203,17 +197,17 @@
 			<!-- 蓝榜柱状图 -->
 			<div class="background clearfix">
 
-					<div class="number_lists mtp_number">
+					<div class="number_lists mtp_number" >
 						<span class="mtop_tit mtop_tit_blue">黑榜次数前五名的柱状图</span>
 						<div class="columnar_box">
-							<div class="height_span">
+							<div class="height_span" id = "height_span_blue">
 								<div class="background_bg background_bg_blue">
-									<div class="span_left">
-										<span class="bg_span bg_span_blue"></span>
-										<span class="bg_span bg_span_blue"></span>
-										<span class="bg_span bg_span_blue"></span>
-										<span class="bg_span bg_span_blue"></span>
-										<span class="bg_span bg_span_blue"></span>
+									<div class="span_left" id="span_left_blue">
+										<span class="bg_span bg_span_blue" id="bg_span_blue_0"></span>
+										<span class="bg_span bg_span_blue" id="bg_span_blue_1"></span>
+										<span class="bg_span bg_span_blue" id="bg_span_blue_2"></span>
+										<span class="bg_span bg_span_blue" id="bg_span_blue_3"></span>
+										<span class="bg_span bg_span_blue" id="bg_span_blue_4"></span>
 									</div>
 								</div>
 								<div class="span_number_box clearfix">
@@ -224,61 +218,57 @@
 									<span class="span_number_list">80</span>
 									<span class="span_number_list last_span">100</span>
 								</div>
+
 							</div>
-							<div class="columnar">
+							<div class="columnar" id="columnar_blue">
 								<ul>
 									<li>
-										<span class="li_tit">横琴国际商务服务基地及配套项目一期工程</span>
+										<span class="li_tit" id="BlistName0"></span>
 										<div class="li_box clearfix">
 											<span class="span_number">1</span>
+											<span class="number_sum number_sum_blue" id="Blistnum0"></span>
 											<div class="width_box">
-												<div class="li_box_width li_box_width_blue" style="width:92%">
-													<span class="number_sum number_sum_blue">92次</span>
-												</div>
+												<div class="li_box_width li_box_width_blue" style="width:0%" id="BlistCss0"></div>
 											</div>
 										</div>
 									</li>
 									<li>
-										<span class="li_tit">珠海荔枝湾花园项目二期（地块1）16栋020栋及地下室</span>
+										<span class="li_tit" id="BlistName1"></span>
 										<div class="li_box clearfix">
 											<span class="span_number">2</span>
+											<span class="number_sum number_sum_blue" id="Blistnum1"></span>
 											<div class="width_box">
-												<div class="li_box_width li_box_width_blue" style="width:90%">
-													<span class="number_sum number_sum_blue">90次</span>
-												</div>
+												<div class="li_box_width li_box_width_blue" style="width:0%" id="BlistCss1"></div>
 											</div>
 										</div>
 									</li>
 									<li>
-										<span class="li_tit">信德横琴口岸服务区A03地块开发项目</span>
+										<span class="li_tit" id="BlistName2"></span>
 										<div class="li_box clearfix">
 											<span class="span_number">3</span>
+											<span class="number_sum number_sum_blue" id="Blistnum2"></span>
 											<div class="width_box">
-												<div class="li_box_width li_box_width_blue" style="width:80%">
-													<span class="number_sum number_sum_blue">80次</span>
-												</div>
+												<div class="li_box_width li_box_width_blue" style="width:0%"id="BlistCss2"></div>
 											</div>
 										</div>
 									</li>
 									<li>
-										<span class="li_tit">铁建广场基坑支护工程</span>
+										<span class="li_tit" id="BlistName3"></span>
 										<div class="li_box clearfix">
 											<span class="span_number">4</span>
+											<span class="number_sum number_sum_blue" id="Blistnum3"></span>
 											<div class="width_box">
-												<div class="li_box_width li_box_width_blue" style="width:70%">
-													<span class="number_sum number_sum_blue">70次</span>
-												</div>
+												<div class="li_box_width li_box_width_blue" style="width:0%" id="BlistCss3"></div>
 											</div>
 										</div>
 									</li>
 									<li>
-										<span class="li_tit">华发十字门国际花园三标段</span>
+										<span class="li_tit" id="BlistName4"></span>
 										<div class="li_box clearfix">
 											<span class="span_number">5</span>
+											<span class="number_sum number_sum_blue" id="Blistnum4"></span>
 											<div class="width_box">
-												<div class="li_box_width li_box_width_blue" style="width:62%">
-													<span class="number_sum number_sum_blue">62次</span>
-												</div>
+												<div class="li_box_width li_box_width_blue" style="width:0%" id="BlistCss4"></div>
 											</div>
 										</div>
 									</li>
@@ -290,7 +280,6 @@
 					</div>
 	
 				</div>
-
 		</div>
 
 		<div class="footer">
@@ -320,11 +309,107 @@
 				},
 			});
 		
-		$(function(){
-			var columnarHeight = $('.columnar').height();
-			var boxHeight = $('.height_span').height(columnarHeight + 22 + 'px')
-			$('.span_left,.bg_span').css({"height":boxHeight.height() })
-		})
+
+
+		//ready事件
+		$(function () {
+			$.ajax({
+				url: "/phone/phoneRankTable",
+				type:"get",
+				async: false,
+				success:function (data) {
+					//黑榜填充
+					var safetyScore = data.safetyScore;
+					$("#weekSafeScore").html(safetyScore);
+					var blackTable = data.blackTable;
+					var blue_container = $("#blue_container");
+					var blue_count = blackTable.length;
+					var blue = "";
+
+					if(blue_count > 0){
+					    for(var i = 0; i< blue_count;i++){
+					        blue = $('<div class="number_lists"><em class="list_left_top ">'+(i+1)+'</em><span class="lists_span" id="blItemName"+i>'+blackTable[i].itemName+'</span><div class="mine clearfix"><span class="mine_fen">自评分：<em id="blScore"+i>'+blackTable[i].score+'</em>分</span></div></div>');
+                            blue_container.append(blue);
+						}
+					}else{
+                        blue ="<div><h3>没有黑榜</h3></div>";
+                        blue_container.append(blue);
+					}
+
+					/*for(var i = 0; i< blackTable.length;i++){
+						var blackName = blackTable[i].itemName;
+						var score = blackTable[i].score;
+						$("#blItemName"+i).html(blackName);
+						$("#blScore"+i).html(score);
+					}*/
+					//红榜填充
+					var redTable = data.redTable;
+					var red_container = $("#red_container");
+					var red_count = redTable.length;
+                    var red = '';
+
+					if(red_count > 0){
+					    for(var i = 0; i< red_count;i++){
+
+					        if(i == 0){
+                                red = $('<div class="number_lists"><em class="list_left_top first_color">'+(i+1)+'</em><span class="lists_span" id="itemName"+i>'+redTable[i].itemName+'</span><div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore"+i>'+ redTable[i].score+'</em>分</span></div></div>');
+							}else{
+                                red = $('<div class="number_lists"><em class="list_left_top">'+(i+1)+'</em><span class="lists_span" id="itemName"+i>'+redTable[i].itemName+'</span><div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore"+i> '+redTable[i].score+'</em>分</span></div></div>');
+							}
+                            red_container.append(red);
+						}
+					}else{
+							red ="<div><h3>没有红榜</h3></div>";
+                       		 red_container.append(red);
+					}
+					/*for(var i = 0; i< redTable.length; i++){
+						var redName = redTable[i].itemName;
+						var score = redTable[i].score;
+						$("#itemName"+i).html(redName+"次");
+						$("#redScore"+i).html(score);
+					}*/
+					//黑榜柱状图填充
+					var blackRankingList = data.blackRankingList;
+					for(var i=0; i< blackRankingList.length; i++){
+						var blackName = blackRankingList[i].itemName;
+						var blackRankingNum = blackRankingList[i].blackRankingNum;
+						$("#BlistName"+i).html(blackName);
+						$("#Blistnum"+i).html(blackRankingNum+"次");
+						$("#BlistCss"+i).css("width", blackRankingNum+"%");
+					}
+
+
+					//红榜柱状图填充
+					var redRankingList =  data.redRankingList;
+					for(var i=0; i< redRankingList.length; i++){
+						var redName = redRankingList[i].itemName;
+						var redRankingNum = redRankingList[i].redRankingNum;
+						$("#RlistName"+i).html(redName);
+						$("#Rlistnum"+i).html(redRankingNum +"次");
+						$("#RlistCss"+i).css("width", redRankingNum+"%");
+					}
+
+                    var columnarHeight_red = $('#columnar_red').height();
+                    var boxHeight_red = $('#height_span_red').height(columnarHeight_red + 22 + 'px');
+                    $('#span_left_red').css({"height":boxHeight_red.height() });
+                    $('#bg_span_red_0').css({"height":boxHeight_red.height() });
+                    $('#bg_span_red_1').css({"height":boxHeight_red.height() });
+                    $('#bg_span_red_2').css({"height":boxHeight_red.height() });
+                    $('#bg_span_red_3').css({"height":boxHeight_red.height() });
+                    $('#bg_span_red_4').css({"height":boxHeight_red.height() });
+
+                    var columnarHeight_blue = $('#columnar_blue').height();
+                    var boxHeight_blue = $('#height_span_blue').height(columnarHeight_blue + 22 + 'px');
+                    $('#span_left_blue').css({"height":boxHeight_blue.height() });
+                    $('#bg_span_blue_0').css({"height":boxHeight_blue.height() });
+                    $('#bg_span_blue_1').css({"height":boxHeight_blue.height() });
+                    $('#bg_span_blue_2').css({"height":boxHeight_blue.height() });
+                    $('#bg_span_blue_3').css({"height":boxHeight_blue.height() });
+                    $('#bg_span_blue_4').css({"height":boxHeight_blue.height() });
+				}
+			});
+		});
+
 		</script>
 	</body>
 </html>

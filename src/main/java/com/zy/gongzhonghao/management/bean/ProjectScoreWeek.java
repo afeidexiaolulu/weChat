@@ -25,9 +25,9 @@ public class ProjectScoreWeek {
 
     private Float score;
 
-    //项目进入排行榜的次数，不参与数据库映射
-    @TableField(exist = false)
-    private Integer TableNum;
+    private Integer redTableNum;
+
+    private Integer blackTableNum;
 
     private Date insertTime;
 }

@@ -59,9 +59,8 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
             project.setStatus(false);
             UpdateWrapper<Project> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq("item_no",item_no);
-            for(int i=0; i< myItemSet.size(); i++){
-                result += baseMapper.update(project,updateWrapper);
-            }
+            //关闭每个项目
+            result += baseMapper.update(project,updateWrapper);
         }
         return result;
     }

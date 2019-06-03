@@ -62,8 +62,9 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
 
     @Override
     public Float carWarningAvg(String yesterday) {
-        if(totalSafetyDataMapper.getCarWarningNumAVG(yesterday) != null){
-            return totalSafetyDataMapper.getCarWarningNumAVG(yesterday);
+        Float warningAVG = totalSafetyDataMapper.getCarWarningNumAVG(yesterday);
+        if(warningAVG != null){
+            return warningAVG;
         }else {
             return new Float("0");
         }
@@ -71,8 +72,9 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
 
     @Override
     public Float craneWeightAvg(String yesterday) {
-        if(totalSafetyDataMapper.getCraneWeightNumAVG(yesterday) != null){
-            return totalSafetyDataMapper.getCraneWeightNumAVG(yesterday);
+        Float weightAVG = totalSafetyDataMapper.getCraneWeightNumAVG(yesterday);
+        if( weightAVG!= null){
+            return weightAVG;
         }else {
             return new Float("0");
         }
@@ -82,9 +84,9 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
 
     @Override
     public Float lifterWeightAvg(String yesterday) {
-
-        if(totalSafetyDataMapper.getLifterWeightNumAVG(yesterday) != null){
-            return totalSafetyDataMapper.getLifterWeightNumAVG(yesterday);
+        Float liftWeightAVG = totalSafetyDataMapper.getLifterWeightNumAVG(yesterday);
+        if(liftWeightAVG != null){
+            return liftWeightAVG;
         }else {
             return new Float("0");
         }
@@ -92,8 +94,9 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
 
     @Override
     public Float dustWarningAvg(String yesterday) {
-        if(totalSafetyDataMapper.getDustWarningNumAVG(yesterday) != null){
-            return totalSafetyDataMapper.getDustWarningNumAVG(yesterday);
+        Float dustWarningAVG =  totalSafetyDataMapper.getDustWarningNumAVG(yesterday);
+        if(dustWarningAVG != null){
+            return dustWarningAVG;
         }else {
             return new Float("0");
         }
@@ -101,8 +104,9 @@ public class TotalSafetyDataServiceImpl extends ServiceImpl<TotalSafetyDataMappe
 
     @Override
     public Float noiseWarningAvg(String yesterday) {
-        if(totalSafetyDataMapper.getNoiseWarningNumAVG(yesterday) != null){
-            return totalSafetyDataMapper.getNoiseWarningNumAVG(yesterday);
+        Float noiseWarningAVG =  totalSafetyDataMapper.getNoiseWarningNumAVG(yesterday);
+        if( noiseWarningAVG!= null){
+            return noiseWarningAVG;
         }else {
             return new Float("0");
         }

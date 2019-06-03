@@ -24,4 +24,6 @@ public interface SafetyIndexService extends IService<SafetyIndex> {
 
     //通过接口自动获取安全指数
     Integer insertSafetyIndexByInterface(List<TotalSafetyData> totalSafetyDataList, Integer diff);
+
+    /*Integer insertSafetyIndexByInterface1(List<TotalSafetyData> totalSafetyDataList);*/
 }
