@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -175,6 +176,12 @@ public class PhoneController extends BaseController {
     }
 
 
+    //总排名页面跳转
+    @RequestMapping("toTotalRank")
+    public String toTotalRank(){
+        return "phone/phonetotalrank";
+    }
+
     //返回手机端项目排名查询的日期条件
     @RequestMapping("/phoneSelectDate")
     @ResponseBody
@@ -205,6 +212,7 @@ public class PhoneController extends BaseController {
         return myPage;
     }
 
+
     //带有条件的查询
     @RequestMapping("queryPageByCondition")
     @ResponseBody
@@ -230,5 +238,20 @@ public class PhoneController extends BaseController {
 
         //返回给前台
         return objectMyPage;
+    }
+
+    //项目分数详情页跳转
+    @RequestMapping("details")
+    public String toProjectDetail(){
+        return "phone/details";
+    }
+
+    //项目分数详情请求接口
+    @RequestMapping("toProjectDetail")
+    @ResponseBody
+    public ProjectScoreDay toProjectDetail(String itemNo){
+        //根据id查询项目每日分数对象
+        ProjectScoreDay projectScoreDay = projectScoreDayService.selectProjectByItemNo(itemNo);
+        return projectScoreDay;
     }
 }

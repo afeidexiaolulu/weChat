@@ -11,6 +11,7 @@ import com.zy.gongzhonghao.management.mapper.ProjectScoreDayMapper;
 import com.zy.gongzhonghao.management.mapper.ProjectScoreWeekMapper;
 import com.zy.gongzhonghao.management.mapper.RedRankingMapper;
 import com.zy.gongzhonghao.management.service.ProjectScoreDayService;
+import com.zy.gongzhonghao.management.util.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.ibatis.annotations.Param;
 import org.apache.velocity.runtime.directive.Foreach;
@@ -20,10 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMapper, ProjectScoreDay> implements ProjectScoreDayService {
@@ -49,14 +47,24 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
 
     //求出每个项目每周平均分并插入
     @Override
-    public Integer insertRankingTable(List<TotalSafetyData> totalSafetyDataList) {
+    public Integer insertRankingTable(List<TotalSafetyData> totalSafetyDataList, Integer diff) {
         //每周平均分数list
         List<ProjectScoreWeek> weekList = new ArrayList<>();
         //分别求出每个项目每周平均安全指数
         for (TotalSafetyData totalSafetyData : totalSafetyDataList) {
             String itemNo = totalSafetyData.getItemNo();
-            //求出每个项目每周平均数据
-            Float weekScore = projectScoreDayMapper.getAvgScoreWeek(itemNo);
+
+            //上周日的日期
+            String endDateStr = DateUtils.getDateStr(diff,"yyyy-MM-dd");
+            endDateStr += " 00:00:00";
+
+            //上周一日期
+            String startDateStr = DateUtils.getDateStr(diff-6, "yyyy-MM-dd");
+            startDateStr += " 00:00:00";
+
+            //求出每个项目上周平均数据
+            Float weekScore = projectScoreDayMapper.getAvgScoreWeek(itemNo,startDateStr,endDateStr);
+
             //求出每个项目上红榜次数
             Integer redNum = redRankingMapper.selectRedNumByItemName(totalSafetyData.getItemName());
             if(redNum == null){
@@ -92,7 +100,7 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         List<String> dateList = new ArrayList<>();
-        for(int i = 0; i < selectDateList.size(); i++){
+        for(int i = selectDateList.size()-1; i >= 0; i--){
             Object myDate = selectDateList.get(i);
             String date = sdf.format(myDate);
             dateList.add(date);
@@ -143,6 +151,18 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
         queryWrapper.orderByDesc("score");
         projectScoreDayMapper.selectPage(projectScoreDayPage,queryWrapper);
         return projectScoreDayPage;
+    }
+
+    //通过itemNo并返回排行进行查询
+    @Override
+    public ProjectScoreDay selectProjectByItemNo(String itemNo) {
+
+        //查询所有日期列表
+        List<Date> selectDateList = projectScoreDayMapper.getSelectDateList();
+        //最新日期
+        Date lastDate = selectDateList.get(selectDateList.size() - 1);
+
+        return projectScoreDayMapper.selectProjectByItemNo(itemNo, lastDate);
     }
 
 

@@ -14,7 +14,7 @@ public interface ProjectScoreDayService extends IService<ProjectScoreDay> {
     //求出每个项目的前5名和后5名
     Integer insertBatch(List<ProjectScoreDay> projectScoreDayList);
     //插入每个项目每周平均分
-    Integer insertRankingTable(List<TotalSafetyData> totalSafetyDataList);
+    Integer insertRankingTable(List<TotalSafetyData> totalSafetyDataList,Integer diff);
 
     //删除所有数据
     Integer deleteAll();
@@ -27,4 +27,7 @@ public interface ProjectScoreDayService extends IService<ProjectScoreDay> {
 
     //根据条件查询项目每日安全数据分页
     Page<ProjectScoreDay> queryPageByCondition(Map<Object, Object> paramMap);
+
+    //通过itemNo进行查询
+    ProjectScoreDay selectProjectByItemNo(String itemNo);
 }

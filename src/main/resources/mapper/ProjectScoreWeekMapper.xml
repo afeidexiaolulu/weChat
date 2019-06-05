@@ -3,7 +3,7 @@
 <mapper namespace="com.zy.gongzhonghao.management.mapper.ProjectScoreWeekMapper">
     <!---批量插入-->
     <insert id="insertBatchWeek">
-        insert into project_score_week (item_name,item_no,statistics_date,score,insert_time)
+        insert into project_score_week (item_name,item_no,statistics_date,score,red_table_num,black_table_num,insert_time)
         values
         <foreach collection="weekList" item="projectScoreWeek" separator=",">
             (
@@ -11,6 +11,8 @@
             #{projectScoreWeek.itemNo},
             #{projectScoreWeek.statisticsDate},
             #{projectScoreWeek.score},
+            #{projectScoreWeek.redTableNum},
+            #{projectScoreWeek.blackTableNum},
             #{projectScoreWeek.insertTime}
             )
         </foreach>

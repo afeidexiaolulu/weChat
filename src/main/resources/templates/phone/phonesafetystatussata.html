@@ -76,12 +76,14 @@
 			<a href="/phone/toIndex">
 				<span class="iconfont"><img src="/erci/img/index.png" ></span>
 			</a><p>首页</p>
-		</li><li id="blackList">
-			<a href="/phone/toRankingTable">
-				<span class="iconfont"><img src="/erci/img/billboard.png" ></span>
-			</a>
-			<p>红黑榜</p>
-		</li>
+			</li><li id="blackList">
+				<span class="iconfont"><img src="/img/billboard.png" ></span>
+				<p>红黑榜</p>
+			</li>
+			<div class="liListName">
+				<p><a href="/phone/toRankingTable">红黑榜</a></p>
+				<p><a href="/phone/toTotalRank">项目排行</a></p>
+			</div>
 		</div>
 
 		<script src="/erci/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
@@ -115,12 +117,16 @@
 
 
 
-		var swiper = new Swiper('.swiper-container', {
+			var swiper = new Swiper('.swiper-container', {
 				navigation: {
 				nextEl: '.swiper-button-next',
 				prevEl: '.swiper-button-prev',
 				},
 			});
+
+			$("#blackList").on("click",function(){
+				$(".liListName").fadeToggle();
+			})
 		</script>
 	</body>
 </html>

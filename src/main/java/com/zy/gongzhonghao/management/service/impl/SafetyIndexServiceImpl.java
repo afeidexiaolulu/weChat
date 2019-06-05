@@ -160,7 +160,7 @@ public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, Safet
             //计算每个项目的安全指数
             Float safetyIndexDay = ((Mmax - Mmin) / (al + a2 + a3)) * ((al * workerRate) + (a2 * manaBachelor) + (a3 * manaRate)) + 60;
             //将每个项目的安全指数插入数据库中
-            ProjectScoreDay projectScoreDay = new ProjectScoreDay(null, totalSafetyData.getItemName(), totalSafetyData.getItemNo(), totalSafetyData.getStatisticsDate(), totalSafetyData.getCraneWeight(),totalSafetyData.getLifterWeight(),totalSafetyData.getCarWarning(),totalSafetyData.getDustWarning(),totalSafetyData.getNoiseWarning(),manaRate,workerRate,safetyIndexDay,new Date());
+            ProjectScoreDay projectScoreDay = new ProjectScoreDay(null, totalSafetyData.getItemName(), totalSafetyData.getItemNo(), totalSafetyData.getStatisticsDate(), totalSafetyData.getCraneWeight(),totalSafetyData.getLifterWeight(),totalSafetyData.getCarWarning(),totalSafetyData.getDustWarning(),totalSafetyData.getNoiseWarning(),manaRate,workerRate,safetyIndexDay,null,new Date());
             projectScoreDayList.add(projectScoreDay);
             //总的安全指数
             safetyIndexSum += safetyIndexDay;

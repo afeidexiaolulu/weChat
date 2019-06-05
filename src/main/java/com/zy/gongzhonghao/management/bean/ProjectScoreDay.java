@@ -1,6 +1,7 @@
 package com.zy.gongzhonghao.management.bean;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +39,10 @@ public class ProjectScoreDay {
     private Float workerRate;
 
     private Float score;
+
+    //排名 不参与映射
+    @TableField(exist = false)
+    private Integer rankNum;
 
     private Date insertTime;
 }

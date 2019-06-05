@@ -290,126 +290,131 @@
 			<a href="/phone/toIndex">
 				<span class="iconfont"><img src="/erci/img/index.png" ></span>
 			</a><p>首页</p>
-		</li><li id="blackList">
-			<a href="/phone/toRankingTable">
-				<span class="iconfont"><img src="/erci/img/billboard.png" ></span>
-			</a>
-			<p>红黑榜</p>
-		</li>
+			</li><li id="blackList">
+				<span class="iconfont"><img src="/img/billboard.png" ></span>
+				<p>红黑榜</p>
+			</li>
+			<div class="liListName">
+				<p><a href="/phone/toRankingTable">红黑榜</a></p>
+				<p><a href="/phone/toTotalRank">项目排行</a></p>
+			</div>
 		</div>
 
 
 
 		<script src="/erci/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
 		<script>
-		var swiper = new Swiper('.swiper-container', {
+			var swiper = new Swiper('.swiper-container', {
 				navigation: {
-				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-prev',
+					nextEl: '.swiper-button-next',
+					prevEl: '.swiper-button-prev',
 				},
 			});
-		
 
 
-		//ready事件
-		$(function () {
-			$.ajax({
-				url: "/phone/phoneRankTable",
-				type:"get",
-				async: false,
-				success:function (data) {
-					//黑榜填充
-					var safetyScore = data.safetyScore;
-					$("#weekSafeScore").html(safetyScore);
-					var blackTable = data.blackTable;
-					var blue_container = $("#blue_container");
-					var blue_count = blackTable.length;
-					var blue = "";
 
-					if(blue_count > 0){
-					    for(var i = 0; i< blue_count;i++){
-					        blue = $('<div class="number_lists"><em class="list_left_top ">'+(i+1)+'</em><span class="lists_span" id="blItemName"+i>'+blackTable[i].itemName+'</span><div class="mine clearfix"><span class="mine_fen">自评分：<em id="blScore"+i>'+blackTable[i].score+'</em>分</span></div></div>');
-                            blue_container.append(blue);
-						}
-					}else{
-                        blue ="<div><h3>没有黑榜</h3></div>";
-                        blue_container.append(blue);
-					}
+			//ready事件
+			$(function () {
+				$.ajax({
+					url: "/phone/phoneRankTable",
+					type:"get",
+					async: false,
+					success:function (data) {
+						//黑榜填充
+						var safetyScore = data.safetyScore;
+						$("#weekSafeScore").html(safetyScore);
+						var blackTable = data.blackTable;
+						var blue_container = $("#blue_container");
+						var blue_count = blackTable.length;
+						var blue = "";
 
-					/*for(var i = 0; i< blackTable.length;i++){
-						var blackName = blackTable[i].itemName;
-						var score = blackTable[i].score;
-						$("#blItemName"+i).html(blackName);
-						$("#blScore"+i).html(score);
-					}*/
-					//红榜填充
-					var redTable = data.redTable;
-					var red_container = $("#red_container");
-					var red_count = redTable.length;
-                    var red = '';
-
-					if(red_count > 0){
-					    for(var i = 0; i< red_count;i++){
-
-					        if(i == 0){
-                                red = $('<div class="number_lists"><em class="list_left_top first_color">'+(i+1)+'</em><span class="lists_span" id="itemName"+i>'+redTable[i].itemName+'</span><div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore"+i>'+ redTable[i].score+'</em>分</span></div></div>');
-							}else{
-                                red = $('<div class="number_lists"><em class="list_left_top">'+(i+1)+'</em><span class="lists_span" id="itemName"+i>'+redTable[i].itemName+'</span><div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore"+i> '+redTable[i].score+'</em>分</span></div></div>');
+						if(blue_count > 0){
+							for(var i = 0; i< blue_count;i++){
+								blue = $('<div class="number_lists"><em class="list_left_top ">'+(i+1)+'</em><span class="lists_span" id="blItemName"+i>'+blackTable[i].itemName+'</span><div class="mine clearfix"><span class="mine_fen">自评分：<em id="blScore"+i>'+blackTable[i].score+'</em>分</span></div></div>');
+								blue_container.append(blue);
 							}
-                            red_container.append(red);
+						}else{
+							blue ="<div><h3>没有黑榜</h3></div>";
+							blue_container.append(blue);
 						}
-					}else{
+
+						/*for(var i = 0; i< blackTable.length;i++){
+							var blackName = blackTable[i].itemName;
+							var score = blackTable[i].score;
+							$("#blItemName"+i).html(blackName);
+							$("#blScore"+i).html(score);
+						}*/
+						//红榜填充
+						var redTable = data.redTable;
+						var red_container = $("#red_container");
+						var red_count = redTable.length;
+						var red = '';
+
+						if(red_count > 0){
+							for(var i = 0; i< red_count;i++){
+
+								if(i == 0){
+									red = $('<div class="number_lists"><em class="list_left_top first_color">'+(i+1)+'</em><span class="lists_span" id="itemName"+i>'+redTable[i].itemName+'</span><div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore"+i>'+ redTable[i].score+'</em>分</span></div></div>');
+								}else{
+									red = $('<div class="number_lists"><em class="list_left_top">'+(i+1)+'</em><span class="lists_span" id="itemName"+i>'+redTable[i].itemName+'</span><div class="mine clearfix"><span class="mine_fen">自评分：<em id="redScore"+i> '+redTable[i].score+'</em>分</span></div></div>');
+								}
+								red_container.append(red);
+							}
+						}else{
 							red ="<div><h3>没有红榜</h3></div>";
-                       		 red_container.append(red);
+							red_container.append(red);
+						}
+						/*for(var i = 0; i< redTable.length; i++){
+							var redName = redTable[i].itemName;
+							var score = redTable[i].score;
+							$("#itemName"+i).html(redName+"次");
+							$("#redScore"+i).html(score);
+						}*/
+						//黑榜柱状图填充
+						var blackRankingList = data.blackRankingList;
+						for(var i=0; i< blackRankingList.length; i++){
+							var blackName = blackRankingList[i].itemName;
+							var blackRankingNum = blackRankingList[i].blackRankingNum;
+							$("#BlistName"+i).html(blackName);
+							$("#Blistnum"+i).html(blackRankingNum+"次");
+							$("#BlistCss"+i).css("width", blackRankingNum+"%");
+						}
+
+
+						//红榜柱状图填充
+						var redRankingList =  data.redRankingList;
+						for(var i=0; i< redRankingList.length; i++){
+							var redName = redRankingList[i].itemName;
+							var redRankingNum = redRankingList[i].redRankingNum;
+							$("#RlistName"+i).html(redName);
+							$("#Rlistnum"+i).html(redRankingNum +"次");
+							$("#RlistCss"+i).css("width", redRankingNum+"%");
+						}
+
+						var columnarHeight_red = $('#columnar_red').height();
+						var boxHeight_red = $('#height_span_red').height(columnarHeight_red + 22 + 'px');
+						$('#span_left_red').css({"height":boxHeight_red.height() });
+						$('#bg_span_red_0').css({"height":boxHeight_red.height() });
+						$('#bg_span_red_1').css({"height":boxHeight_red.height() });
+						$('#bg_span_red_2').css({"height":boxHeight_red.height() });
+						$('#bg_span_red_3').css({"height":boxHeight_red.height() });
+						$('#bg_span_red_4').css({"height":boxHeight_red.height() });
+
+						var columnarHeight_blue = $('#columnar_blue').height();
+						var boxHeight_blue = $('#height_span_blue').height(columnarHeight_blue + 22 + 'px');
+						$('#span_left_blue').css({"height":boxHeight_blue.height() });
+						$('#bg_span_blue_0').css({"height":boxHeight_blue.height() });
+						$('#bg_span_blue_1').css({"height":boxHeight_blue.height() });
+						$('#bg_span_blue_2').css({"height":boxHeight_blue.height() });
+						$('#bg_span_blue_3').css({"height":boxHeight_blue.height() });
+						$('#bg_span_blue_4').css({"height":boxHeight_blue.height() });
 					}
-					/*for(var i = 0; i< redTable.length; i++){
-						var redName = redTable[i].itemName;
-						var score = redTable[i].score;
-						$("#itemName"+i).html(redName+"次");
-						$("#redScore"+i).html(score);
-					}*/
-					//黑榜柱状图填充
-					var blackRankingList = data.blackRankingList;
-					for(var i=0; i< blackRankingList.length; i++){
-						var blackName = blackRankingList[i].itemName;
-						var blackRankingNum = blackRankingList[i].blackRankingNum;
-						$("#BlistName"+i).html(blackName);
-						$("#Blistnum"+i).html(blackRankingNum+"次");
-						$("#BlistCss"+i).css("width", blackRankingNum+"%");
-					}
-
-
-					//红榜柱状图填充
-					var redRankingList =  data.redRankingList;
-					for(var i=0; i< redRankingList.length; i++){
-						var redName = redRankingList[i].itemName;
-						var redRankingNum = redRankingList[i].redRankingNum;
-						$("#RlistName"+i).html(redName);
-						$("#Rlistnum"+i).html(redRankingNum +"次");
-						$("#RlistCss"+i).css("width", redRankingNum+"%");
-					}
-
-                    var columnarHeight_red = $('#columnar_red').height();
-                    var boxHeight_red = $('#height_span_red').height(columnarHeight_red + 22 + 'px');
-                    $('#span_left_red').css({"height":boxHeight_red.height() });
-                    $('#bg_span_red_0').css({"height":boxHeight_red.height() });
-                    $('#bg_span_red_1').css({"height":boxHeight_red.height() });
-                    $('#bg_span_red_2').css({"height":boxHeight_red.height() });
-                    $('#bg_span_red_3').css({"height":boxHeight_red.height() });
-                    $('#bg_span_red_4').css({"height":boxHeight_red.height() });
-
-                    var columnarHeight_blue = $('#columnar_blue').height();
-                    var boxHeight_blue = $('#height_span_blue').height(columnarHeight_blue + 22 + 'px');
-                    $('#span_left_blue').css({"height":boxHeight_blue.height() });
-                    $('#bg_span_blue_0').css({"height":boxHeight_blue.height() });
-                    $('#bg_span_blue_1').css({"height":boxHeight_blue.height() });
-                    $('#bg_span_blue_2').css({"height":boxHeight_blue.height() });
-                    $('#bg_span_blue_3').css({"height":boxHeight_blue.height() });
-                    $('#bg_span_blue_4').css({"height":boxHeight_blue.height() });
-				}
+				});
 			});
-		});
 
+			$("#blackList").on("click",function(){
+				$(".liListName").fadeToggle();
+			})
 		</script>
 	</body>
 </html>

@@ -9,6 +9,9 @@
 ul li{
 	list-style: none;
 }
+a:hover {
+	text-decoration:none;
+}
 #WorkerTraining{
 	width: 4.6rem;
 	height: 1.8rem;
@@ -88,7 +91,19 @@ ul li{
 	display: inline-block;
 	text-align: center;
 }
-
+.liListName{
+	width: 33.33%;
+	display: none;
+	background: #FFFFFF;
+	text-align: center;
+	position: fixed;
+	bottom: 0.936rem;
+	right: 0;
+}
+.liListName p{
+	margin: 0 auto;
+	padding: 0.1rem 0.2rem;
+}
 
 
 #line_03{
@@ -234,7 +249,7 @@ ul li{
 	color: #53595B;
 	margin: 0.078rem 0 0.5135rem;
 	font-size: 0.187rem;
-	
+
 }
 
 .menu_01,.menu_02,.menu_03,.menu_04{

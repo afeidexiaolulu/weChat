@@ -23,11 +23,7 @@
         </foreach>
     </insert>
 
-    <!--查询个项目的平均数getAvgScoreWeek-->
-    <select id="getAvgScoreWeek" resultType="float">
-        select avg(score) from project_score_day where item_no = #{itemNo}
-    </select>
-
+    <!--查询出表中有的日期-->
     <select id="getSelectDateList" resultType="java.util.Date">
         select distinct statistics_date from project_score_day
     </select>

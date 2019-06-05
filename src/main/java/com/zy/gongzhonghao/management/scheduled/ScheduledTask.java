@@ -85,8 +85,8 @@ public class ScheduledTask {
      * 查询安全时长并插入数据库中
      */
     //每一小时执行一次查询安全时长，并放入数据库中
-    @Scheduled(cron="0 0 0/1 * * ?")
     //@Scheduled(cron="0 */1 * * * ?")
+    @Scheduled(cron="0 0 0/1 * * ?")
     public void getSafetyData(){
 
         try {
@@ -296,11 +296,12 @@ public class ScheduledTask {
     @Scheduled(cron = "0 0 6 ? * MON")
     @Transactional
     public void projectScoreWeek(){
+        Integer diff = -1;
         //获取昨天日期
         System.out.println("====================================执行=============");
-        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(diff,"yyyy-MM-dd");
         //获取请求参数
-        String jsonString = DateUtils.getJsonString(-1);
+        String jsonString = DateUtils.getJsonString(diff);
 
         try {
             //通过三方接口获取数据
@@ -316,7 +317,7 @@ public class ScheduledTask {
                 String s = datas.toString();
                 List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
                 //求出每个项目每周的平均分
-                Integer insertNum = projectScoreDayService.insertRankingTable(totalSafetyDataList);
+                Integer insertNum = projectScoreDayService.insertRankingTable(totalSafetyDataList,diff);
                 if(insertNum != totalSafetyDataList.size()){
                    throw new RuntimeException();
                 }
@@ -325,8 +326,6 @@ public class ScheduledTask {
                 //选出项目后5名放入黑榜，同时更新每周分数表中黑榜次数
                 blackRankingService.insertBlackTable();
 
-                //删除上周每天安全指数数据
-                Integer deleteNum = projectScoreDayService.deleteAll();
             }
         }catch (Exception e){
             e.printStackTrace();
