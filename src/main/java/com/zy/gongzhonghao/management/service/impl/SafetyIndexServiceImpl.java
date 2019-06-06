@@ -160,7 +160,7 @@ public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, Safet
             //计算每个项目的安全指数
             Float safetyIndexDay = ((Mmax - Mmin) / (al + a2 + a3)) * ((al * workerRate) + (a2 * manaBachelor) + (a3 * manaRate)) + 60;
             //将每个项目的安全指数插入数据库中
-            ProjectScoreDay projectScoreDay = new ProjectScoreDay(null, totalSafetyData.getItemName(), totalSafetyData.getItemNo(), totalSafetyData.getStatisticsDate(), totalSafetyData.getCraneWeight(),totalSafetyData.getLifterWeight(),totalSafetyData.getCarWarning(),totalSafetyData.getDustWarning(),totalSafetyData.getNoiseWarning(),manaRate,workerRate,safetyIndexDay,null,new Date());
+            ProjectScoreDay projectScoreDay = new ProjectScoreDay(null, totalSafetyData.getItemName(), totalSafetyData.getItemNo(), totalSafetyData.getStatisticsDate(), totalSafetyData.getCraneWeight(),totalSafetyData.getLifterWeight(),totalSafetyData.getCarWarning(),totalSafetyData.getDustWarning(),totalSafetyData.getNoiseWarning(),manaRate,workerRate,safetyIndexDay,null,null,new Date());
             projectScoreDayList.add(projectScoreDay);
             //总的安全指数
             safetyIndexSum += safetyIndexDay;
@@ -170,6 +170,11 @@ public class SafetyIndexServiceImpl extends ServiceImpl<SafetyIndexMapper, Safet
         if(insertSum != totalSafetyDataList.size()){
             throw new RuntimeException("项目每日安全指数插入失败");
         }
+        //查询昨天每个项目的分数并进行排名
+        List<ProjectScoreDay> projectScoreDays = projectScoreDayService.selectProjectListByDate(totalSafetyDataList.get(1).getStatisticsDate());
+
+        //更新排名字段
+        Integer updateNum = projectScoreDayService.updateRankNumBatch(projectScoreDays);
 
         //求区域安全指数
         float safetIndexAvg = safetyIndexSum / totalSafetyDataList.size();

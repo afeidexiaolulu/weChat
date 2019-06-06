@@ -27,4 +27,15 @@
     <select id="getSelectDateList" resultType="java.util.Date">
         select distinct statistics_date from project_score_day
     </select>
+
+    <!--批量更新每天排名-->
+    <update id="updateRankNumBatch"  parameterType="java.util.List">
+        <foreach collection="projectScoreDays" item="projectScoreDay" index="index" open="" close="" separator=";">
+            update project_score_day
+            set rank_num_t = #{projectScoreDay.rankNum}
+            where id = #{projectScoreDay.id}
+        </foreach>
+    </update>
+
+
 </mapper>

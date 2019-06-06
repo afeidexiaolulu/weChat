@@ -44,5 +44,9 @@ public class ProjectScoreDay {
     @TableField(exist = false)
     private Integer rankNum;
 
+    //数据库中排名
+    //@TableField(exist = false)
+    private Integer rankNumT;
+
     private Date insertTime;
 }

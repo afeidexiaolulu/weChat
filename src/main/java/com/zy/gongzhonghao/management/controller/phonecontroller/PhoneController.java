@@ -194,22 +194,15 @@ public class PhoneController extends BaseController {
     //返回手机端查询最新日期的所有项目分数
     @RequestMapping("queryPageFirst")
     @ResponseBody
-    public Object projectRankList(Integer pageSize, Integer pageNo){
+    public MyPage<ProjectScoreDay> projectRankList(Integer pageSize, Integer pageNo){
         //将参数传到map中
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageSize",pageSize);
         paramMap.put("pageNo",pageNo);
         //进行分页查询，没有筛选条件
-        Page<ProjectScoreDay> page =projectScoreDayService.queryPage(paramMap);
-        //创建分页对象
-        MyPage<ProjectScoreDay> myPage = new MyPage<>();
-        myPage.setPageno((int)page.getCurrent());
-        myPage.setPagesize((int)page.getSize());
-        myPage.setTotalsize((int)page.getTotal());
-        //获取所有的分页数据
-        List<ProjectScoreDay> records = page.getRecords();
-        myPage.setDatas(records);
-        return myPage;
+        MyPage<ProjectScoreDay> page =projectScoreDayService.queryPage(paramMap);
+        //返回分页对象
+        return page;
     }
 
 
@@ -246,12 +239,12 @@ public class PhoneController extends BaseController {
         return "phone/details";
     }
 
-    //项目分数详情请求接口
+    //项目分数详情请求接口， 通过itemNo和日期查询项目分数详情
     @RequestMapping("toProjectDetail")
     @ResponseBody
-    public ProjectScoreDay toProjectDetail(String itemNo){
+    public ProjectScoreDay toProjectDetail(String itemNo,String queryDate){
         //根据id查询项目每日分数对象
-        ProjectScoreDay projectScoreDay = projectScoreDayService.selectProjectByItemNo(itemNo);
+        ProjectScoreDay projectScoreDay = projectScoreDayService.selectProjectByItemNoAndDate(itemNo,queryDate);
         return projectScoreDay;
     }
 }

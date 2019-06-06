@@ -23,7 +23,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     password: root
     username: root
-    url: jdbc:mysql://localhost:3306/wxgongzhonghao?characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/wxgongzhonghao?characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
     type: com.alibaba.druid.pool.DruidDataSource
     tomcat:
       connection-properties: druid.stat.mergeSql=true
@@ -39,7 +39,7 @@ spring:
     time-zone: GMT+8
 #指定环境为测试环境
   profiles:
-    active: dev
+    active: prod
 
 
 mybatis-plus:

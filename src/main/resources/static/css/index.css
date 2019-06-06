@@ -861,7 +861,7 @@ input[type="search"] {
 	text-align: center;
 }
 .itenname{
-	width: 3rem!important;
+	width: 2.9rem!important;
 	height: .3rem;
 	text-align: left;
 	overflow: hidden;/*超出部分隐藏*/
@@ -878,6 +878,7 @@ input[type="search"] {
 }
 .tooltipList{
 	display: none;
+	text-align: center;
 }
 .toProjectDetail tr td:first-child{
 	width: 40%;

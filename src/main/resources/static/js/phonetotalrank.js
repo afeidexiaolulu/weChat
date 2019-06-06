@@ -13,6 +13,8 @@ function getListData(pageNo) {
         success: function (data) {
 			
             if (data.totalno >= pageNo) {
+				$("#ListPage").show();
+				$(".tooltipList").hide();
 				let tab_list = "";
 					count = data.totalsize;
 					limit = data.pagesize;
@@ -28,10 +30,12 @@ function getListData(pageNo) {
 				$("#tab_list").html(tab_list);
 				paged(count,limit,datacurr);
 				$(".table td").bind("click", function (){
-					window.location = 'details?itemNo='+$(this).parent("tr").attr("id")+'';
+					window.location = 'details?itemNo='+$(this).parent("tr").attr("id")+'&queryDate='+ $("#dateList_Num").val();
 				})
             } else{
             	// $("#tab_list").html("抱歉！数据为空");
+				$("#tab_list").html("");
+				$("#ListPage").hide();
 				$(".tooltipList").show();
             }
 
@@ -120,26 +124,31 @@ function queryPageByCondition(pageNo){
 	    url: '/phone/queryPageByCondition?pageSize=20&pageNo='+ pageNo +'&queryDate='+ $("#dateList_Num").val() +'&queryWord='+ $(".input-clear").val() +'', // ajax请求路径
 	    dataType: 'json',
 	    success: function (data) {
+	    	$("#ListPage").show();
+			$(".tooltipList").hide();
 			if (data.totalno >= data.pageno) {
 				let tab_list = "";
 					count = data.totalsize;
 					limit = data.pagesize;
 					datacurr = pageNo;
 				$.each(data.datas, function (key, position) {
-					let number = Number((pageNo-1)*20+key)+1;
+					//let queryDate = position.statisticsDate;
+					//let number = Number((pageNo-1)*20+key)+1;
 					tab_list += '<tr id='+ position.itemNo +'>' +
-						'<td>' + position.itemName + '</td>' +
+						'<td><div class="itenname">' + position.itemName + '</div></td>' +
 						'<td>' + position.score + '</td>' +
-						'<td>' + number + '</td>' +
+						'<td>' + position.rankNumT+ '</td>' +
 						'</tr>'
 				})
 				$("#tab_list").html(tab_list);
 				pagedTWO(count,limit,datacurr);
 				$(".table td").bind("click", function (){
-					window.location = 'details?itemNo='+$(this).parent("tr").attr("id")+'';
+					window.location = 'details?itemNo='+$(this).parent("tr").attr("id")+'&queryDate='+ $("#dateList_Num").val();
 				})
 			} else{
 				// $("#tab_list").html("抱歉！数据为空");
+				$("#tab_list").html("");
+				$("#ListPage").hide();
 				$(".tooltipList").show();
 			}
 	    },

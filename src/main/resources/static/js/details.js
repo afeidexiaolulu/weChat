@@ -1,6 +1,7 @@
 $(document).ready(function () {
 	document.documentElement.style.fontSize = document.documentElement.clientWidth / 5 + 'px';
-    toProjectDetail(GetQueryString("itemNo"));
+    toProjectDetail(GetQueryString("itemNo"),GetQueryString("queryDate"));
+
 	Return();
 });
 
@@ -13,10 +14,10 @@ function GetQueryString(name) {
 }
 
 // 详情
-function toProjectDetail(itemNo){
+function toProjectDetail(itemNo,queryDate){
 		$.ajax({
 	    type: 'post',
-	    url: '/phone/toProjectDetail?itemNo='+ itemNo +'', // ajax请求路径
+	    url: '/phone/toProjectDetail?itemNo='+ itemNo +'&queryDate='+ queryDate, // ajax请求路径
 	    dataType: 'json',
 	    success: function (data) {
 	    	let craneWeight = data.craneWeight == "8888"?"无数据":data.craneWeight;
@@ -28,7 +29,7 @@ function toProjectDetail(itemNo){
 			$("#entryName").html(data.itemName);
 			$("#detailsDate").html(data.statisticsDate.substring(0,10));
 			$("#safetyIndex").html(data.score);
-			$("#ranking").html(data.rankNum);
+			$("#ranking").html(data.rankNumT);
 			$("#workerTrainingRate").html(data.workerRate);
 			$("#personnelArrivalRate").html(data.manaRate);
 			$("#overloadTowerCrane").html(craneWeight);

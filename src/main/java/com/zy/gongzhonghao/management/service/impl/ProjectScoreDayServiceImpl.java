@@ -12,6 +12,7 @@ import com.zy.gongzhonghao.management.mapper.ProjectScoreWeekMapper;
 import com.zy.gongzhonghao.management.mapper.RedRankingMapper;
 import com.zy.gongzhonghao.management.service.ProjectScoreDayService;
 import com.zy.gongzhonghao.management.util.DateUtils;
+import com.zy.gongzhonghao.management.util.MyPage;
 import org.apache.commons.logging.Log;
 import org.apache.ibatis.annotations.Param;
 import org.apache.velocity.runtime.directive.Foreach;
@@ -110,7 +111,7 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
 
     //查询最新的日期的每日项目列表
     @Override
-    public Page<ProjectScoreDay> queryPage(Map<String, Object> paramMap) {
+    public MyPage<ProjectScoreDay> queryPage(Map<String, Object> paramMap) {
 
         //查询所有日期列表
         List<Date> selectDateList = projectScoreDayMapper.getSelectDateList();
@@ -123,8 +124,17 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
         QueryWrapper<ProjectScoreDay> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("statistics_date",lastDate);
         queryWrapper.orderByDesc("score");
+        queryWrapper.orderByAsc("id");
         projectScoreDayMapper.selectPage(projectScoreDayPage,queryWrapper);
-        return projectScoreDayPage;
+        //创建分页对象
+        MyPage<ProjectScoreDay> myPage = new MyPage<>();
+        myPage.setPageno((int)projectScoreDayPage.getCurrent());
+        myPage.setPagesize((int)projectScoreDayPage.getSize());
+        myPage.setTotalsize((int)projectScoreDayPage.getTotal());
+        //获取所有的分页数据
+        List<ProjectScoreDay> records = projectScoreDayPage.getRecords();
+        myPage.setDatas(records);
+        return myPage;
     }
 
     @Override
@@ -134,13 +144,6 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
         Integer pageNo = (int) paramMap.get("pageNo");
         String queryDate = (String)paramMap.get("queryDate");
         queryDate += " 00:00:00";
-        //日期字符串转为Date
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            sdf.parse(queryDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         String queryWord = (String) paramMap.get("queryWord");
         //进行查询  创建page对象
         Page<ProjectScoreDay> projectScoreDayPage = new Page<>(pageNo, pageSize);
@@ -153,7 +156,7 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
         return projectScoreDayPage;
     }
 
-    //通过itemNo并返回排行进行查询
+/*    //通过itemNo并返回排行进行查询
     @Override
     public ProjectScoreDay selectProjectByItemNo(String itemNo) {
 
@@ -162,7 +165,26 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
         //最新日期
         Date lastDate = selectDateList.get(selectDateList.size() - 1);
 
-        return projectScoreDayMapper.selectProjectByItemNo(itemNo, lastDate);
+        return projectScoreDayMapper.selectProjectByItemNoAndDate(itemNo, lastDate);
+    }*/
+
+    @Override
+    public List<ProjectScoreDay> selectProjectListByDate(Date statisticsDate) {
+        return projectScoreDayMapper.selectProjectListByDate(statisticsDate);
+    }
+
+    //批量更新每日项目表里的排名字段
+    @Override
+    public Integer updateRankNumBatch(List<ProjectScoreDay> projectScoreDays) {
+        return projectScoreDayMapper.updateRankNumBatch(projectScoreDays);
+    }
+
+    //通过itemNo和日期查询项目分数详情
+    @Override
+    public ProjectScoreDay selectProjectByItemNoAndDate(String itemNo, String statisticsDate) {
+        //装换为与数据库格式一致
+        statisticsDate += " 00:00:00";
+        return projectScoreDayMapper.selectProjectByItemNoAndDate(itemNo, statisticsDate);
     }
 
 
