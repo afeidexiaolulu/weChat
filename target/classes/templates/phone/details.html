@@ -1,0 +1,97 @@
+
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+		<title>红黑榜</title>
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/index.css"/>
+		<script src="/js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/details.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="" style="padding:20px 20px 100px 20px ;">
+			<table  class="table table-border table-bordered">
+				<tbody class="toProjectDetail">
+					<tr>
+						<td>项目名称</td>
+						<td id="entryName"></td>
+					</tr>
+					<tr>
+						<td>统计日期</td>
+						<td id="detailsDate"></td>
+					</tr>
+					<tr>
+						<td>安全指数</td>
+						<td id="safetyIndex"></td>
+					</tr>
+					<tr>
+						<td>排名</td>
+						<td id="ranking"></td>
+					</tr>
+					<tr>
+						<td>工人培训率</td>
+						<td id="workerTrainingRate"></td>
+					</tr>
+					<tr>
+						<td>管理人员到岗率</td>
+						<td id="personnelArrivalRate"></td>
+					</tr>
+					<tr>
+						<td>塔吊超载情况</td>
+						<td id="overloadTowerCrane"></td>
+					</tr>
+					<tr>
+						<td>起重机超载情况</td>
+						<td id="overloadCrane"></td>
+					</tr>
+					<tr>
+						<td>噪声超标情况</td>
+						<td id="xcessiveNoise"></td>
+					</tr>
+					<tr>
+						<td>扬尘超标情况</td>
+						<td id="DustRaisingExceedingStandard"></td>
+					</tr>
+					<tr>
+						<td>泥头车违规情况</td>
+						<td id="mudTruckViolations"></td>
+					</tr>
+
+
+				</tbody>
+			</table>
+			<div class="closeBtn">
+				<button type="button" class="btn Return">返回</button>
+			</div>
+		</div>
+		<div class="footer">
+			<li id="noticeAnnouncement">
+				<span class="iconfont"><img src="/img/Notice.png" ></span>
+				<p>安全公告</p>
+			</li><li id="indexMenu">
+			<a href="/phone/toIndex">
+				<span class="iconfont"><img src="/img/index.png" ></span>
+			</a><p>首页</p>
+			</li><li id="blackList">
+				<span class="iconfont"><img src="/img/billboard.png" ></span>
+				<p>红黑榜</p>
+			</li>
+			<div class="liListName">
+				<p><a href="/phone/toRankingTable">红黑榜</a></p>
+				<p><a href="/phone/toTotalRank">项目排行</a></p>
+			</div>
+		</div>
+
+		<script>
+			$("#blackList").on("click",function(){
+				$(".liListName").fadeToggle();
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.gongzhonghao.management.mapper.ProjectScoreWeekMapper">
+    <!---批量插入-->
+    <insert id="insertBatchWeek">
+        insert into project_score_week (item_name,item_no,statistics_date,score,red_table_num,black_table_num,insert_time)
+        values
+        <foreach collection="weekList" item="projectScoreWeek" separator=",">
+            (
+            #{projectScoreWeek.itemName},
+            #{projectScoreWeek.itemNo},
+            #{projectScoreWeek.statisticsDate},
+            #{projectScoreWeek.score},
+            #{projectScoreWeek.redTableNum},
+            #{projectScoreWeek.blackTableNum},
+            #{projectScoreWeek.insertTime}
+            )
+        </foreach>
+    </insert>
+
+
+    <select id="select5RedTable" resultType="com.zy.gongzhonghao.management.bean.ProjectScoreWeek">
+		select item_no,item_name, score from (select item_no,item_name, score
+        from project_score_week
+        where score is not null
+        order by statistics_date desc, score desc
+		limit 0,20
+		) aa
+		ORDER BY aa.score desc
+		limit 0,5
+    </select>
+
+    <select id="select5BlackTable" resultType="com.zy.gongzhonghao.management.bean.ProjectScoreWeek">
+		select item_no,item_name, score from (select item_no,item_name, score
+        from project_score_week
+        where score is not null
+        order by statistics_date desc, score asc,id asc
+		limit 0,20
+		) aa
+		ORDER BY aa.score asc
+		limit 0,5
+    </select>
+
+    <select id="getLastweekAvgScore" resultType="java.lang.Float">
+       select avg(score) from  project_score_week  group by statistics_date  order by statistics_date desc limit 1;
+    </select>
+
+    <select id="selectScoreRedTable" resultType="com.zy.gongzhonghao.management.bean.ProjectScoreWeek">
+       select DISTINCT(item_no),score,item_name,statistics_date,red_table_num,black_table_num from  project_score_week where score in (select * from (select score from  project_score_week  where statistics_date = (select statistics_date from project_score_week order by statistics_date desc limit 1) and score is not null group by score order by score desc limit 5) aa ) and statistics_date = (select statistics_date from project_score_week order by statistics_date desc limit 1) order by score desc
+    </select>
+
+    <select id="selectScoreBlackTable" resultType="com.zy.gongzhonghao.management.bean.ProjectScoreWeek">
+        select DISTINCT(item_no),score,item_name,statistics_date,red_table_num,black_table_num from  project_score_week where score in (select * from (select score from  project_score_week  where statistics_date = (select statistics_date from project_score_week order by statistics_date desc limit 1) and score is not null group by score order by score asc limit 5) aa ) and statistics_date = (select statistics_date from project_score_week order by statistics_date desc limit 1) order by score asc
+    </select>
+</mapper>

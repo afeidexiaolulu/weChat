@@ -2,7 +2,7 @@
 loginname: admin
 password: 1
 weburl: http://120.77.254.210:8888/ibps-platform-webapi/api
-weatherurl: http://t.weather.sojson.com/api/weather/city/101280701
+weatherurl: http://t.weather.itboy.net/api/weather/city/101280701
 
 #所有数据三方接口
 safetyInterface: http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord
@@ -23,7 +23,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     password: root
     username: root
-    url: jdbc:mysql://localhost:3306/wxgongzhonghao?characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/wxgongzhonghao?characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
     type: com.alibaba.druid.pool.DruidDataSource
     tomcat:
       connection-properties: druid.stat.mergeSql=true
@@ -39,7 +39,7 @@ spring:
     time-zone: GMT+8
 #指定环境为测试环境
   profiles:
-    active: dev
+    active: prod
 
 
 mybatis-plus:

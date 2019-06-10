@@ -17,13 +17,7 @@
 		
 		<script src="/js/echarts.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="/js/index.js" type="text/javascript" charset="utf-8"></script>
-		<style type=text/css>
-			a:hover {
-				text-decoration:none;
-			}
-		</style>
-	</head>
+</head>
 	<body>
 		<div class="bannerImg">
 			<div class="bannerimg"></div>
@@ -74,17 +68,19 @@
 			<a href="/phone/toIndex">
 				<span class="iconfont"><img src="/img/index.png" ></span>
 			</a><p>首页</p>
-		</li><li id="blackList">
-			<a href="/phone/toRankingTable">
-			<span class="iconfont"><img src="/img/billboard.png" ></span>
-			</a>
-			<p>红黑榜</p>
-		</li>
+			</li><li id="blackList">
+				<span class="iconfont"><img src="/img/billboard.png" ></span>
+				<p>红黑榜</p>
+			</li>
+			<div class="liListName">
+				<p><a href="/phone/toRankingTable">红黑榜</a></p>
+				<p><a href="/phone/toTotalRank">项目排行</a></p>
+			</div>
 		</div>
 		<script type="text/javascript">
 			function aa() {
-				var nu = '';
-				var wea = '';
+				let nu = '';
+				let	wea = '';
 				$.ajax({
 					cache:'false',
 					url: "/phone/phoneSafetyIndex",
@@ -100,11 +96,11 @@
 				$("#weather").html(wea);
 			} aa();
 
-			 var time = setInterval(function () {
+			 let time = setInterval(function () {
                 t();}, 5000);
 
             function t() {
-                var he = $("#news>ul>li").height();//找到li高
+                let he = $("#news>ul>li").height();//找到li高
                 $("#news>ul>li").eq(0).appendTo($("#news>ul")); //复制第一个到最后一个
                 $("#news>ul").animate({
                     "marginTop": "-" + he
@@ -114,6 +110,11 @@
                     });
                 });
             }
+
+			document.documentElement.style.fontSize = document.documentElement.clientWidth / 5 + 'px';
+			$("#blackList").on("click",function(){
+				$(".liListName").fadeToggle();
+			})
 		</script>
 	</body>
 </html>

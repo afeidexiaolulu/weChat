@@ -3,7 +3,7 @@
 <mapper namespace="com.zy.gongzhonghao.management.mapper.ProjectScoreDayMapper">
     <!---批量插入-->
     <insert id="insertBatch">
-        insert into project_score_day (item_name,item_no,statistics_date,score,insert_time)
+        insert into project_score_day (item_name,item_no,statistics_date,score,crane_weight,lifer_weight,car_warning,dust_warning,noise_warning,mana_rate,worker_rate,insert_time)
         values
         <foreach collection="projectScoreDayList" item="projectScoreDay" separator=",">
             (
@@ -11,8 +11,31 @@
             #{projectScoreDay.itemNo},
             #{projectScoreDay.statisticsDate},
             #{projectScoreDay.score},
+            #{projectScoreDay.craneWeight},
+            #{projectScoreDay.liferWeight},
+            #{projectScoreDay.carWarning},
+            #{projectScoreDay.dustWarning},
+            #{projectScoreDay.noiseWarning},
+            #{projectScoreDay.manaRate},
+            #{projectScoreDay.workerRate},
             #{projectScoreDay.insertTime}
             )
         </foreach>
     </insert>
+
+    <!--查询出表中有的日期-->
+    <select id="getSelectDateList" resultType="java.util.Date">
+        select distinct statistics_date from project_score_day
+    </select>
+
+    <!--批量更新每天排名-->
+    <update id="updateRankNumBatch"  parameterType="java.util.List">
+        <foreach collection="projectScoreDays" item="projectScoreDay" index="index" open="" close="" separator=";">
+            update project_score_day
+            set rank_num_t = #{projectScoreDay.rankNum}
+            where id = #{projectScoreDay.id}
+        </foreach>
+    </update>
+
+
 </mapper>

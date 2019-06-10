@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.test.context.junit4.SpringRunner;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -31,7 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-//@Ignore
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ManagementApplicationTests {
@@ -63,6 +62,9 @@ public class ManagementApplicationTests {
     @Value("${a3}")
     private Float a3;
 
+    //获取三方数据的接口
+    @Value("${safetyInterface}")
+    private String safetyInterface;
 
 
     @Autowired
@@ -101,6 +103,19 @@ public class ManagementApplicationTests {
     @Autowired
     private SafetyIndexService safetyIndexService;
 
+    @Autowired
+    private ProjectScoreDayService projectScoreDayService;
+
+    @Autowired
+    private ProjectScoreWeekService projectScoreWeekService;
+
+    @Autowired
+    private RedRankingService redRankingService;
+
+    @Autowired
+    private BlackRankingService blackRankingService;
+
+
     @Test
     public void contextLoads() {
 
@@ -110,7 +125,7 @@ public class ManagementApplicationTests {
 
     //测试获取安全时长
     @Test
-    public void getSatefyData(){
+    public void getSatefyData() {
 
         String s = "http://120.77.254.210:8888/ibps-platform-webapi/api/loginCustomService/appEncryption?account=";
         String safetyDataStr = HttpClientUtils.doPost(s + loginname + "&pwd=" + password);
@@ -122,7 +137,7 @@ public class ManagementApplicationTests {
         String encryptAccount = jsonObject1.getString("encryptAccount");
         String encryptPwd = jsonObject1.getString("encryptPwd");
         //将用户名密码拼接后进行app登录
-        String tokenStr = HttpClientUtils.doPost("http://120.77.254.210:8888/ibps-platform-webapi/api/loginCustomService/appLogin?account="+encryptAccount+"&pwd="+encryptPwd);
+        String tokenStr = HttpClientUtils.doPost("http://120.77.254.210:8888/ibps-platform-webapi/api/loginCustomService/appLogin?account=" + encryptAccount + "&pwd=" + encryptPwd);
         //解析返回数据
         JSONObject tokenObject = JSONObject.parseObject(tokenStr);
         String tokenBody = tokenObject.getString("body");
@@ -131,7 +146,7 @@ public class ManagementApplicationTests {
         String token = jsonObjectToken.getString("token");
         //对token进行32位小写加密
         String digestToken = MD5Util.digest(token);
-        System.out.println("token为"+digestToken);
+        System.out.println("token为" + digestToken);
         //携带token进行接口调用获取安全时长
         String s1 = HttpClientUtils.doGet("http://120.77.254.210:8888/ibps-platform-webapi/api/webapi/homePageService/fieldDynamics?token=" + digestToken);
         System.out.println("获取的json为" + s1);
@@ -139,23 +154,23 @@ public class ManagementApplicationTests {
         JSONObject body1 = safetyResultObject.getJSONObject("body");
         JSONObject jsonObject2 = body1.getJSONObject("fieldDynamics");
         String safeHours = jsonObject2.getString("safeHours");
-        System.out.println("safeHours"+safeHours);
+        System.out.println("safeHours" + safeHours);
     }
 
 
     @Test
-    public void test1(){
+    public void test1() {
 
         Integer integer = safetyTimeMapper.selectSafetyTime();
-        System.out.println("查询出来的数据为："+integer);
-        List<AccidentNumTable> accidentNumTables =accidentNumMapper.seletcDataAndDateLast3Month();
-        System.out.println("数据为"+accidentNumTables);
+        System.out.println("查询出来的数据为：" + integer);
+        List<AccidentNumTable> accidentNumTables = accidentNumMapper.seletcDataAndDateLast3Month();
+        System.out.println("数据为" + accidentNumTables);
 
     }
 
     //安全数据测试
     @Test
-    public void test2(){
+    public void test2() {
         SafetyNumDto safetyNumDto = new SafetyNumDto();
         //查询最高安全时长，赋值
         SafetyTimeMax saTiMaxRecord = maxRecordMapper.selectById("1");
@@ -167,10 +182,10 @@ public class ManagementApplicationTests {
         safetyNumDto.setSafetyTime(safetyTime.toString());
         //查询近三天的安全事故和日期
         List<AccidentNumTable> accidentNumTables = accidentNumMapper.seletcDataAndDateLast3Month();
-        System.out.println("数据为："+accidentNumTables);
+        System.out.println("数据为：" + accidentNumTables);
         int intTem[] = new int[3];
         Date dateTem[] = new Date[3];
-        for (int i=0; i< accidentNumTables.size();i++){
+        for (int i = 0; i < accidentNumTables.size(); i++) {
             intTem[i] = accidentNumTables.get(i).getAccidentNum();
             dateTem[i] = accidentNumTables.get(i).getAccidentDate();
         }
@@ -179,7 +194,7 @@ public class ManagementApplicationTests {
         String stringArr[] = new String[3];
         //将日期转换为字符串
         SimpleDateFormat sdf = new SimpleDateFormat("yy年M月");
-        for(int i =0;i<intTem.length;i++){
+        for (int i = 0; i < intTem.length; i++) {
             stringArr[i] = sdf.format(dateTem[i]);
         }
         safetyNumDto.setDate(stringArr);
@@ -189,14 +204,14 @@ public class ManagementApplicationTests {
 
     //查询最新安全指数
     @Test
-    public void testSafetyIndexLastOne(){
+    public void testSafetyIndexLastOne() {
         SafetyIndex safetyIndex = safetyIndexMapper.selectLastOne();
         System.out.println(safetyIndex);
     }
 
     //工人培训率和管理人员到岗率mapper测试
     @Test
-    public void testSafetyBehaviourLast10Day(){
+    public void testSafetyBehaviourLast10Day() {
         List<WorkerManaRate> workerManaRatelist = workerManaRateMapper.selectLast10day();
 
         System.out.println(workerManaRatelist.size());
@@ -205,7 +220,7 @@ public class ManagementApplicationTests {
 
     //安全行为监督返回结果测试
     @Test
-    public void testSafetyBahaviourLast10DayDate(){
+    public void testSafetyBahaviourLast10DayDate() {
         //对象封装
         SafetyBehaviourDto safetyBehaviourDto = new SafetyBehaviourDto();
 
@@ -219,7 +234,7 @@ public class ManagementApplicationTests {
         String dateString[] = new String[10];
 
         SimpleDateFormat sdf = new SimpleDateFormat("M/d");
-        for (int i=0; i< workerManaRatelist.size();i++){
+        for (int i = 0; i < workerManaRatelist.size(); i++) {
             manaDuty[i] = workerManaRatelist.get(i).getManaDutyRate();
             workTrain[i] = workerManaRatelist.get(i).getWorkerTrainRate();
             dateString[i] = sdf.format(workerManaRatelist.get(i).getStatisticsDate());
@@ -238,14 +253,14 @@ public class ManagementApplicationTests {
     }
 
     @Test
-    public void testArray(){
-        int arry[] = {1,2,3,4};
-        for(int i=0; i<arry.length; i++){
+    public void testArray() {
+        int arry[] = {1, 2, 3, 4};
+        for (int i = 0; i < arry.length; i++) {
             System.out.println(arry[i]);
         }
         ArrayUtils.reverse(arry);
 
-        for(int i=0; i<arry.length; i++){
+        for (int i = 0; i < arry.length; i++) {
             System.out.println(arry[i]);
         }
     }
@@ -253,13 +268,13 @@ public class ManagementApplicationTests {
 
     //横琴施工接口测试
     @Test
-    public void shiGongInterfaceTest(){
+    public void shiGongInterfaceTest() {
 
-        Calendar cal   =   Calendar.getInstance();
-        cal.add(Calendar.DATE,   -1);
-        String yesterday = new SimpleDateFormat( "yyyy-MM-dd ").format(cal.getTime());
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        String yesterday = new SimpleDateFormat("yyyy-MM-dd ").format(cal.getTime());
         System.out.println(yesterday);
-        String result =  HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord","{\n" +
+        String result = HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord", "{\n" +
                 "    \"SearchBeginDate\": \"2019-04-15\",\n" +
                 "    \"SearchEndDate\": \"2019-04-15\",\n" +
                 "    \"Token\": \"48C8B324-744C-4480-9E0B-966D8632AB05\"\n" +
@@ -272,7 +287,7 @@ public class ManagementApplicationTests {
         System.out.println(stateCode);
 
         JSONArray datas = jsonObject.getJSONArray("Datas");
-        if(!datas.isEmpty()) {
+        if (!datas.isEmpty()) {
             String s = datas.toString();
             List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
             System.out.println(totalSafetyDataList);
@@ -287,17 +302,17 @@ public class ManagementApplicationTests {
 
     //定时任务，计算每日工人培训率和管理人员到岗率，存入数据库
     @Test
-    public void testWorkerAndManaRate(){
-        Calendar cal   =   Calendar.getInstance();
-        cal.add(Calendar.DATE,   -1);
-        String yesterday = new SimpleDateFormat( "yyyy-MM-dd ").format(cal.getTime());
+    public void testWorkerAndManaRate() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        String yesterday = new SimpleDateFormat("yyyy-MM-dd ").format(cal.getTime());
         //输出昨天日期
         System.out.println(yesterday);
     }
 
     //测试工人培训率和管理在岗率
     @Test
-    public void testNull(){
+    public void testNull() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
 
@@ -311,19 +326,18 @@ public class ManagementApplicationTests {
         Integer yesWorkerTraNum = totalSafetyDataService.getYesWorkerTraNum("2019-04-13");
 
         //数据校验
-        if((yesWorkerNum != null && yesWorkerNum != 0 )&& yesWorkerTraNum != null){
+        if ((yesWorkerNum != null && yesWorkerNum != 0) && yesWorkerTraNum != null) {
             //计算工人培训率
-            float wokerTraRate = (float)yesWorkerTraNum / yesWorkerNum;
+            float wokerTraRate = (float) yesWorkerTraNum / yesWorkerNum;
             wokerTraRate = wokerTraRate * 100;
             //将数值格式化
             DecimalFormat df = new DecimalFormat("0");
             String s = df.format(wokerTraRate);
-            Integer workerTraRate =  new Integer(s);
+            Integer workerTraRate = new Integer(s);
             workerManaRate.setWorkerTrainRate(workerTraRate);
-        }else {
+        } else {
             workerManaRate.setWorkerTrainRate(0);
         }
-
 
 
         //取出昨天所有的在职管理人员数量
@@ -331,15 +345,15 @@ public class ManagementApplicationTests {
 
         //取出昨天所有考勤管理人员数量
         Integer yesManaDutyNum = totalSafetyDataService.getYesManaDutyNum(yesterday);
-        if((yesManaNum != null && yesManaNum != 0)&& yesManaDutyNum != null){
+        if ((yesManaNum != null && yesManaNum != 0) && yesManaDutyNum != null) {
             float manaDutyRate = (float) yesManaDutyNum / yesManaNum;
             manaDutyRate = manaDutyRate * 100;
             //将数值格式化
             DecimalFormat df = new DecimalFormat("0");
             String s = df.format(manaDutyRate);
-            Integer workerTraRate =  new Integer(s);
+            Integer workerTraRate = new Integer(s);
             workerManaRate.setManaDutyRate(workerTraRate);
-        }else {
+        } else {
             workerManaRate.setManaDutyRate(0);
         }
 
@@ -361,23 +375,26 @@ public class ManagementApplicationTests {
         System.out.println(result);
     }
 
+    /**
+     * 每天的定时任务，各种插入
+     */
 
     @Test
-    public void scheduled(){
+    public void scheduled() {
         //获取昨天日期
-        Calendar cal   =   Calendar.getInstance();
-        cal.add(Calendar.DATE,   -1);
-        String yesterday = new SimpleDateFormat( "yyyy-MM-dd ").format(cal.getTime());
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        String yesterday = new SimpleDateFormat("yyyy-MM-dd ").format(cal.getTime());
         Map<String, String> paramMap = new HashMap<>();
-        paramMap.put("SearchBeginDate",yesterday);
-        paramMap.put("SearchEndDate",yesterday);
-        paramMap.put("Token","48C8B324-744C-4480-9E0B-966D8632AB05");
+        paramMap.put("SearchBeginDate", yesterday);
+        paramMap.put("SearchEndDate", yesterday);
+        paramMap.put("Token", "48C8B324-744C-4480-9E0B-966D8632AB05");
         String mapToJson = JsonUtils.mapToJson(paramMap);
 
         //捕获异常
         try {
             //通过三方接口获取数据
-            String result = HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord",mapToJson);
+            String result = HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord", mapToJson);
 
             LOGGER.info(result);
             //解析数据查看是否查询成功
@@ -386,7 +403,7 @@ public class ManagementApplicationTests {
             JSONArray datas = jsonObject.getJSONArray("Datas");
 
             //如果数据不为空插入数据库中
-            if(!datas.isEmpty()) {
+            if (!datas.isEmpty()) {
                 String s = datas.toString();
                 List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
                 //数据返回来的日期
@@ -394,10 +411,10 @@ public class ManagementApplicationTests {
 
                 //如果日期数据库没有插入
                 QueryWrapper<TotalSafetyData> wrapper = new QueryWrapper<>();
-                wrapper.eq("statistics_date",statisticsDate);
+                wrapper.eq("statistics_date", statisticsDate);
                 List<TotalSafetyData> selectList = totalSafetyDataMapper.selectList(wrapper);
                 LOGGER.debug("查询数据库中是否有数据");
-                if( selectList.size() == 0){
+                if (selectList.size() == 0) {
                     //插入数据库中
                     totalSafetyDataService.insertJsonTableBatch(totalSafetyDataList);
                     try {
@@ -424,11 +441,10 @@ public class ManagementApplicationTests {
     }
 
 
-
     //国家气象局天气预报接口测试
     @Test
-    public void weatherInterface(){
-        try{
+    public void weatherInterface() {
+        try {
             String s = HttpClientUtils.doGet(weatherurl);//可使用
             //解析为json对象
             JSONObject jsonObject = JSONObject.parseObject(s);
@@ -438,7 +454,7 @@ public class ManagementApplicationTests {
             Weather weather = JSONObject.parseObject(jsonObject1.toString(), Weather.class);
             //插入前先获取，如果获取为0个，则插入
             System.out.println(weather);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.debug("获取天气失败");
         }
@@ -448,15 +464,15 @@ public class ManagementApplicationTests {
 
     //测试string类自带的substring方法,截取范围[start,end)
     @Test
-    public void testString(){
+    public void testString() {
         String num = "1234567";
         System.out.println(num.length());
-        String subNum = num.substring(0,num.length()-3);
+        String subNum = num.substring(0, num.length() - 3);
         System.out.println(subNum);
     }
 
     @Test
-    public void test11(){
+    public void test11() {
         Integer num = 30259611;
         int length = num.toString().length();
         System.out.println(length);
@@ -464,7 +480,7 @@ public class ManagementApplicationTests {
 
 
     @Test
-    public void safetyIndexTest(){
+    public void safetyIndexTest() {
         SafetyIndexDto safetyIndexDto = new SafetyIndexDto();
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
@@ -475,9 +491,9 @@ public class ManagementApplicationTests {
         //创建同等长度数组
         Float safetyIndex[] = new Float[size];
         String safetyDate[] = new String[size];
-        for(int i=0;i<size;i++){
+        for (int i = 0; i < size; i++) {
             safetyIndex[i] = safetyIndexList.get(i).getSafetyNum();
-            safetyDate[i]=sdf.format(safetyIndexList.get(i).getSafetyDate());
+            safetyDate[i] = sdf.format(safetyIndexList.get(i).getSafetyDate());
         }
         //给最新安全指数负责
         safetyIndexDto.setSafetyIndex(safetyIndex[0]);
@@ -487,12 +503,12 @@ public class ManagementApplicationTests {
         safetyIndexDto.setSafetyIndexArr(safetyIndex);
         safetyIndexDto.setSafetyIndexDateArr(safetyDate);
 
-        LOGGER.debug("安全 指数dto"+safetyIndexDto.toString());
+        LOGGER.debug("安全 指数dto" + safetyIndexDto.toString());
     }
 
 
     @Test
-    public void testSafetyStatus(){
+    public void testSafetyStatus() {
         SafetyStatusLineDto safetyStatusLineDto = new SafetyStatusLineDto();
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
@@ -507,14 +523,14 @@ public class ManagementApplicationTests {
         Integer dustWarning[] = new Integer[size];
         Integer carWarning[] = new Integer[size];
 
-        if(totalWarningList != null && totalWarningList.size() != 0){
-            for(int i = 0; i < size; i++){
-                carWarning[i]=totalWarningList.get(size-i-1).getCarWarning();
-                craneWeight[i]=totalWarningList.get(size-i-1).getCraneWeight();
-                dustWarning[i]=totalWarningList.get(size-i-1).getDustWarning();
-                noiseWarning[i]=totalWarningList.get(size-i-1).getNoiseWarning();
-                lifterWeight[i]=totalWarningList.get(size-i-1).getLifterWeight();
-                dateString[i]=sdf.format(totalWarningList.get(size-i-1).getStatisticsDate());
+        if (totalWarningList != null && totalWarningList.size() != 0) {
+            for (int i = 0; i < size; i++) {
+                carWarning[i] = totalWarningList.get(size - i - 1).getCarWarning();
+                craneWeight[i] = totalWarningList.get(size - i - 1).getCraneWeight();
+                dustWarning[i] = totalWarningList.get(size - i - 1).getDustWarning();
+                noiseWarning[i] = totalWarningList.get(size - i - 1).getNoiseWarning();
+                lifterWeight[i] = totalWarningList.get(size - i - 1).getLifterWeight();
+                dateString[i] = sdf.format(totalWarningList.get(size - i - 1).getStatisticsDate());
             }
             safetyStatusLineDto.setCarWarning(carWarning);
             safetyStatusLineDto.setCraneWeight(craneWeight);
@@ -522,15 +538,14 @@ public class ManagementApplicationTests {
             safetyStatusLineDto.setDustWarning(dustWarning);
             safetyStatusLineDto.setLifterWeight(lifterWeight);
             //赋值
-            LOGGER.debug("赋值输出+"+safetyStatusLineDto);
+            LOGGER.debug("赋值输出+" + safetyStatusLineDto);
         }
-        LOGGER.debug("未赋值输出+"+safetyStatusLineDto);
+        LOGGER.debug("未赋值输出+" + safetyStatusLineDto);
     }
 
 
-
     @Test
-    public void testSet(){
+    public void testSet() {
         Set<String> set1 = new HashSet<>();
         Set<String> set2 = new HashSet<>();
 
@@ -542,29 +557,29 @@ public class ManagementApplicationTests {
         //交集
         set1.retainAll(set2);
 
-        System.out.println("交集集为是 "+set1);
+        System.out.println("交集集为是 " + set1);
 
         set1.removeAll(set2);
 
-        System.out.println("差集集为是 "+set1);
+        System.out.println("差集集为是 " + set1);
     }
 
 
     @Test
-    public void testInsertProject(){
+    public void testInsertProject() {
 
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
+        String yesDateStr = DateUtils.getDateStr(-1, "yyyy-MM-dd");
 
         Map<String, String> paramMap = new HashMap<>();
-        paramMap.put("SearchBeginDate",yesDateStr);
-        paramMap.put("SearchEndDate",yesDateStr);
-        paramMap.put("Token","48C8B324-744C-4480-9E0B-966D8632AB05");
+        paramMap.put("SearchBeginDate", yesDateStr);
+        paramMap.put("SearchEndDate", yesDateStr);
+        paramMap.put("Token", "48C8B324-744C-4480-9E0B-966D8632AB05");
         String mapToJson = JsonUtils.mapToJson(paramMap);
 
         try {
             //通过三方接口获取数据
-            String result = HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord",mapToJson);
+            String result = HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord", mapToJson);
             LOGGER.debug("开始请求所有安全数据");
             //解析数据查看是否查询成功
             JSONObject jsonObject = JSONObject.parseObject(result);
@@ -582,16 +597,16 @@ public class ManagementApplicationTests {
 
             }*/
             //如果数据不为空插入数据库中
-            if(!datas.isEmpty()) {
+            if (!datas.isEmpty()) {
                 String s = datas.toString();
                 List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
                 //数据返回来的日期
                 Date statisticsDate = totalSafetyDataList.get(0).getStatisticsDate();
                 //如果日期数据库没有插入
                 QueryWrapper<TotalSafetyData> wrapper = new QueryWrapper<>();
-                wrapper.eq("statistics_date",statisticsDate);
+                wrapper.eq("statistics_date", statisticsDate);
                 List<TotalSafetyData> selectList = totalSafetyDataMapper.selectList(wrapper);
-                if( selectList.size() == 0){
+                if (selectList.size() == 0) {
                     //插入数据库中
                     totalSafetyDataService.insertJsonTableBatch(totalSafetyDataList);
                     LOGGER.debug("将总安全数据插入数据库");
@@ -600,7 +615,7 @@ public class ManagementApplicationTests {
                     //插入各种预警数值
                     totalWarningService.insertTotalWarning(yesDateStr);
                     //计算每个项目的今天的安全指数
-                    safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
+                    safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList, -1);
 
 
                     //获取所有的项目的item_no
@@ -617,7 +632,7 @@ public class ManagementApplicationTests {
 
                     //求两个交集
                     itemSetRetain.retainAll(myItemSet);
-                    System.out.println("交集为："+itemSetRetain);
+                    System.out.println("交集为：" + itemSetRetain);
                     //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
                     itemSet.removeAll(itemSetRetain);
                     //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
@@ -625,28 +640,28 @@ public class ManagementApplicationTests {
 
                     List<Project> projectList = new ArrayList<>();
                     //插入新增工程
-                    if(itemSet.size()!= 0){
-                        for(int i=0; i< totalSafetyDataList.size(); i++){
+                    if (itemSet.size() != 0) {
+                        for (int i = 0; i < totalSafetyDataList.size(); i++) {
                             TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
                             //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
-                            if(itemSet.contains(totalSafetyData.getItemNo())){
-                                Project project = new Project(null,totalSafetyData.getItemName(),totalSafetyData.getItemNo(),true,new Date());
+                            if (itemSet.contains(totalSafetyData.getItemNo())) {
+                                Project project = new Project(null, totalSafetyData.getItemName(), totalSafetyData.getItemNo(), true, new Date());
                                 projectList.add(project);
                             }
                         }
                         //插入
                         projectService.insertProjectBatch(projectList);
-                        LOGGER.debug("新增的工程项目插入完成"+itemSet);
+                        LOGGER.debug("新增的工程项目插入完成" + itemSet);
                     }
                     //更新状态为关闭
-                    if(myItemSet.size() != 0){
+                    if (myItemSet.size() != 0) {
                         projectService.updateProjectStatus(myItemSet);
-                        LOGGER.debug("关闭的工程项目关闭完成："+myItemSet);
+                        LOGGER.debug("关闭的工程项目关闭完成：" + myItemSet);
                     }
                     //插入后结束定时任务
                     LOGGER.debug("各个安全 数据插入完成，定时任务结束");
                     return;
-                }else {
+                } else {
                     LOGGER.debug("已插入过各种安全数据");
                 }
             }
@@ -657,59 +672,80 @@ public class ManagementApplicationTests {
     }
 
 
-
     //每天凌晨0点01分开始获取天气,10分钟一次
     @Test
-    public void WeatherTask(){
+    public void WeatherTask() {
         //封装到weatherService中,通过接口获取天气
         Integer result = weatherService.insertWeatherMsgByInterface();
-        if(result == 1){
+        if (result == 1) {
             LOGGER.debug("插入天气数据成功");
             return;
         }
-        if(result == 2){
+        if (result == 2) {
             LOGGER.debug("已插入过天气数据");
         }
     }
 
-
+    //测试
     @Test
-    public void testSafetyIndexByInterface(){
+    public void testSafetyIndexByInterface() {
         //获取昨天日期
-        String yesDateStr = DateUtils.getDateStr(-1,"yyyy-MM-dd");
-        String dateStr = DateUtils.getDateStr(-1, "yyyy-MM-dd");
-
+        String yesDateStr = DateUtils.getDateStr(-1, "yyyy-MM-dd");
+        //获取请求参数
         String jsonString = DateUtils.getJsonString(-1);
-
-/*        Map<String, String> paramMap = new HashMap<>();
-        paramMap.put("SearchBeginDate",dateStr);
-        paramMap.put("SearchEndDate",yesDateStr);
-        paramMap.put("Token","48C8B324-744C-4480-9E0B-966D8632AB05");
-        String mapToJson = JsonUtils.mapToJson(paramMap);*/
-
 
         try {
             //通过三方接口获取数据
-            String result = HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord",jsonString);
-            LOGGER.debug("开始请求所有安全数据");
+            String result = HttpClientUtils.doPostJson("http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord", jsonString);
+            LOGGER.info("开始请求所有安全数据");
             //解析数据查看是否查询成功
             JSONObject jsonObject = JSONObject.parseObject(result);
             //查看datas是否为空，如不不为空查询成功
             JSONArray datas = jsonObject.getJSONArray("Datas");
+
             //如果数据不为空插入数据库中
-            if(!datas.isEmpty()) {
+            if (!datas.isEmpty()) {
                 String s = datas.toString();
                 List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
 
-                if(true){
+                //数据返回来的日期
+                Date statisticsDate = totalSafetyDataList.get(0).getStatisticsDate();
+                //如果日期数据库没有插入
+                QueryWrapper<TotalSafetyData> wrapper = new QueryWrapper<>();
+                wrapper.eq("statistics_date", statisticsDate);
+                List<TotalSafetyData> selectList = totalSafetyDataMapper.selectList(wrapper);
+                if (selectList.size() == 0) {
+                    //插入数据库中
+                    Integer insertNum = totalSafetyDataService.insertJsonTableBatch(totalSafetyDataList);
+                    if (insertNum != totalSafetyDataList.size()) {
+                        LOGGER.error("总安全数据时失败");
+                        throw new Exception();
+                    }
+                    LOGGER.info("将总安全数据插入数据库");
 
                     //插入工人培训率和管理到岗率
-                    workerManaRateService.insertTraDuty(yesDateStr);
-                    //计算每个项目的今天的安全指数
-                    safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList,-1);
-
+                    Integer insertTraDuty = workerManaRateService.insertTraDuty(yesDateStr);
+                    if (insertTraDuty != 1) {
+                        LOGGER.error("插入工人培训率和管理到岗率失败");
+                        throw new Exception();
+                    }
                     //插入各种预警数值
-                    totalWarningService.insertTotalWarning(yesDateStr);
+                    Integer insertTotalWarning = totalWarningService.insertTotalWarning(yesDateStr);
+                    if (insertTotalWarning != 1) {
+                        LOGGER.error("插入各种预警值失败");
+                        throw new Exception();
+                    }
+
+                    //插入区域项目的安全指数
+                    Integer insertSafetyIndex = safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList, -1);
+                    if (insertSafetyIndex != 1) {
+                        LOGGER.error("插入区域安全指数失败");
+                        throw new Exception();
+                    }
+
+                    //插入每天各个项目的安全分数
+                    //projectScoreDayService.insertBatch();
+
                     //获取所有的项目的item_no
                     Set<String> itemSet = new HashSet<>();
 
@@ -724,7 +760,7 @@ public class ManagementApplicationTests {
 
                     //求两个交集
                     itemSetRetain.retainAll(myItemSet);
-                    LOGGER.debug("交集为："+itemSetRetain);
+                    LOGGER.debug("交集为：" + itemSetRetain);
                     //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
                     itemSet.removeAll(itemSetRetain);
                     //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
@@ -732,37 +768,37 @@ public class ManagementApplicationTests {
 
                     List<Project> projectList = new ArrayList<>();
                     //插入新增工程
-                    if(itemSet.size()!= 0){
-                        for(int i=0; i< totalSafetyDataList.size(); i++){
+                    if (itemSet.size() != 0) {
+                        for (int i = 0; i < totalSafetyDataList.size(); i++) {
                             TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
                             //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
-                            if(itemSet.contains(totalSafetyData.getItemNo())){
-                                Project project = new Project(null,totalSafetyData.getItemName(),totalSafetyData.getItemNo(),true,new Date());
+                            if (itemSet.contains(totalSafetyData.getItemNo())) {
+                                Project project = new Project(null, totalSafetyData.getItemName(), totalSafetyData.getItemNo(), true, new Date());
                                 projectList.add(project);
                             }
                         }
                         //插入
                         Integer insertProjectBatch = projectService.insertProjectBatch(projectList);
-                        if(insertProjectBatch != itemSet.size()){
+                        if (insertProjectBatch != itemSet.size()) {
                             LOGGER.error("批量插入工程失败");
                             throw new Exception();
                         }
-                        LOGGER.debug("新增的工程项目插入完成"+itemSet);
+                        LOGGER.debug("新增的工程项目插入完成" + itemSet);
                     }
                     //更新状态为关闭
-                    if(myItemSet.size() != 0){
+                    if (myItemSet.size() != 0) {
                         Integer updateProjectStatus = projectService.updateProjectStatus(myItemSet);
-                        if(myItemSet.size() != updateProjectStatus){
-                            LOGGER.error("更新状态失败");
+                        if (myItemSet.size() != updateProjectStatus) {
+                            LOGGER.error("关闭状态失败");
                             throw new Exception();
                         }
-                        LOGGER.debug("关闭的工程项目关闭完成："+myItemSet);
+                        LOGGER.info("关闭的工程项目关闭完成：" + myItemSet);
                     }
                     //插入后结束定时任务
-                    LOGGER.debug("各个安全 数据插入完成，定时任务结束");
+                    LOGGER.info("各个安全 数据插入完成，定时任务结束");
                     return;
-                }else {
-                    LOGGER.debug("已插入过各种安全数据");
+                } else {
+                    LOGGER.info("已插入过各种安全数据");
                 }
             }
             //失败异常捕获
@@ -771,18 +807,217 @@ public class ManagementApplicationTests {
         }
     }
 
-
     @Test
-    public void testMap(){
-        HashMap<Integer, Integer> map = new HashMap<>();
-        map.put(1,2);
-        map.put(3,4);
-        Integer integer = map.get(5);
-        System.out.println(integer);
-        System.out.println(111);
+    public void getdate() {
+        String yesDateStr = DateUtils.getDateStr(-14, "yyyy-MM-dd");
+        System.out.println(yesDateStr);
     }
 
 
+    /**
+     * 每天的所有请求
+     */
+    @Test
+    public void totalRequData() {
+
+        Integer diff = -1;
+        //获取昨天日期字符串形式
+        String yesDateStr = DateUtils.getDateStr(diff, "yyyy-MM-dd");
+        System.out.println(yesDateStr);
+        //获取请求参数
+        String jsonParam = DateUtils.getJsonString(diff);
+
+        try {
+            //通过三方接口获取数据
+            String result = HttpClientUtils.doPostJson(safetyInterface, jsonParam);
+            LOGGER.info("开始请求所有安全数据");
+            //解析数据查看是否查询成功
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            //查看datas是否为空，如不不为空查询成功
+            JSONArray datas = jsonObject.getJSONArray("Datas");
+
+            //如果数据不为空插入数据库中
+            if (!datas.isEmpty()) {
+                String s = datas.toString();
+                List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
+
+                //数据返回来的日期
+                if (totalSafetyDataList != null && totalSafetyDataList.size() > 0) {
+                    Date statisticsDate = totalSafetyDataList.get(0).getStatisticsDate();
+                    //如果日期数据库没有插入
+                    QueryWrapper<TotalSafetyData> wrapper = new QueryWrapper<>();
+                    wrapper.eq("statistics_date", statisticsDate);
+                    List<TotalSafetyData> selectList = totalSafetyDataMapper.selectList(wrapper);
+                    if (selectList.size() == 0) {
+                        //插入数据库中
+                        Integer insertNum = totalSafetyDataService.insertJsonTableBatch(totalSafetyDataList);
+                        if (insertNum != totalSafetyDataList.size()) {
+                            LOGGER.error("总安全数据时失败");
+                            throw new Exception();
+                        }
+                        LOGGER.info("将总安全数据插入数据库");
+
+                        //插入工人培训率和管理到岗率
+                        Integer insertTraDuty = workerManaRateService.insertTraDuty(yesDateStr);
+                        if (insertTraDuty != 1) {
+                            LOGGER.error("插入工人培训率和管理到岗率失败");
+                            throw new Exception();
+                        }
+                        //插入各种预警数值
+                        Integer insertTotalWarning = totalWarningService.insertTotalWarning(yesDateStr);
+                        if (insertTotalWarning != 1) {
+                            LOGGER.error("插入各种预警值失败");
+                            throw new Exception();
+                        }
+
+                        //插入区域项目的安全指数同时插入每天每个项目得分
+                        Integer insertSafetyIndex = safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList, diff);
+                        if (insertSafetyIndex != 1) {
+                            LOGGER.error("插入区域安全指数失败");
+                            throw new Exception();
+                        }
+
+                        //查询昨天每个项目的分数并进行排名
+                        List<ProjectScoreDay> projectScoreDays = projectScoreDayService.selectProjectListByDate(totalSafetyDataList.get(1).getStatisticsDate());
+
+                        //获取所有的项目的item_no
+                        Set<String> itemSet = new HashSet<>();
+
+                        for (TotalSafetyData totalSafetyData : totalSafetyDataList) {
+                            itemSet.add(totalSafetyData.getItemNo());
+                        }
+                        //复制
+                        Set<String> itemSetRetain = new HashSet<>();
+                        itemSetRetain.addAll(itemSet);
+                        //查询字典表中所有的item
+                        Set<String> myItemSet = projectService.selectItemNo();
+
+                        //求两个交集
+                        itemSetRetain.retainAll(myItemSet);
+                        LOGGER.debug("交集为：" + itemSetRetain);
+                        //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
+                        itemSet.removeAll(itemSetRetain);
+                        //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
+                        myItemSet.removeAll(itemSetRetain);
+
+                        List<Project> projectList = new ArrayList<>();
+                        //插入新增工程
+                        if (itemSet.size() != 0) {
+                            for (int i = 0; i < totalSafetyDataList.size(); i++) {
+                                TotalSafetyData totalSafetyData = totalSafetyDataList.get(i);
+                                //如果itemSet里面包含接口中获取到的itemno，说明为新增，插入
+                                if (itemSet.contains(totalSafetyData.getItemNo())) {
+                                    Project project = new Project(null, totalSafetyData.getItemName(), totalSafetyData.getItemNo(), true, new Date());
+                                    projectList.add(project);
+                                }
+                            }
+                            //插入
+                            Integer insertProjectBatch = projectService.insertProjectBatch(projectList);
+                            if (insertProjectBatch != itemSet.size()) {
+                                LOGGER.error("批量插入工程失败");
+                                throw new Exception();
+                            }
+                            LOGGER.debug("新增的工程项目插入完成" + itemSet);
+                        }
+                        //更新状态为关闭
+                        if (myItemSet.size() != 0) {
+                            Integer updateProjectStatus = projectService.updateProjectStatus(myItemSet);
+                            if (myItemSet.size() != updateProjectStatus) {
+                                LOGGER.error("关闭状态失败");
+                                throw new Exception();
+                            }
+                            LOGGER.info("关闭的工程项目关闭完成：" + myItemSet);
+                        }
+                        //插入后结束定时任务
+                        LOGGER.info("各个安全 数据插入完成，定时任务结束");
+                        return;
+                    } else {
+                        LOGGER.info("已插入过各种安全数据");
+                    }
+                }
+            }
+            //失败异常捕获
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    //}
+
+
+    /**
+     * 每周一执行
+     */
+    @Test
+    public void projectScoreWeek1() {
+
+        Integer diff = -3;
+        String yesDateStr = DateUtils.getDateStr(diff, "yyyy-MM-dd");
+        //获取请求参数
+        String jsonString = DateUtils.getJsonString(diff);
+
+        try {
+            //通过三方接口获取数据
+            String result = HttpClientUtils.doPostJson(safetyInterface, jsonString);
+            LOGGER.info("开始请求所有安全数据");
+            //解析数据查看是否查询成功
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            //查看datas是否为空，如不不为空查询成功
+            JSONArray datas = jsonObject.getJSONArray("Datas");
+
+            //如果数据不为空插入数据库中
+            if (!datas.isEmpty()) {
+                String s = datas.toString();
+                List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
+                //求出每个项目每周的平均分
+                Integer insertNum = projectScoreDayService.insertRankingTable(totalSafetyDataList, diff);
+                if (insertNum != totalSafetyDataList.size()) {
+                    throw new RuntimeException();
+                }
+                //选出项目前5名放入红榜，同时更新每周分数表中红榜次数
+                redRankingService.insertRedTable();
+                //选出项目后5名放入黑榜，同时更新每周分数表中黑榜次数
+                blackRankingService.insertBlackTable();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.info("红黑榜插入失败");
+        }
+    }
+
+
+    @Test
+    public void calender() {
+
+        Integer diff = -32;
+
+        //获取昨天日期字符串形式
+        String yesDateStr = DateUtils.getDateStr(diff, "yyyy-MM-dd");
+        //获取请求参数
+        String jsonParam = DateUtils.getJsonString(diff);
+
+        try {
+            //通过三方接口获取数据
+            String result = HttpClientUtils.doPostJson(safetyInterface, jsonParam);
+            LOGGER.info("开始请求所有安全数据");
+            //解析数据查看是否查询成功
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            //查看datas是否为空，如不不为空查询成功
+            JSONArray datas = jsonObject.getJSONArray("Datas");
+
+            //如果数据不为空插入数据库中
+            if (!datas.isEmpty()) {
+                String s = datas.toString();
+                List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
+
+                //查询昨天每个项目的分数并进行排名
+                List<ProjectScoreDay> projectScoreDays = projectScoreDayService.selectProjectListByDate(totalSafetyDataList.get(1).getStatisticsDate());
+
+                //更新排名字段
+                Integer updateNum = projectScoreDayService.updateRankNumBatch(projectScoreDays);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
-
-
