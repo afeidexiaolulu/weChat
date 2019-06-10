@@ -138,7 +138,7 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
     }
 
     @Override
-    public Page<ProjectScoreDay> queryPageByCondition(Map<Object, Object> paramMap) {
+    public MyPage<ProjectScoreDay> queryPageByCondition(Map<Object, Object> paramMap) {
         //将查询参数取出
         Integer pageSize = (int)paramMap.get("pageSize");
         Integer pageNo = (int) paramMap.get("pageNo");
@@ -151,9 +151,19 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
         QueryWrapper<ProjectScoreDay> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("statistics_date",queryDate);
         queryWrapper.like("item_name",queryWord);
-        queryWrapper.orderByDesc("score");
+        queryWrapper.orderByAsc("rank_num_t");
         projectScoreDayMapper.selectPage(projectScoreDayPage,queryWrapper);
-        return projectScoreDayPage;
+        //将查询好的page对象封装为自定义page对象
+        MyPage<ProjectScoreDay> objectMyPage = new MyPage<>();
+        //当前页码
+        objectMyPage.setPageno((int)projectScoreDayPage.getCurrent());
+        //每页数量
+        objectMyPage.setPagesize((int)projectScoreDayPage.getSize());
+        //总数据量
+        objectMyPage.setTotalsize((int)projectScoreDayPage.getTotal());
+        //数据
+        objectMyPage.setDatas(projectScoreDayPage.getRecords());
+        return objectMyPage;
     }
 
 /*    //通过itemNo并返回排行进行查询

@@ -1,7 +1,6 @@
 package com.zy.gongzhonghao.management.controller.phonecontroller;
 
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zy.gongzhonghao.management.bean.ProjectScoreDay;
 import com.zy.gongzhonghao.management.bean.SafetyIndex;
 import com.zy.gongzhonghao.management.bean.TotalWarning;
@@ -11,14 +10,10 @@ import com.zy.gongzhonghao.management.controller.model.phone.*;
 import com.zy.gongzhonghao.management.mapper.*;
 import com.zy.gongzhonghao.management.service.*;
 import com.zy.gongzhonghao.management.util.MyPage;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,7 +204,7 @@ public class PhoneController extends BaseController {
     //带有条件的查询
     @RequestMapping("queryPageByCondition")
     @ResponseBody
-    public Object queryPageByCondition(Integer pageSize, Integer pageNo, String queryDate, String queryWord){
+    public MyPage<ProjectScoreDay> queryPageByCondition(Integer pageSize, Integer pageNo, String queryDate, String queryWord){
         //将查询参数封装为参数map
         Map<Object, Object> paramMap = new HashMap<>();
         paramMap.put("pageSize",pageSize);
@@ -217,20 +212,7 @@ public class PhoneController extends BaseController {
         paramMap.put("queryDate",queryDate);
         paramMap.put("queryWord",queryWord);
         //调用 service层
-        Page<ProjectScoreDay> page = projectScoreDayService.queryPageByCondition(paramMap);
-        //将查询好的page对象封装为自定义page对象
-        MyPage<ProjectScoreDay> objectMyPage = new MyPage<>();
-        //当前页码
-        objectMyPage.setPageno((int)page.getCurrent());
-        //每页数量
-        objectMyPage.setPagesize((int)page.getSize());
-        //总数据量
-        objectMyPage.setTotalsize((int)page.getTotal());
-        //数据
-        objectMyPage.setDatas(page.getRecords());
-
-        //返回给前台
-        return objectMyPage;
+        return projectScoreDayService.queryPageByCondition(paramMap);
     }
 
     //项目分数详情页跳转

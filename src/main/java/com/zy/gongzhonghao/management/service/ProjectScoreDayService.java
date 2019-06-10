@@ -28,7 +28,7 @@ public interface ProjectScoreDayService extends IService<ProjectScoreDay> {
     MyPage<ProjectScoreDay> queryPage(Map<String, Object> paramMap);
 
     //根据条件查询项目每日安全数据分页
-    Page<ProjectScoreDay> queryPageByCondition(Map<Object, Object> paramMap);
+    MyPage<ProjectScoreDay> queryPageByCondition(Map<Object, Object> paramMap);
 
     //查询昨天每个项目的分数并排序
     List<ProjectScoreDay> selectProjectListByDate(Date statisticsDate);
