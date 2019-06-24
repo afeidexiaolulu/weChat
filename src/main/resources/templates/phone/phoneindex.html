@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -46,8 +46,8 @@
 					<a href="/phone/toSafetyData"><img src="/img/安全数据.png" >
 					<p>安全数据</p></a>
 				</div><i style="margin: 0 2%"></i><div class="menu_02">
-					<a href="/phone/toSafetyIndex"><img src="/img/施工安全指数.png" >
-					<p>施工安全指数</p></a>
+					<a href="/phone/toTotalRank"><img src="/img/施工安全指数.png" >
+					<p>項目排行</p></a>
 				</div>
 			</div>
 			<div class="margin08">
@@ -65,17 +65,14 @@
 				<span class="iconfont"><img src="/img/Notice.png" ></span>
 				<p>安全公告</p>
 			</li><li id="indexMenu">
-			<a href="/phone/toIndex">
-				<span class="iconfont"><img src="/img/index.png" ></span>
-			</a><p>首页</p>
+				<a href="/phone/toIndex">
+					<span class="iconfont"><img src="/img/index.png" ></span>
+				</a><p>首页</p>
 			</li><li id="blackList">
-				<span class="iconfont"><img src="/img/billboard.png" ></span>
-				<p>红黑榜</p>
+				<a href="/phone/toRankingTable">
+					<span class="iconfont"><img src="/img/billboard.png" ></span>
+				</a><p>红黑榜</p>
 			</li>
-			<div class="liListName">
-				<p><a href="/phone/toRankingTable">红黑榜</a></p>
-				<p><a href="/phone/toTotalRank">项目排行</a></p>
-			</div>
 		</div>
 		<script type="text/javascript">
 			function aa() {
@@ -112,9 +109,6 @@
             }
 
 			document.documentElement.style.fontSize = document.documentElement.clientWidth / 5 + 'px';
-			$("#blackList").on("click",function(){
-				$(".liListName").fadeToggle();
-			})
 		</script>
 	</body>
 </html>

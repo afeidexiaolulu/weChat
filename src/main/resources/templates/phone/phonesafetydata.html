@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -45,20 +45,11 @@
 			<a href="/phone/toIndex">
 				<span class="iconfont"><img src="/img/index.png" ></span>
 			</a><p>首页</p>
-			</li><li id="blackList">
+		</li><li id="blackList">
+			<a href="/phone/toRankingTable">
 				<span class="iconfont"><img src="/img/billboard.png" ></span>
-				<p>红黑榜</p>
-			</li>
-			<div class="liListName">
-				<p><a href="/phone/toRankingTable">红黑榜</a></p>
-				<p><a href="/phone/toTotalRank">项目排行</a></p>
-			</div>
+			</a><p>红黑榜</p>
+		</li>
 		</div>
-
-		<script>
-			$("#blackList").on("click",function(){
-				$(".liListName").fadeToggle();
-			})
-		</script>
 	</body>
 </html>

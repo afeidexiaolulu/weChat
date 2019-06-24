@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -70,20 +70,17 @@
 
 		<div class="footer">
 			<li id="noticeAnnouncement">
-				<span class="iconfont"><img src="/erci/img/Notice.png" ></span>
+				<span class="iconfont"><img src="/img/Notice.png" ></span>
 				<p>安全公告</p>
 			</li><li id="indexMenu">
 			<a href="/phone/toIndex">
-				<span class="iconfont"><img src="/erci/img/index.png" ></span>
+				<span class="iconfont"><img src="/img/index.png" ></span>
 			</a><p>首页</p>
-			</li><li id="blackList">
+		</li><li id="blackList">
+			<a href="/phone/toRankingTable">
 				<span class="iconfont"><img src="/img/billboard.png" ></span>
-				<p>红黑榜</p>
-			</li>
-			<div class="liListName">
-				<p><a href="/phone/toRankingTable">红黑榜</a></p>
-				<p><a href="/phone/toTotalRank">项目排行</a></p>
-			</div>
+			</a><p>红黑榜</p>
+		</li>
 		</div>
 
 		<script src="/erci/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
@@ -123,10 +120,6 @@
 				prevEl: '.swiper-button-prev',
 				},
 			});
-
-			$("#blackList").on("click",function(){
-				$(".liListName").fadeToggle();
-			})
 		</script>
 	</body>
 </html>
