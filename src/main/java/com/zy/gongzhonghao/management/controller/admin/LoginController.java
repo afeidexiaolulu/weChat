@@ -48,9 +48,6 @@ public class LoginController extends BaseController {
             }
             //如果密码不相同就是密码错误
             if(!user.getUserpwd().equals(MD5Util.digest(password))) {
-                System.out.println("结果不相等才进入此");
-                System.out.println(user.getUserpwd());
-                System.out.println(MD5Util.digest(password));
                 message(Const.LOGIN_USERPSWD_ERROR);
                 success(false);
                 return end();

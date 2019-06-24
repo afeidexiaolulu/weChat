@@ -13,7 +13,6 @@ import java.util.Set;
 
 
 //定义为组件，添加到ioc容器中
-
 @Component
 //拦截器可以继承自HandlerInterceptorAdapter或者实现
 public class UserInterceptor extends HandlerInterceptorAdapter {
