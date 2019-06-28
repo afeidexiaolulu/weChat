@@ -14,10 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 
 
@@ -26,6 +24,7 @@ import java.util.*;
  */
 
 @Component
+@Transactional
 public class TotalOperation {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TotalOperation.class);
@@ -62,9 +61,6 @@ public class TotalOperation {
     private TotalWarningService totalWarningService;
 
     @Autowired
-    private WeatherService weatherService;
-
-    @Autowired
     private ProjectService projectService;
 
     @Autowired
@@ -85,7 +81,6 @@ public class TotalOperation {
      * 查询安全时长并插入数据库中
      */
     //查询安全时长，并放入数据库中
-    @Transactional
     public void getSafetyData(){
         try {
             LOGGER.debug("开始查询安全时长");
@@ -114,7 +109,6 @@ public class TotalOperation {
     /**
      * 查询各种安全数据并放入到数据库中
      */
-    @Transactional
     public void totalRequData() {
         //昨天日期
         Integer diff = -1;
@@ -234,7 +228,6 @@ public class TotalOperation {
     /**
      * 计算每周红黑榜并进行更新
      */
-    @Transactional
     public void projectScoreWeek(){
         Integer diff = -1;
         //获取请求参数
