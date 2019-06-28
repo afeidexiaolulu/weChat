@@ -266,7 +266,6 @@ public class HttpClientUtils {
             e.printStackTrace();
         }
 
-        System.out.println(response.toString());
 
         resultString = EntityUtils.toString(response.getEntity(), "utf-8");
         return resultString;

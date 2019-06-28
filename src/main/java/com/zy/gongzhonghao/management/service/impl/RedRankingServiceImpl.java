@@ -34,25 +34,26 @@ public class RedRankingServiceImpl extends ServiceImpl<RedRankingMapper, RedRank
             //进行插入
             QueryWrapper<RedRanking> wrapper = new QueryWrapper<>();
             wrapper.eq("item_name",redTables.get(i).getItemName());
-            RedRanking redRanking = baseMapper.selectOne(wrapper);
+            RedRanking redRanking = redRankingMapper.selectOne(wrapper);
             if(redRanking == null){
                 //如果为null，插入
                 redRankingMapper.insert(new RedRanking(null, redTables.get(i).getItemName(),1,new Date()));
+                //更新周榜中红榜次数
+                projectScoreWeekService.updateRedTable(redTables.get(i).getItemName(),1);
             }else {
-                //更新次数
+                //更新红榜中次数
                 RedRanking redRankingUp = new RedRanking();
+                //如果不为1，次数加1
                 redRankingUp.setRedRankingNum(redRanking.getRedRankingNum()+1);
                 redRankingUp.setInsertTime(new Date());
-                //如果不为1，次数加1
+
                 UpdateWrapper<RedRanking> updateWrapper = new UpdateWrapper<>();
                 updateWrapper.eq("item_name",redRanking.getItemName());
+                //更新红榜中次数
                 redRankingMapper.update(redRankingUp,updateWrapper);
+                //更新周榜中红榜次数
+                projectScoreWeekService.updateRedTable(redTables.get(i).getItemName(),redRanking.getRedRankingNum()+1);
             }
-
-
-            //更新红榜次数
-/*            ProjectScoreWeek projectScoreWeek = redTables.get(i);
-            projectScoreWeekService.updateRedTable(projectScoreWeek.getItemName());*/
 
         }
         return 1;

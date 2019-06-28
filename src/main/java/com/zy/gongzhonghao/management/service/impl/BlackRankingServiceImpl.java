@@ -39,6 +39,7 @@ public class BlackRankingServiceImpl extends ServiceImpl<BlackRankingMapper, Bla
             if(blackRanking == null){
                 //如果为null，插入
                 blackRankingMapper.insert(new BlackRanking(null, blackTables.get(i).getItemName(),1,new Date()));
+                projectScoreWeekService.updateBlackTable(blackTables.get(i).getItemName(),1);
             }else {
                 //更新次数
                 BlackRanking blackRankingUp = new BlackRanking();
@@ -48,6 +49,7 @@ public class BlackRankingServiceImpl extends ServiceImpl<BlackRankingMapper, Bla
                 UpdateWrapper<BlackRanking> updateWrapper = new UpdateWrapper<>();
                 updateWrapper.eq("item_name",blackRanking.getItemName());
                 blackRankingMapper.update(blackRankingUp,updateWrapper);
+                projectScoreWeekService.updateBlackTable(blackTables.get(i).getItemName(),blackRanking.getBlackRankingNum()+1);
             }
         }
         return 1;

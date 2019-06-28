@@ -86,12 +86,11 @@ public class ProjectScoreWeekServiceImpl extends ServiceImpl<ProjectScoreWeekMap
         rankingTableDto.setBlackRankingList(blackRankings);
 
         Float avgScore = getLastweekAvgScore();
-        System.out.println(avgScore);
+
         if(avgScore == null){
             rankingTableDto.setSafetyScore("60.0");
         }else {
             float result = (float) (Math.round(avgScore * 10)) / 10;
-            System.out.println(result);
             rankingTableDto.setSafetyScore(new DecimalFormat("0.0").format(result));
         }
 
@@ -101,45 +100,35 @@ public class ProjectScoreWeekServiceImpl extends ServiceImpl<ProjectScoreWeekMap
 
     //更新红榜次数
     @Override
-    public Integer updateRedTable(String itemName) {
+    public Integer updateRedTable(String itemName, Integer redNumber) {
         //创建更新对象
         ProjectScoreWeek projectScoreWeek1 = new ProjectScoreWeek();
+        projectScoreWeek1.setRedTableNum(redNumber);
+        //更新时间
+        projectScoreWeek1.setInsertTime(new Date());
 
-        //查询项目红榜次数
-        //Integer num = projectScoreWeekMapper.selectRedNum();
-/*        if(num != null){
-            projectScoreWeek1.setRedTableNum(num + 1);
-
-        }*/
         //创建更新条件
         UpdateWrapper<ProjectScoreWeek> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("item_name",itemName);
         //进行更新
-        return baseMapper.update(projectScoreWeek1,updateWrapper);
+        return projectScoreWeekMapper.update(projectScoreWeek1,updateWrapper);
     }
 
 
     //更新黑榜次数
     @Override
-    public Integer updateBlackTable(String itemName) {
+    public Integer updateBlackTable(String itemName, Integer blackNum) {
         //创建更新对象
         ProjectScoreWeek projectScoreWeek2 = new ProjectScoreWeek();
-
-        //查询项目黑榜次数
-        QueryWrapper<ProjectScoreWeek> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("item_name",itemName);
-        ProjectScoreWeek projectScoreWeek = baseMapper.selectOne(queryWrapper);
-        if(projectScoreWeek != null){
-            Integer redTableNum = projectScoreWeek.getBlackTableNum();
-            if(redTableNum != null){
-                projectScoreWeek2.setRedTableNum(redTableNum + 1);
-            }
-        }
+        //更新次数
+        projectScoreWeek2.setBlackTableNum(blackNum);
+        //更新时间
+        projectScoreWeek2.setInsertTime(new Date());
         //创建更新条件
         UpdateWrapper<ProjectScoreWeek> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("item_name",itemName);
         //进行更新
-        return baseMapper.update(projectScoreWeek2,updateWrapper);
+        return projectScoreWeekMapper.update(projectScoreWeek2,updateWrapper);
     }
 
     @Override

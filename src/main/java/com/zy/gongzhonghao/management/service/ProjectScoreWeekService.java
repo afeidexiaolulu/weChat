@@ -18,10 +18,10 @@ public interface ProjectScoreWeekService extends IService<ProjectScoreWeek> {
     //获取红黑榜的dto
     RankingTableDto getPhoneRankTable();
 
-    //更新红榜次数
-    Integer updateRedTable(String itemName);
-
-    Integer updateBlackTable(String itemName);
+    //更新周榜中上红榜次数
+    Integer updateRedTable(String itemName, Integer redNum);
+    //更新周榜中上黑榜次数
+    Integer updateBlackTable(String itemName, Integer redNum);
 
     Float getLastweekAvgScore();
 

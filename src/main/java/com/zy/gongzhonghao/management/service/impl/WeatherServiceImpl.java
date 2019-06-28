@@ -59,7 +59,6 @@ public class WeatherServiceImpl extends ServiceImpl <WeatherMapper, Weather> imp
     public Integer insertWeatherMsgByInterface() {
         try{
             String s = HttpClientUtils.doGet(weatherurl);//可使用
-            System.out.println(s);
             //解析为json对象
             JSONObject jsonObject = JSONObject.parseObject(s);
             JSONArray data = jsonObject.getJSONObject("data").getJSONArray("forecast");
