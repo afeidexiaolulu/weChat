@@ -27,7 +27,7 @@
 		limit 0,20
 		) aa
 		ORDER BY aa.score desc
-		limit 0,5
+		limit 0,10
     </select>
 
     <select id="select5BlackTable" resultType="com.zy.gongzhonghao.management.bean.ProjectScoreWeek">
@@ -38,7 +38,7 @@
 		limit 0,20
 		) aa
 		ORDER BY aa.score asc
-		limit 0,5
+		limit 0,10
     </select>
 
     <select id="getLastweekAvgScore" resultType="java.lang.Float">

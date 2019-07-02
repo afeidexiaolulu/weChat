@@ -311,11 +311,11 @@ a:hover {
 .green{background:#d6f6f1;}
 .green span{border-bottom:#91d0c6 solid 1px;}
 
-.security_tit{display:block; text-align: left; height:0.65rem;background:#f5f5f5;padding-left:0.4rem;box-sizing:border-box;padding: 0 15px;margin: 0.6rem auto 0.4rem;font-size: 0.24rem;line-height: 0.65rem;color: #64666d;}
-.security_tit em{display:inline-block;font-size: 0.35rem;color:#1974e5;font-weight:bold;line-height:0.65rem;}
+.security_tit{display: block;text-align: left;height: 0.45rem;background: #f5f5f5;padding-left: 0.4rem;box-sizing: border-box;padding: 0 15px;margin: 0.4rem auto 0.2rem;font-size: 0.18rem;line-height: 0.45rem;color: #64666d;}
+.security_tit em{display: inline-block;font-size: 0.24rem;color: #1974e5;font-weight: bold;line-height: 0.45rem;}
 .background{background:#f5f5f5;margin-bottom:0.4rem; border-top-left-radius: 7px;border-top-right-radius: 7px;padding-bottom:0.35rem;}
-.tit_box{display:block; text-align: center;border-radius: 7px; position: relative;margin-bottom:0.5rem;}
-.background_tit{display:inline-block;height:0.9rem;font-size:0.4rem;line-height:0.9rem; position: relative;}
+.tit_box{display:block; text-align: center;border-radius: 7px; position: relative;margin-bottom:0.18rem;}
+.background_tit{display: inline-block;height: 0.5rem;font-size: 0.28rem;line-height: 0.5rem;position: relative;}
 .tit_color_red{background:#fff0f0;border-bottom:#f8c0b6 dashed 1px;}
 .tit_color_red .background_tit{color:#ff2a06;}
 .tit_color_blue{background:#def1ff;border-bottom:#9ed4fb dashed 1px;}
@@ -331,12 +331,12 @@ a:hover {
 .yuan_right{background: url(../img/yuan_right.png) no-repeat center center;right:0;background-size:100%;}
 
 .number_lists{background:#ffffff;border-radius: 7px; position: relative;padding: 0 0.2rem;box-sizing:border-box;margin: 0 0.15rem 0.15rem;}
-.list_left_top{display:block;width:0.48rem;height:0.48rem; position: absolute;left:0.3rem;top:0;background:#1974e5; text-align:center;font-size: 0.25rem;color:#fff;line-height:0.48rem; font-style: normal;border-bottom-left-radius:20px;border-bottom-right-radius: 20px}
+.list_left_top{display:block;width: 0.24rem;height:0.24rem; position: absolute;left:0.3rem;top:0;background:#1974e5; text-align:center;font-size: 0.16rem;color:#fff;line-height:0.24rem; font-style: normal;border-bottom-left-radius:20px;border-bottom-right-radius: 20px}
 .first_color{background:#ff2a06;}
-.lists_span{display:block;padding-top:0.63rem;font-size: 0.3rem;color:#5a5e60;line-height:0.6rem;}
-.mine{display:block;line-height:0.66rem;font-size: 0.24rem;color:#707475;padding-bottom:0.25rem;}
-.mine_fen{float:left;display:inline-block;line-height:0.66rem;}
-.mine_fen em{font-style: normal;display:inline-block;color:#1974e5;font-size:0.35rem;line-height:0.66rem;font-weight:bold;}
+.lists_span{display:block;padding-top:0.33rem;font-size: 0.18rem;color:#5a5e60;line-height:0.3rem;}
+.mine{display:block;line-height:0.66rem;font-size: 0.18rem;color:#707475;}
+.mine_fen{float:left;display:inline-block;line-height:0.33rem;}
+.mine_fen em{font-style: normal;display:inline-block;color:#1974e5;font-size:0.213rem;line-height: 0.33rem;font-weight:bold;}
 .mine_ci{float:right;display:inline-block;width:0.66rem;height:0.28rem;color:#1974e5; text-align: center;background:#def1ff;border-radius:15px;line-height:0.28rem;font-size:0.14rem;margin-top:0.2rem;}
 .mine_ci em{font-style: normal;font-size:0.12rem;font-weight:bold;color:#1974e5;padding-right:0.03rem;}
 
