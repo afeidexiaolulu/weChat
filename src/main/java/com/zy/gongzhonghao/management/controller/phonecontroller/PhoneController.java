@@ -77,11 +77,6 @@ public class PhoneController extends BaseController {
         return "phone/phoneranktable";
     }
 
-    //施工安全指数页面跳转
-    @RequestMapping("/toSafetyIndex")
-    public String toSafetyIndex(){
-        return "phone/phonesafetyindex";
-    }
 
     //安全状态监控
     @RequestMapping("/toSafetyStatus")

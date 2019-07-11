@@ -81,7 +81,6 @@ public class ConSafetyIndexController extends BaseController {
             safetyIndex1.setSafetyNum(safetyIndex);
             safetyIndex1.setSubmitName(submitName);
             safetyIndex1.setSubmitTime(new Date());
-
         } catch (ParseException e) {
             e.printStackTrace();
             success(false);

@@ -1,23 +1,12 @@
 package com.zy.gongzhonghao.management.scheduled;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.zy.gongzhonghao.management.bean.Project;
-import com.zy.gongzhonghao.management.bean.ProjectScoreWeek;
-import com.zy.gongzhonghao.management.bean.TotalSafetyData;
-import com.zy.gongzhonghao.management.mapper.TotalSafetyDataMapper;
+
 import com.zy.gongzhonghao.management.service.*;
-import com.zy.gongzhonghao.management.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.transaction.annotation.Transactional;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 
 /**

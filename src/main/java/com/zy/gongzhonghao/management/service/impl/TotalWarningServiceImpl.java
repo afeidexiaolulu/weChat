@@ -76,7 +76,7 @@ public class TotalWarningServiceImpl extends ServiceImpl<TotalWarningMapper, Tot
     @Override
     public TotalWarning selectLastOne() {
         //调用查询十天的方法
-        List<TotalWarning> totalWarningList = selectLast10TotalWarningList();
+        List<TotalWarning> totalWarningList = this.selectLast10TotalWarningList();
 
         if(totalWarningList != null && totalWarningList.size() != 0){
            return totalWarningList.get(0);
@@ -95,7 +95,7 @@ public class TotalWarningServiceImpl extends ServiceImpl<TotalWarningMapper, Tot
     public SafetyStatusLineDto getPhoneSafetyStatusLine() {
         SafetyStatusLineDto safetyStatusLineDto = new SafetyStatusLineDto();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
-        List<TotalWarning> totalWarningList = selectLast10TotalWarningList();
+        List<TotalWarning> totalWarningList = this.selectLast10TotalWarningList();
 
         int size = totalWarningList.size();
 

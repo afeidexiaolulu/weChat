@@ -39,11 +39,11 @@ public class WorkerManaRateServiceImpl extends ServiceImpl<WorkerManaRateMapper,
         int arraySize = workerManaRatelist.size();
 
         //工人培训率10天
-        int workTrain[] = new int[arraySize];
+        int[] workTrain = new int[arraySize];
         //管理人员到岗率10天
-        int manaDuty[] = new int[arraySize];
+        int[] manaDuty = new int[arraySize];
         //显示的日期
-        String dateString[] = new String[arraySize];
+        String[] dateString = new String[arraySize];
 
         SimpleDateFormat sdf = new SimpleDateFormat("M/d");
         for (int i=0; i< arraySize;i++){

@@ -335,12 +335,6 @@
 							blue_container.append(blue);
 						}
 
-						/*for(var i = 0; i< blackTable.length;i++){
-							var blackName = blackTable[i].itemName;
-							var score = blackTable[i].score;
-							$("#blItemName"+i).html(blackName);
-							$("#blScore"+i).html(score);
-						}*/
 						//红榜填充
 						var redTable = data.redTable;
 						var red_container = $("#red_container");
@@ -361,12 +355,7 @@
 							red ="<div><h3>没有红榜</h3></div>";
 							red_container.append(red);
 						}
-						/*for(var i = 0; i< redTable.length; i++){
-							var redName = redTable[i].itemName;
-							var score = redTable[i].score;
-							$("#itemName"+i).html(redName+"次");
-							$("#redScore"+i).html(score);
-						}*/
+
 						//黑榜柱状图填充
 						var blackRankingList = data.blackRankingList;
 						for(var i=0; i< blackRankingList.length; i++){
