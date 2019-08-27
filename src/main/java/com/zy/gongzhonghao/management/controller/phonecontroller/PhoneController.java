@@ -157,7 +157,7 @@ public class PhoneController extends BaseController {
         return totalWarningService.getPhoneSafetyStatusLine();
     }
 
-    //红黑榜返回数据折线图
+    //红黑榜返回数据
     @RequestMapping("/phoneRankTable")
     @ResponseBody
     public RankingTableDto getPhoneRankTable(){

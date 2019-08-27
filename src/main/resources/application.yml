@@ -2,7 +2,7 @@
 loginname: admin
 password: 1
 weburl: http://120.77.254.210:8888/ibps-platform-webapi/api
-weatherurl: http://t.weather.itboy.net/api/weather/city/101280701
+weatherurl: http://t.weather.sojson.com/api/weather/city/101280701
 
 #所有数据三方接口
 safetyInterface: http://www.hqajz.com/ContSafetyInterface/GetItemContSafetyRecord
@@ -16,7 +16,7 @@ a3: 0.1917
 
 
 server:
-  port: 8380
+  port: 80
 
 spring:
   datasource:

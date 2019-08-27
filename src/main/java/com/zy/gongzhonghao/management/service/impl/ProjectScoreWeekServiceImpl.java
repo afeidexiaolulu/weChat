@@ -56,7 +56,6 @@ public class ProjectScoreWeekServiceImpl extends ServiceImpl<ProjectScoreWeekMap
                     week.setScore(60.0f);
                 }
             }
-            //redTables.removeIf(a->a.getScore()==null);
         }
         //赋值
         rankingTableDto.setRedTable(redTables);
@@ -70,7 +69,6 @@ public class ProjectScoreWeekServiceImpl extends ServiceImpl<ProjectScoreWeekMap
                     week.setScore(60.0f);
                 }
             }
-            //blackTables.removeIf(a->a.getScore()==null);
         }
         //赋值
         rankingTableDto.setBlackTable(blackTables);

@@ -3,8 +3,13 @@ package com.zy.gongzhonghao.management.controller.admin;
 
 
 
+import com.zy.gongzhonghao.management.util.HttpUtil;
+import org.apache.http.HttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -44,6 +49,36 @@ public class AdminController extends BaseController{
         return "pc/consafetyindex_add";
     }
 
+
+
+    @RequestMapping("/testMsg")
+    public void t() {
+        String host = "http://yzx.market.alicloudapi.com";
+        String path = "/yzx/sendSms";
+        String method = "POST";
+        String appcode = "016291c0c6f646c68ec9759f14876937";
+        Map<String, String> headers = new HashMap<>();
+
+        headers.put("Authorization", "APPCODE " + appcode);
+        Map<String, String> querys = new HashMap<>();
+        querys.put("mobile", "18332566942");
+        querys.put("param", "code:123456");
+        //querys.put("param", "这里填写你和商家定义的变量名称和变量值填写格式看上一行代码");
+        querys.put("tpl_id", "TP1710262");
+        Map<String, String> bodys = new HashMap<>();
+
+
+        try {
+
+            HttpResponse response = HttpUtil.doPost(host, path, method, headers, querys, bodys);
+            System.out.println(response.toString());
+
+            //获取response的body
+            //System.out.println(EntityUtils.toString(response.getEntity()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

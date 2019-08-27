@@ -36,9 +36,10 @@ public class ScheduledTask {
         //查询安全时长
         try {
             totalOperation.getSafetyData();
+            LOGGER.info("查询安全时长定时任务插入数据成功");
         } catch (Exception e) {
+            LOGGER.error("查询安全时长定时任务失效");
             e.printStackTrace();
-            LOGGER.info("查询安全时长定时任务失效");
         }
     }
 
@@ -52,8 +53,9 @@ public class ScheduledTask {
     public void projectScoreWeek(){
         try {
             totalOperation.projectScoreWeek();
+            LOGGER.info("插入项目周平均分数成功");
         } catch (Exception e) {
-            LOGGER.info("插入每周项目分数失败，定时任务捕获异常");
+            LOGGER.error("插入每周项目分数失败，定时任务捕获异常");
             e.printStackTrace();
         }
     }
@@ -67,12 +69,11 @@ public class ScheduledTask {
             //封装到weatherService中,通过接口获取天气
             Integer result = weatherService.insertWeatherMsgByInterface();
             if(result == 1){
-                LOGGER.debug("插入天气数据成功");
-                return;
+                LOGGER.info("插入天气数据成功");
             }
         } catch (Exception e) {
+            LOGGER.error("插入天气信息失败");
             e.printStackTrace();
-            LOGGER.debug("插入天气信息失败");
         }
     }
 
@@ -83,8 +84,9 @@ public class ScheduledTask {
     public void totalRequData() {
         try {
             totalOperation.totalRequData();
+            LOGGER.info("定时任务请求所有安全数据接口无异常");
         } catch (Exception e) {
-            LOGGER.info("定时任务捕获所有安全数据插入失败异常");
+            LOGGER.error("定时任务捕获所有安全数据插入失败异常");
             e.printStackTrace();
         }
     }

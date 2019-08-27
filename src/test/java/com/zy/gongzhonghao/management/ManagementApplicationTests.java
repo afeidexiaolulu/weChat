@@ -427,7 +427,7 @@ public class ManagementApplicationTests {
 
                     //插入各种预警数值
                     totalWarningService.insertTotalWarning(yesterday);
-                    LOGGER.debug("插入成功直接返回");
+                    LOGGER.info("插入成功直接返回");
                     //插入后返回结束任务
                     return;
                 }
@@ -922,10 +922,10 @@ public class ManagementApplicationTests {
                         //更新状态为关闭
                         if (myItemSet.size() != 0) {
                             Integer updateProjectStatus = projectService.updateProjectStatus(myItemSet);
-                            if (myItemSet.size() != updateProjectStatus) {
+                            /*if (myItemSet.size() != updateProjectStatus) {
                                 LOGGER.error("关闭状态失败");
                                 throw new Exception();
-                            }
+                            }*/
                             LOGGER.info("关闭的工程项目关闭完成：" + myItemSet);
                         }
                         //插入后结束定时任务
@@ -950,7 +950,7 @@ public class ManagementApplicationTests {
     @Test
     public void projectScoreWeek1() {
 
-        Integer diff = -3;
+        Integer diff = -2;
         String yesDateStr = DateUtils.getDateStr(diff, "yyyy-MM-dd");
         //获取请求参数
         String jsonString = DateUtils.getJsonString(diff);

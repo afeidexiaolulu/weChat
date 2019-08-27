@@ -93,13 +93,13 @@ public class TotalOperation {
             //调用mapper将安全工时放入到数据库中
             Integer insertNum = safetyTimeService.insertSafetyTime(new Integer(safeHours.substring(0, safeHours.indexOf("."))));
             if(insertNum != 1){
-                LOGGER.debug("安全时长插入数据库失败");
+                LOGGER.error("安全时长插入数据库失败");
                 throw new RuntimeException();
             }
             LOGGER.info("安全时长插入到数据库中");
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            LOGGER.debug("安全时长查询出现问题");
+            LOGGER.error("安全时长查询出现问题");
             throw new RuntimeException();
         }
     }
@@ -122,7 +122,7 @@ public class TotalOperation {
         LOGGER.info("开始请求所有安全数据");
         //解析数据查看是否查询成功
         JSONObject jsonObject = JSONObject.parseObject(result);
-        //查看datas是否为空，如不不为空查询成功
+        //查看datas是否为空，如不为空查询成功
         JSONArray datas = jsonObject.getJSONArray("Datas");
 
         //如果数据不为空插入数据库中
@@ -151,20 +151,21 @@ public class TotalOperation {
                         LOGGER.error("插入工人培训率和管理到岗率失败");
                         throw new RuntimeException();
                     }
+                    LOGGER.info("插入工人培训率和管理到岗率成功");
                     //插入各种预警数值
                     Integer insertTotalWarning = totalWarningService.insertTotalWarning(yesDateStr);
                     if (insertTotalWarning != 1) {
                         LOGGER.error("插入各种预警值失败");
                         throw new RuntimeException();
                     }
-
+                    LOGGER.info("插入各种预警值成功");
                     //插入区域项目的安全指数同时插入每天每个项目得分
                     Integer insertSafetyIndex = safetyIndexService.insertSafetyIndexByInterface(totalSafetyDataList, diff);
                     if (insertSafetyIndex != 1) {
                         LOGGER.error("插入区域安全指数失败");
                         throw new RuntimeException();
                     }
-
+                    LOGGER.info("插入区域安全指数成功");
                     //获取所有的项目的item_no
                     Set<String> itemSet = new HashSet<>();
 
@@ -176,10 +177,8 @@ public class TotalOperation {
                     itemSetRetain.addAll(itemSet);
                     //查询字典表中所有的item
                     Set<String> myItemSet = projectService.selectItemNo();
-
                     //求两个交集
                     itemSetRetain.retainAll(myItemSet);
-                    LOGGER.debug("交集为：" + itemSetRetain);
                     //itemSet中有，myItemSet中没有  即为新增的项目 插入到项目字典中
                     itemSet.removeAll(itemSetRetain);
                     //itemSet中没有，myItemSet中有，即为关闭项目  更新项目状态为0
@@ -202,16 +201,16 @@ public class TotalOperation {
                             LOGGER.error("批量插入工程失败");
                             throw new RuntimeException();
                         }
-                        LOGGER.debug("新增的工程项目插入完成" + itemSet);
+                        LOGGER.info("批量插入工程成功");
                     }
                     //更新状态为关闭
                     if (myItemSet.size() != 0) {
                         Integer updateProjectStatus = projectService.updateProjectStatus(myItemSet);
-                        if (myItemSet.size() != updateProjectStatus) {
-                            LOGGER.error("关闭状态失败");
+                       /* if (myItemSet.size() != updateProjectStatus) {
+                            LOGGER.error("关闭项目状态失败");
                             throw new RuntimeException();
-                        }
-                        LOGGER.info("关闭的工程项目关闭完成：" + myItemSet);
+                        }*/
+                        LOGGER.info("关闭的工程项目关闭完成");
                     }
                     //插入后结束定时任务
                     LOGGER.info("各个安全 数据插入完成，定时任务结束");
@@ -224,7 +223,6 @@ public class TotalOperation {
     }
 
 
-
     /**
      * 计算每周红黑榜并进行更新
      */
@@ -234,10 +232,10 @@ public class TotalOperation {
         String jsonString = DateUtils.getJsonString(diff);
         //通过三方接口获取数据
         String result = HttpClientUtils.doPostJson(safetyInterface, jsonString);
-        LOGGER.info("开始请求所有安全数据");
+        LOGGER.info("计算周平均分开始请求所有安全数据");
         //解析数据查看是否查询成功
         JSONObject jsonObject = JSONObject.parseObject(result);
-        //查看datas是否为空，如不不为空查询成功
+        //查看datas是否为空，如不为空查询成功
         JSONArray datas = jsonObject.getJSONArray("Datas");
         //如果数据不为空插入数据库中
         if (!datas.isEmpty()) {
@@ -246,18 +244,21 @@ public class TotalOperation {
             //求出每个项目每周的平均分
             Integer insertNum = projectScoreDayService.insertRankingTable(totalSafetyDataList,diff);
             if(insertNum != totalSafetyDataList.size()){
+               LOGGER.error("周平均分插入数据库失败");
                throw new RuntimeException();
             }
+            LOGGER.info("周平均分插入数据库成功");
             //选出项目前5名放入红榜，同时更新每周分数表中红榜次数
             redRankingService.insertRedTable();
+            LOGGER.info("选出项目前5名放入红榜，同时更新每周分数表中红榜次数成功");
             //选出项目后5名放入黑榜，同时更新每周分数表中黑榜次数
             blackRankingService.insertBlackTable();
+            LOGGER.info("选出项目后5名放入黑榜，同时更新每周分数表中黑榜次数成功");
         }
     }
 
 
     //获取安全时长json数据的方法
-
     private String getSafetyTimeJson() {
         String s = webUrl+"/loginCustomService/appEncryption?account=";
         String safetyDataStr = HttpClientUtils.doPost(s + loginname + "&pwd=" + password);
@@ -281,8 +282,6 @@ public class TotalOperation {
         //携带token进行接口调用获取安全时长
         return HttpClientUtils.doGet(webUrl+"/webapi/homePageService/fieldDynamics?token=" + digestToken);
     }
-
-
 
 }
 

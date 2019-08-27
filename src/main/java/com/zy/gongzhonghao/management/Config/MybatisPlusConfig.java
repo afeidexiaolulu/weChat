@@ -1,4 +1,4 @@
-package com.zy.gongzhonghao.management.MyPlusConfig;
+package com.zy.gongzhonghao.management.Config;
 
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;

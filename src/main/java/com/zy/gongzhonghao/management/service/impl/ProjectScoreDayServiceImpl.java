@@ -166,17 +166,6 @@ public class ProjectScoreDayServiceImpl extends ServiceImpl<ProjectScoreDayMappe
         return objectMyPage;
     }
 
-/*    //通过itemNo并返回排行进行查询
-    @Override
-    public ProjectScoreDay selectProjectByItemNo(String itemNo) {
-
-        //查询所有日期列表
-        List<Date> selectDateList = projectScoreDayMapper.getSelectDateList();
-        //最新日期
-        Date lastDate = selectDateList.get(selectDateList.size() - 1);
-
-        return projectScoreDayMapper.selectProjectByItemNoAndDate(itemNo, lastDate);
-    }*/
 
     @Override
     public List<ProjectScoreDay> selectProjectListByDate(Date statisticsDate) {
