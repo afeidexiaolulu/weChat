@@ -9,6 +9,7 @@ import com.zy.gongzhonghao.management.controller.model.phone.SafetyIndexDto;
 import com.zy.gongzhonghao.management.controller.model.phone.SafetyNumDto;
 import com.zy.gongzhonghao.management.controller.model.phone.SafetyStatusLineDto;
 import com.zy.gongzhonghao.management.mapper.*;
+import com.zy.gongzhonghao.management.scheduled.TotalOperation;
 import com.zy.gongzhonghao.management.service.*;
 import com.zy.gongzhonghao.management.util.DateUtils;
 import com.zy.gongzhonghao.management.util.HttpClientUtils;
@@ -114,6 +115,16 @@ public class ManagementApplicationTests {
 
     @Autowired
     private BlackRankingService blackRankingService;
+
+    @Autowired
+    private TotalOperation totalOperation;
+
+
+    @Test
+    public void test111(){
+        totalOperation.projectScoreWeek();
+    }
+
 
 
     @Test

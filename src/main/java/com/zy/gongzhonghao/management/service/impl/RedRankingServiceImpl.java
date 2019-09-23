@@ -41,7 +41,7 @@ public class RedRankingServiceImpl extends ServiceImpl<RedRankingMapper, RedRank
                 //更新周榜中红榜次数
                 projectScoreWeekService.updateRedTable(redTables.get(i).getItemName(),1);
             }else {
-                //更新红榜中次数
+
                 RedRanking redRankingUp = new RedRanking();
                 //如果不为1，次数加1
                 redRankingUp.setRedRankingNum(redRanking.getRedRankingNum()+1);

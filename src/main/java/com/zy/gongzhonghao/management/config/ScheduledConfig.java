@@ -1,4 +1,4 @@
-package com.zy.gongzhonghao.management.Config;
+package com.zy.gongzhonghao.management.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;

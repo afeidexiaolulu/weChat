@@ -241,7 +241,7 @@ public class TotalOperation {
         if (!datas.isEmpty()) {
             String s = datas.toString();
             List<TotalSafetyData> totalSafetyDataList = JSONArray.parseArray(s, TotalSafetyData.class);
-            //求出每个项目每周的平均分
+            //求出每个项目每周的平均分并插入
             Integer insertNum = projectScoreDayService.insertRankingTable(totalSafetyDataList,diff);
             if(insertNum != totalSafetyDataList.size()){
                LOGGER.error("周平均分插入数据库失败");

@@ -49635,7 +49635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Avoid the drag cause ghost shadow
 	            // FIXME Better way ?
 	            zr.painter.getLayer(zlevel).clear(true);
-	            // Config layer with motion blur
+	            // config layer with motion blur
 	            if (this._lastZlevel != null) {
 	                zr.configLayer(this._lastZlevel, {
 	                    motionBlur: false

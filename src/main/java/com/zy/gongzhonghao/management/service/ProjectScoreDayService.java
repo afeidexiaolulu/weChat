@@ -15,6 +15,7 @@ public interface ProjectScoreDayService extends IService<ProjectScoreDay> {
 
     //求出每个项目的前5名和后5名
     Integer insertBatch(List<ProjectScoreDay> projectScoreDayList);
+
     //插入每个项目每周平均分
     Integer insertRankingTable(List<TotalSafetyData> totalSafetyDataList,Integer diff);
 
