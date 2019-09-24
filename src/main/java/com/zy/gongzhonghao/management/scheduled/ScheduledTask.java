@@ -30,7 +30,6 @@ public class ScheduledTask {
      * 查询安全时长并插入数据库中
      */
     //每一小时执行一次查询安全时长，并放入数据库中
-    //@Scheduled(cron="0 */1 * * * ?")
     @Scheduled(cron="0 0 0/1 * * ?")
     public void getSafetyData(){
         //查询安全时长

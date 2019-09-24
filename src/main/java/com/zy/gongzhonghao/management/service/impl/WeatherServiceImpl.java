@@ -62,7 +62,7 @@ public class WeatherServiceImpl extends ServiceImpl <WeatherMapper, Weather> imp
             //解析为json对象
             JSONObject jsonObject = JSONObject.parseObject(s);
             JSONArray data = jsonObject.getJSONObject("data").getJSONArray("forecast");
-            JSONObject jsonObject1 = data.getJSONObject(0);
+            JSONObject jsonObject1 = data.getJSONObject(1);
             Weather weather = JSONObject.parseObject(jsonObject1.toString(), Weather.class);
             weather.setInsertTime(new Date());
             return baseMapper.insert(weather);

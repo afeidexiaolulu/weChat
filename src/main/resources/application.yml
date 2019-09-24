@@ -37,7 +37,7 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-#指定环境为测试环境
+#指定环境为
   profiles:
     active: prod
 
